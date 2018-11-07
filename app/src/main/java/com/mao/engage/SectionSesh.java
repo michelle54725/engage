@@ -21,7 +21,8 @@ public class SectionSesh implements Serializable {
 
     public SectionSesh(String a_start, String b_end,
                        String ta_name, String section_id,
-                       String ref_key, int magic_key) {
+                       String ref_key, int magic_key,
+                       ArrayList<String> user_ids) {
         // fed by constructor
         this.a_start = a_start;
         this.b_end = b_end;
@@ -31,7 +32,7 @@ public class SectionSesh implements Serializable {
 
         this.magic_key = magic_key;
         // manual init
-        this.user_ids = new ArrayList<>();
+        this.user_ids = user_ids;
         this.saved_slider_vals = new ArrayList<>();
     }
 
