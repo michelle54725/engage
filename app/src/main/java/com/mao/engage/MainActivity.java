@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     String teacherMagicKey;
     UserSesh mUser;
     SectionSesh mSection;
+    ArrayList<String> mListUsers = new ArrayList<>();
 
     // Views to set
     TextView readValue; //TA-side: read slider_val from DB TODO: Read from DB (UserSesh's slider_val)
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 magicValue.setText(teacherMagicKey);
 
                 // Create new SectionSesh & store in DB
-                mSection = new SectionSesh(START, END, TA_NAME, SECTION_ID, mSectionRefKey, MAGICKEY);
+                mSection = new SectionSesh(START, END, TA_NAME, SECTION_ID, mSectionRefKey, MAGICKEY, mListUsers);
                 mSectionRef.child(mSectionRefKey).setValue(mSection);
             }
         });
@@ -105,6 +106,10 @@ public class MainActivity extends AppCompatActivity {
                         Integer.valueOf(studentMagicKey), null);
                 setSectionWithMagicKey(mUser);
                 mUsersRef.child(USER_ID).setValue(mUser);
+
+                // Update SectionSesh's user_ids
+                mListUsers.add(mUser.user_id);
+                mSectionRef.child(mSectionRefKey).child("user_ids").setValue(mListUsers);
                 }
         });
     }
@@ -118,11 +123,12 @@ public class MainActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 Toast.makeText(MainActivity.this,
                         "Seekbar vale "+i, Toast.LENGTH_SHORT).show();
-                if (mSectionRef != null) {
+                String key = mUser.getSection_ref_key();
+                if (key != null) {
+                    mSectionRef.child(key);
                     TextView index = findViewById(R.id.indexView);
                     index.setText(String.valueOf(i));
                     mUser.slider_val = i;
-
                 }
             }
 
