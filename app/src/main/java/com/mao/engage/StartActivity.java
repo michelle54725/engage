@@ -61,6 +61,10 @@ public class StartActivity extends AppCompatActivity {
         return nameEditText.getText().toString().replaceAll("\\s","");
     }
 
+    private String getName() {
+        return nameEditText.getText().toString().replaceAll("\\s","");
+    }
+
     private boolean isValidName() {
         return !getName().isEmpty();
     }
