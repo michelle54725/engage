@@ -14,10 +14,13 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/titleText"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
         app:srcCompat="@drawable/logo_placeholder" />
 
     <TextView
@@ -30,10 +33,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/app_name"
-        android:textColor="@color/colorTextGrey"
+        android:textColor="@android:color/white"
         android:textSize="36sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/nameEditText"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logoImage" />
 
@@ -56,12 +61,14 @@
         android:textColor="@color/colorTextGrey"
         android:textColorHighlight="#CACACA"
         android:textColorHint="#CACACA"
+        app:layout_constraintBottom_toTopOf="@+id/joinStudentBtn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleText" />
 
     <Button
-        android:id="@+id/joinStudentButton"
+        android:id="@+id/joinStudentBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -73,22 +80,27 @@
         android:padding="10dp"
         android:text="Join As Student"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/joinTeacherBtn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
 
     <Button
-        android:id="@+id/joinTeacherButton"
+        android:id="@+id/joinTeacherBtn"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="Join as Teacher"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/joinStudentButton" />
+        app:layout_constraintTop_toBottomOf="@+id/joinStudentBtn" />
 </android.support.constraint.ConstraintLayout>
