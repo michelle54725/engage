@@ -1,6 +1,7 @@
 package com.mao.engage;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,7 +20,7 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -33,7 +34,9 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isValidName()) {
-                    startActivity(new Intent(StartActivity.this, StudentLoginActivity.class));
+                    Intent intent = new Intent(StartActivity.this, StudentLoginActivity.class);
+                    intent.putExtra("name", getName());
+                    startActivity(intent);
                 } else {
                     Toast.makeText(StartActivity.this, "Choose a real name", Toast.LENGTH_SHORT).show();
                 }
@@ -41,7 +44,11 @@ public class StartActivity extends AppCompatActivity {
         });
     }
 
+    private String getName() {
+        return nameEditText.getText().toString().replaceAll("\\s","");
+    }
+
     private boolean isValidName() {
-        return !nameEditText.getText().toString().replaceAll("\\s","").isEmpty();
+        return !getName().isEmpty();
     }
 }
