@@ -28,7 +28,7 @@ public class StartActivity extends AppCompatActivity {
 
         joinStudentBtn = findViewById(R.id.joinStudentBtn);
         joinTeacherBtn = findViewById(R.id.joinTeacherBtn);
-        nameEditText = findViewById(R.id.nameEditText);
+        nameEditText = findViewById(R.id.classNameEditText);
 
         joinStudentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,6 +39,19 @@ public class StartActivity extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                     Toast.makeText(StartActivity.this, "Choose a real name", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        joinTeacherBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isValidName()) {
+                    Intent intent = new Intent(StartActivity.this, TeacherCreateClassActivity.class);
+                    intent.putExtra("name", getName());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(StartActivity.this, "Please provide a name", Toast.LENGTH_SHORT).show();
                 }
             }
         });

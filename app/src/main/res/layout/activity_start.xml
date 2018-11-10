@@ -37,14 +37,14 @@
         android:textColor="@android:color/white"
         android:textSize="36sp"
         app:fontFamily="@font/quicksand_bold"
-        app:layout_constraintBottom_toTopOf="@+id/nameEditText"
+        app:layout_constraintBottom_toTopOf="@+id/classNameEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logoImage" />
 
     <EditText
-        android:id="@+id/nameEditText"
+        android:id="@+id/classNameEditText"
         android:layout_width="wrap_content"
         android:layout_height="44dp"
         android:layout_marginEnd="8dp"
@@ -87,7 +87,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/classNameEditText" />
 
     <Button
         android:id="@+id/joinTeacherBtn"

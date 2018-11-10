@@ -7,7 +7,7 @@
     tools:context=".StudentLoginActivity">
 
     <TextView
-        android:id="@+id/instructionsText"
+        android:id="@+id/classNameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -22,11 +22,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/helloText"
+        app:layout_constraintTop_toBottomOf="@+id/classNameLabel"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
-        android:id="@+id/helloText"
+        android:id="@+id/classNameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -37,7 +37,7 @@
         android:textColor="@android:color/white"
         android:textSize="24sp"
         app:fontFamily="@font/quicksand_bold"
-        app:layout_constraintBottom_toTopOf="@id/instructionsText"
+        app:layout_constraintBottom_toTopOf="@id/classNameLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -65,11 +65,11 @@
         android:textColorHighlight="@color/colorTextGrey"
         android:textColorHint="@color/colorTextGrey"
         app:fontFamily="@font/quicksand_bold"
-        app:layout_constraintBottom_toTopOf="@+id/joinClassBtn"
+        app:layout_constraintBottom_toTopOf="@+id/createClassBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/instructionsText" />
+        app:layout_constraintTop_toBottomOf="@+id/classNameLabel" />
 
     <Button
         android:id="@+id/joinClassBtn"

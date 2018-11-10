@@ -30,10 +30,10 @@ public class StudentLoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_student_login);
 
-        joinClassBtn = findViewById(R.id.joinClassBtn);
+        joinClassBtn = findViewById(R.id.createClassBtn);
         backBtn = findViewById(R.id.backBtn);
         magicWordEditText = findViewById(R.id.magicWordEditText);
-        helloText = findViewById(R.id.helloText);
+        helloText = findViewById(R.id.classNameLabel);
 
         helloText.setText(String.format("Hi, %s", getIntent().getStringExtra("name")));
 
