@@ -1,6 +1,9 @@
 package com.mao.engage;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static java.lang.Math.abs;
 
 
 /**
@@ -31,6 +39,8 @@ public class MeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private Boolean elastic;
 
     private OnFragmentInteractionListener mListener;
 
@@ -71,7 +81,38 @@ public class MeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_me, container, false);
         seekBar = view.findViewById(R.id.seekBar);
-        seekBar.setThumb(getResources().getDrawable(R.drawable.ic_slider_thumb));
+        Drawable original = getResources().getDrawable(R.drawable.ic_slider_thumb);
+        original.setBounds(0, 0, 1000, 1000);
+        seekBar.setThumb(original);
+        elastic = true;
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                elastic = false;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                elastic = true;
+            }
+        });
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                if (elastic) {
+                    seekBar.setProgress(elasticFunction(seekBar.getProgress()));
+                }
+            }
+
+        },0,10);
         return view;
     }
 
@@ -112,5 +153,13 @@ public class MeFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private int elasticFunction(int current) {
+        double next = (current + 50) / 2;
+        if(abs(next - 50) <= 1) {
+            return 50;
+        }
+        return (int) next;
     }
 }

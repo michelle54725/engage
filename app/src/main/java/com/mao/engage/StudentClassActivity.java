@@ -51,7 +51,7 @@ public class StudentClassActivity extends AppCompatActivity implements MeFragmen
 
         meFragment = new MeFragment();
         classFragment = new ClassFragment();
-        fragmentTransaction.add(R.id.constraintLayout, meFragment);
+        fragmentTransaction.replace(R.id.constraintLayout, meFragment);
         fragmentTransaction.commit();
 
         meTabBtn.setOnClickListener(new View.OnClickListener() {
