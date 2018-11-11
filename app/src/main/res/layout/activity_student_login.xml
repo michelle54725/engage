@@ -38,7 +38,7 @@
         android:textColor="@android:color/white"
         android:textSize="24sp"
         app:fontFamily="@font/quicksand_bold"
-        app:layout_constraintBottom_toTopOf="@id/instructionsText"
+        app:layout_constraintBottom_toTopOf="@id/magicWordLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -70,7 +70,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/classNameLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/magicWordLabel" />
 
     <Button
         android:id="@+id/joinClassBtn"

@@ -13,7 +13,7 @@
         android:layout_marginBottom="32dp"
         android:background="@drawable/edit_text_background"
         android:ems="10"
-        android:hint="mm/dd/yy"
+        android:hint="01/01/18"
         android:inputType="date"
         android:paddingStart="10dp"
         android:shadowColor="#CACACA"
@@ -24,8 +24,6 @@
         android:textColorHint="@color/colorTextGrey"
         app:fontFamily="@font/quicksand_bold"
         app:layout_constraintBottom_toTopOf="@+id/endTimeEditText"
-        app:layout_constraintEnd_toStartOf="@+id/datePickerBtn"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/classNameEditText"
         app:layout_constraintTop_toBottomOf="@+id/classNameEditText" />
 
@@ -38,7 +36,7 @@
         android:background="@drawable/edit_text_background"
         android:ems="10"
         android:hint="3:00 PM"
-        android:inputType="time"
+        android:inputType="none"
         android:paddingStart="10dp"
         android:shadowColor="#CACACA"
         android:singleLine="true"
@@ -59,7 +57,6 @@
         android:background="@drawable/edit_text_background"
         android:ems="10"
         android:hint="4:00 PM"
-        android:inputType="time"
         android:paddingStart="10dp"
         android:shadowColor="#CACACA"
         android:singleLine="true"
@@ -154,7 +151,7 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/edit_text_background"
         android:ems="10"
-        android:hint="Eg: CS61A Section 171"
+        android:hint="CS61A Section 100"
         android:inputType="textPersonName"
         android:paddingStart="10dp"
         android:shadowColor="#CACACA"
@@ -203,17 +200,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_round_arrow_back_24px" />
-
-    <ImageButton
-        android:id="@+id/datePickerBtn"
-        style="@android:style/Widget.ImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="@+id/dateEditText"
-        app:layout_constraintEnd_toEndOf="@+id/classNameEditText"
-        app:layout_constraintStart_toEndOf="@+id/dateEditText"
-        app:layout_constraintTop_toTopOf="@+id/dateEditText"
-        app:srcCompat="@android:drawable/ic_menu_my_calendar" />
 
 </android.support.constraint.ConstraintLayout>

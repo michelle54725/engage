@@ -28,7 +28,7 @@ public class StartActivity extends AppCompatActivity {
 
         joinStudentBtn = findViewById(R.id.joinStudentBtn);
         joinTeacherBtn = findViewById(R.id.joinTeacherBtn);
-        nameEditText = findViewById(R.id.classNameEditText);
+        nameEditText = findViewById(R.id.nameEditText);
 
         joinStudentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,10 +55,6 @@ public class StartActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private String getName() {
-        return nameEditText.getText().toString().replaceAll("\\s","");
     }
 
     private String getName() {
