@@ -29,9 +29,6 @@ public class MainActivity extends AppCompatActivity {
     final static String USER_ID = "user_id_1";
     final static String USERNAME = "Michelle Mao";
 
-    //TODO: fix this bug: "com.google.firebase.database.DatabaseException: Class java.time.LocalDateTime does not define a no-argument constructor."
-//    final static LocalDateTime START = LocalDateTime.of(2018, 12, 31, 20, 00);
-//    final static LocalDateTime END = LocalDateTime.of(2018, 12, 31, 22, 00);
     final static String START = "2018-12-31-2000";
     final static String END = "2018-12-31-2200";
 
@@ -56,13 +53,13 @@ public class MainActivity extends AppCompatActivity {
     TextView magicValue; //randomly generated magic key
     TextView refValue; //FireBase-generated ref key
     TextView refView; //Student-side: read section_ref from DB via. magic_key
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
         readValue = findViewById(R.id.readView);
@@ -110,19 +107,19 @@ public class MainActivity extends AppCompatActivity {
                 // Update SectionSesh's user_ids
                 mListUsers.add(mUser.user_id);
                 mSectionRef.child(mSectionRefKey).child("user_ids").setValue(mListUsers);
-                }
+            }
         });
     }
 
     void setSlider() {
         // slider
-        SeekBar seekBar = (SeekBar)findViewById(R.id.seekBar2);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+        SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar2);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 Toast.makeText(MainActivity.this,
-                        "Seekbar vale "+i, Toast.LENGTH_SHORT).show();
+                        "Seekbar vale " + i, Toast.LENGTH_SHORT).show();
                 String key = mUser.getSection_ref_key();
                 if (key != null) {
                     mSectionRef.child(key);
@@ -168,43 +165,5 @@ public class MainActivity extends AppCompatActivity {
                 // Failed to read value
             }
         });
-    }
-
-    public static class User {
-
-        public String userID;
-        public String userKey;
-        public int sliderValue;
-
-        public User() {
-
-        }
-
-        public User(String userID, String userKey, int sliderValue) {
-            this.userID = userID;
-            this.userKey = userKey;
-            this.sliderValue = sliderValue;
-
-
-        }
-    }
-
-    public static class Class {
-
-        public String classID;
-        public ArrayList<User> users;
-
-        public Class() {
-
-        }
-
-        public Class(String classID) {
-            this.classID = classID;
-            this.users = new ArrayList<>();
-        }
-
-        public void addUser(User user) {
-            this.users.add(user);
-        }
     }
 }
