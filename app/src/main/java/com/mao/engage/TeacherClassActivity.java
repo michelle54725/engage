@@ -12,12 +12,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RadioButton;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.sql.Time;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
 public class TeacherClassActivity extends AppCompatActivity implements  NowFragment.OnFragmentInteractionListener, TimelineFragment.OnFragmentInteractionListener{
-
     SegmentedGroup segmentedBar;
     RadioButton nowTabBtn;
     RadioButton timelineTabBtn;

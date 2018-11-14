@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -86,22 +88,8 @@ public class MeFragment extends Fragment {
         seekBar.setThumb(original);
         elastic = true;
 
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        setSlider();
 
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                elastic = false;
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                elastic = true;
-            }
-        });
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
 
@@ -161,5 +149,29 @@ public class MeFragment extends Fragment {
             return 50;
         }
         return (int) next;
+    }
+
+    void setSlider() {
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                Toast.makeText(getActivity(),
+                        "Seekbar value " + progress, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                Toast.makeText(getActivity(),
+                        "Seekbar touch started", Toast.LENGTH_SHORT).show();
+                elastic = false;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Toast.makeText(getActivity(),
+                        "Seekbar touch stopped", Toast.LENGTH_SHORT).show();
+//                elastic = true;
+            }
+        });
     }
 }
