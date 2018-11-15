@@ -156,7 +156,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // create SectionSesh and push to Firebase
                 DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
-                String mSectionRefKey = mSectionRef.push().getKey(); //create empty node to get key of it
+                final String mSectionRefKey = mSectionRef.push().getKey(); //create empty node to get key of it
                 final SectionSesh mSectionSesh = new SectionSesh(
                         START, END, TA_NAME, SECTION_ID, mSectionRefKey, MAGICKEY, new ArrayList<String>());
                 FirebaseUtils.createSection(mSectionSesh);
@@ -175,7 +175,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         Intent intent = new Intent(TeacherCreateClassActivity.this, TeacherClassActivity.class);
-                        intent.putExtra("sectionSesh", mSectionSesh);
+                        intent.putExtra("sectionRefKey", mSectionRefKey);
                         startActivity(intent);
                     }
                 });

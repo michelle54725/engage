@@ -20,6 +20,8 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // UI: set to portrait, notification bar hidden
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -38,6 +40,7 @@ public class StartActivity extends AppCompatActivity {
                     intent.putExtra("name", getName());
                     startActivity(intent);
                 } else {
+                    // TODO: replace Toasts with something cleaner
                     Toast.makeText(StartActivity.this, "Choose a real name", Toast.LENGTH_SHORT).show();
                 }
             }

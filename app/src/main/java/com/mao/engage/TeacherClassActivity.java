@@ -26,6 +26,7 @@ public class TeacherClassActivity extends AppCompatActivity implements  NowFragm
     FragmentManager fragmentManager;
     NowFragment nowFragment;
     TimelineFragment timelineFragment;
+    String mSectionRefKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,8 @@ public class TeacherClassActivity extends AppCompatActivity implements  NowFragm
                 fragmentTransaction.commit();
             }
         });
+
+        mSectionRefKey = getIntent().getStringExtra("sectionRefKey");
     }
 
     @Override
