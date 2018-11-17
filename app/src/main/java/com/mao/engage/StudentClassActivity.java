@@ -12,15 +12,18 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
-public class StudentClassActivity extends AppCompatActivity implements MeFragment.OnFragmentInteractionListener, ClassFragment.OnFragmentInteractionListener {
+public class StudentClassActivity extends AppCompatActivity implements MeFragment.OnFragmentInteractionListener {
 
     SegmentedGroup segmentedBar;
     RadioButton meTabBtn;
     RadioButton classTabBtn;
+    ImageButton backBtn;
     MeFragment meFragment;
     ClassFragment classFragment;
     FragmentManager fragmentManager;
@@ -41,6 +44,7 @@ public class StudentClassActivity extends AppCompatActivity implements MeFragmen
         segmentedBar = findViewById(R.id.segmentedBar);
         meTabBtn = findViewById(R.id.meTabBtn);
         classTabBtn = findViewById(R.id.classTabBtn);
+        backBtn = findViewById(R.id.backBtn);
 
         segmentedBar.setTintColor(getResources().getColor(R.color.colorPrimary));
         meTabBtn.setTextColor(Color.WHITE);
@@ -69,6 +73,13 @@ public class StudentClassActivity extends AppCompatActivity implements MeFragmen
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.constraintLayout, classFragment);
                 fragmentTransaction.commit();
+            }
+        });
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
