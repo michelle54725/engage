@@ -171,6 +171,7 @@ public class MeFragment extends Fragment {
                 Toast.makeText(getActivity(),
                         "Seekbar touch stopped", Toast.LENGTH_SHORT).show();
 //                elastic = true;
+                // push to FB here
             }
         });
     }
