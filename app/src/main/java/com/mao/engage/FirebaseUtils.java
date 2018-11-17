@@ -57,7 +57,7 @@ public class FirebaseUtils {
                 // Failed to read value
             }
         });
-        Log.d("refKey got", user.getSection_ref_key());
+        //Log.d("refKey got", user.getSection_ref_key());
         return user.getSection_ref_key();
     }
 

@@ -106,7 +106,7 @@ public class StudentLoginActivity extends AppCompatActivity {
     // Add current user to SectionSesh's user_ids list
     void updateSectionUsersList() {
         Log.d("TEST", "in updateSectionUsersList");
-        mSectionRef.child(getRefKey()).child("user_ids").child(mUID);
+//        mSectionRef.child(getRefKey()).child("user_ids").child(mUID);
 //        mSectionRef.child(getRefKey()).child("user_ids").setValue(mListUsers);
     }
 }

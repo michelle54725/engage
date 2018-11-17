@@ -19,7 +19,7 @@ import java.sql.Time;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
-public class TeacherClassActivity extends AppCompatActivity implements  NowFragment.OnFragmentInteractionListener, TimelineFragment.OnFragmentInteractionListener{
+public class TeacherClassActivity extends AppCompatActivity implements TimelineFragment.OnFragmentInteractionListener{
     SegmentedGroup segmentedBar;
     RadioButton nowTabBtn;
     RadioButton timelineTabBtn;

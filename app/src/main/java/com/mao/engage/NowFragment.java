@@ -1,15 +1,21 @@
 package com.mao.engage;
 
-import android.content.Context;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -19,65 +25,26 @@ import com.github.mikephil.charting.data.PieEntry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link NowFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link NowFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class NowFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private BarChart barChart;
     private PieChart engagedPieChart;
     private PieChart disengagedPieChart;
 
-    private OnFragmentInteractionListener mListener;
-
     public NowFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NowFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NowFragment newInstance(String param1, String param2) {
-        NowFragment fragment = new NowFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_now, container, false);
@@ -85,6 +52,12 @@ public class NowFragment extends Fragment {
         engagedPieChart = view.findViewById(R.id.engagedPieChart);
         disengagedPieChart = view.findViewById(R.id.disengagedPieChart);
 
+        retrieveData();
+
+        return view;
+    }
+
+    private void retrieveData() {
         List<BarEntry> entries = new ArrayList<>();
         entries.add(new BarEntry(0f, 30f));
         entries.add(new BarEntry(1f, 80f));
@@ -94,12 +67,14 @@ public class NowFragment extends Fragment {
         entries.add(new BarEntry(5f, 70f));
         entries.add(new BarEntry(6f, 60f));
 
-        List<PieEntry> engagedEntries = new ArrayList<>();
-        engagedEntries.add(new PieEntry(75));
-        engagedEntries.add(new PieEntry(25));
-        List<PieEntry> disengagedEntries = new ArrayList<>();
-        disengagedEntries.add(new PieEntry(25));
-        disengagedEntries.add(new PieEntry(75));
+        //TODO: make these values like real
+        int totalStudents = new Random().nextInt(100);
+        int engagedStudents = new Random().nextInt(totalStudents);
+        int disengagedStudents = totalStudents - engagedStudents;
+
+        List<PieEntry> engagementEntries = new ArrayList<>();
+        engagementEntries.add(new PieEntry(disengagedStudents));
+        engagementEntries.add(new PieEntry(engagedStudents));
 
         BarDataSet set = new BarDataSet(entries, "BarDataSet");
         BarData data = new BarData(set);
@@ -108,55 +83,46 @@ public class NowFragment extends Fragment {
         barChart.setFitBars(true); // make the x-axis fit exactly all bars
         barChart.invalidate(); // refresh
 
-        PieDataSet engagedSet = new PieDataSet(engagedEntries, "EngagedPieSet");
+        PieDataSet engagedSet = new PieDataSet(engagementEntries, "EngagedPieSet");
+        engagedSet.setColors(Color.TRANSPARENT, getResources().getColor(R.color.colorAccentBlue));
         PieData engagedData = new PieData(engagedSet);
+        engagedData.setDrawValues(false);
         engagedPieChart.setData(engagedData);
+        engagedPieChart.setTouchEnabled(false);
+        engagedPieChart.setHoleColor(Color.TRANSPARENT);
+        engagedPieChart.setHoleRadius(75);
+        engagedPieChart.setTransparentCircleRadius(0);
+
+        String engagedStudentsString = String.valueOf(engagedStudents);
+        SpannableString engagedSpannable = new SpannableString(engagedStudentsString + "\nstudents");
+        engagedSpannable.setSpan(new RelativeSizeSpan(2.5f), 0, engagedStudentsString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        engagedPieChart.setCenterText(engagedSpannable);
+        engagedPieChart.setCenterTextSize(18);
+        engagedPieChart.setCenterTextColor(Color.WHITE);
+        engagedPieChart.setCenterTextTypeface(ResourcesCompat.getFont(getContext(), R.font.quicksand_bold));
+        engagedPieChart.getLegend().setEnabled(false);
+        engagedPieChart.getDescription().setEnabled(false);
         engagedPieChart.invalidate();
 
-        PieDataSet disengagedSet = new PieDataSet(disengagedEntries, "DisengagedPieSet");
+        PieDataSet disengagedSet = new PieDataSet(engagementEntries, "DisengagedPieSet");
+        disengagedSet.setColors(getResources().getColor(R.color.colorAccentRed), Color.TRANSPARENT);
         PieData disengagedData = new PieData(disengagedSet);
+        disengagedData.setDrawValues(false);
         disengagedPieChart.setData(disengagedData);
+        disengagedPieChart.setTouchEnabled(false);
+        disengagedPieChart.setHoleColor(Color.TRANSPARENT);
+        disengagedPieChart.setHoleRadius(75);
+        disengagedPieChart.setTransparentCircleRadius(0);
+
+        String disengagedStudentsString = String.valueOf(disengagedStudents);
+        SpannableString disengagedSpannable = new SpannableString(disengagedStudentsString + "\nstudents");
+        disengagedSpannable.setSpan(new RelativeSizeSpan(2.5f), 0, disengagedStudentsString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        disengagedPieChart.setCenterText(disengagedSpannable);
+        disengagedPieChart.setCenterTextSize(18);
+        disengagedPieChart.setCenterTextColor(Color.WHITE);
+        disengagedPieChart.setCenterTextTypeface(ResourcesCompat.getFont(getContext(), R.font.quicksand_bold));
+        disengagedPieChart.getLegend().setEnabled(false);
+        disengagedPieChart.getDescription().setEnabled(false);
         disengagedPieChart.invalidate();
-
-        return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }
