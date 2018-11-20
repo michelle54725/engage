@@ -3,12 +3,15 @@ package com.mao.engage;
 import android.os.Build;
 import android.util.Log;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class FirebaseUtils {
@@ -24,6 +27,9 @@ public class FirebaseUtils {
     private static DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
     private static DatabaseReference mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions");
 
+    //Local variables as copy of Database
+    static HashMap<String, String> allUsers = new HashMap<>(); // K: user_id; V: section_ref_key
+
     // Add a section child in SectionSesh
     public static void createSection(SectionSesh section) {
         mSectionRef.child(section.ref_key).setValue(section);
@@ -33,32 +39,61 @@ public class FirebaseUtils {
                                      String key, int magic_word) {
     }
 
-    // Adds user to SectionSesh's user_id list
-    // Returns refKey of SectionSesh with input Magic Word
-    public static String findSectionWithUser(final UserSesh user) {
-        Log.d("TEST-REF", mSectionRef.getKey());
 
-        mUsersRef.addValueEventListener(new ValueEventListener() {
+    // Find SectionSesh corresponding to User's MagicWord
+    // Add UserID to corresponding Section's user_ids list
+    public static void createUser(final UserSesh user) {
+        Log.d("TEST", "in findSectionWithUser" + mSectionRef.getKey());
+        mSectionRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("TEST", "in mSectionRef OnDataChange");
+                Log.d("TEST", "in OnDataChange w MW: " + String.valueOf(user.getMagic_key()));
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     SectionSesh section = snapshot.getValue(SectionSesh.class);
-                    if (section.magic_key == Integer.valueOf(user.getMagic_key())) {
+                    if (section.getmagic_key() == user.getMagic_key()) {
+                        Log.d("TEST", "\n[FOUND MATCH] " + "\nmagic key: " + section.getmagic_key() + "; \n" + "ref key: " + section.getref_key());
                         // Reflect change in section_ref_key in both DB and UserSesh object
-                        mUsersRef.child(user.getUser_id()).child("section_ref_key").setValue(section.ref_key);
-                        user.setSection_ref_key(section.ref_key);
+                        user.setSection_ref_key(section.getref_key());
+                        mUsersRef.child(user.getUser_id()).setValue(user);
+
+                        DatabaseReference userIDref = mSectionRef.child(section.getref_key()).child("user_ids");
+                        Map<String, Object> userUpdates = new HashMap<>();
+                        userUpdates.put(user.getUser_id(), user.getUsername());
+                        userIDref.updateChildren(userUpdates);
                     }
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
+                Log.d("TEST-FAIL", "failed to read value");
             }
         });
-        //Log.d("refKey got", user.getSection_ref_key());
-        return user.getSection_ref_key();
+    }
+
+    public static void setUserListener() {
+        mUsersRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                UserSesh newUser = dataSnapshot.getValue(UserSesh.class);
+                Log.d("TEST", "[new User Child] \n" + newUser.getUser_id() + "\n" + newUser.getSection_ref_key());
+                allUsers.put(newUser.getUser_id(), newUser.getSection_ref_key());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 
     /**

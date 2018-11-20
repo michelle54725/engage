@@ -58,6 +58,8 @@ public class StartActivity extends AppCompatActivity {
                 }
             }
         });
+
+        FirebaseUtils.setUserListener();
     }
 
     private String getName() {
