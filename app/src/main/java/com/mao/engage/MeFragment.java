@@ -8,6 +8,7 @@ import android.graphics.drawable.ScaleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,14 +33,15 @@ import static java.lang.Math.abs;
 public class MeFragment extends Fragment {
 
     SeekBar seekBar;
+    int sliderValue;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM1 = "uID";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private String uID;
     private String mParam2;
 
     private Boolean elastic;
@@ -72,7 +74,7 @@ public class MeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            uID = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -157,6 +159,7 @@ public class MeFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 Toast.makeText(getActivity(),
                         "Seekbar value " + progress, Toast.LENGTH_SHORT).show();
+                sliderValue = progress;
             }
 
             @Override
@@ -171,7 +174,8 @@ public class MeFragment extends Fragment {
                 Toast.makeText(getActivity(),
                         "Seekbar touch stopped", Toast.LENGTH_SHORT).show();
 //                elastic = true;
-                // push to FB here
+                // push to FB
+                FirebaseUtils.setSliderVal(uID, sliderValue);
             }
         });
     }

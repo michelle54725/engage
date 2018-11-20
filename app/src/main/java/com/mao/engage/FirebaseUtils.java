@@ -1,8 +1,11 @@
 package com.mao.engage;
 
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -69,6 +72,25 @@ public class FirebaseUtils {
                 Log.d("TEST-FAIL", "failed to read value");
             }
         });
+    }
+
+    public static void setSliderVal(String user_id, final int value) {
+        String key = allUsers.get(user_id);
+        Log.d("TEST", "Attempting to write " + value + " to " + user_id + "...");
+        if (key != null) {
+            mUsersRef.child(user_id).child("slider_val").setValue(value).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("TEST", "New slider wrote to DB: " + value);
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("TEST", "New slider wrote to DB: " + "FAILED");
+                }
+            });
+        }
     }
 
     public static void setUserListener() {

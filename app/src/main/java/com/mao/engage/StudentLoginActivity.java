@@ -72,6 +72,8 @@ public class StudentLoginActivity extends AppCompatActivity {
                         Log.d("TEST", "set User's ref key to: " + mUser.getSection_ref_key());
                         Toast.makeText(StudentLoginActivity.this, "SUCCESS! Entering Section...", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(StudentLoginActivity.this, StudentClassActivity.class);
+                        intent.putExtra("uID", mUID);
+                        Log.d("TEST", "put intent: " + mUID);
                         startActivity(intent);
                     } else {
                         Toast.makeText(StudentLoginActivity.this, "Error! Check for typos?", Toast.LENGTH_SHORT).show();

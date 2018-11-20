@@ -15,6 +15,12 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
@@ -27,6 +33,9 @@ public class StudentClassActivity extends AppCompatActivity implements MeFragmen
     MeFragment meFragment;
     ClassFragment classFragment;
     FragmentManager fragmentManager;
+
+    DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
+    DatabaseReference mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +64,13 @@ public class StudentClassActivity extends AppCompatActivity implements MeFragmen
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         meFragment = new MeFragment();
+        // send data to Fragment
+        Bundle bundle = new Bundle();
+        bundle.putString("uID", getIntent().getStringExtra("uID"));
+        Log.d("TEST", "put bundle: " + getIntent().getStringExtra("uID"));
+
+        meFragment.setArguments(bundle);
+
         classFragment = new ClassFragment();
         fragmentTransaction.replace(R.id.constraintLayout, meFragment);
         fragmentTransaction.commit();
@@ -83,7 +99,6 @@ public class StudentClassActivity extends AppCompatActivity implements MeFragmen
                 finish();
             }
         });
-
     }
 
     @Override
