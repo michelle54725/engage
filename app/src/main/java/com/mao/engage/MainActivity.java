@@ -153,8 +153,8 @@ public class MainActivity extends AppCompatActivity {
                     if (section.magic_key == user.magic_key) {
                         //TODO: could do this more elegantly.
                         // Reflect change in section_ref_key in both DB and UserSesh object
-                        user.setSection_ref_key(section.getref_key());
-                        mUsersRef.child(user.user_id).child("section_ref_key").setValue(section.getref_key());
+                        user.setSection_ref_key(section.getRef_key());
+                        mUsersRef.child(user.user_id).child("section_ref_key").setValue(section.getRef_key());
                         refView.setText(user.section_ref_key);
                     }
                 }

@@ -53,13 +53,13 @@ public class FirebaseUtils {
                 Log.d("TEST", "in OnDataChange w MW: " + String.valueOf(user.getMagic_key()));
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     SectionSesh section = snapshot.getValue(SectionSesh.class);
-                    if (section.getmagic_key() == user.getMagic_key()) {
-                        Log.d("TEST", "\n[FOUND MATCH] " + "\nmagic key: " + section.getmagic_key() + "; \n" + "ref key: " + section.getref_key());
+                    if (section.getMagic_key() == user.getMagic_key()) {
+                        Log.d("TEST", "\n[FOUND MATCH] " + "\nmagic key: " + section.getMagic_key() + "; \n" + "ref key: " + section.getRef_key());
                         // Reflect change in section_ref_key in both DB and UserSesh object
-                        user.setSection_ref_key(section.getref_key());
+                        user.setSection_ref_key(section.getRef_key());
                         mUsersRef.child(user.getUser_id()).setValue(user);
 
-                        DatabaseReference userIDref = mSectionRef.child(section.getref_key()).child("user_ids");
+                        DatabaseReference userIDref = mSectionRef.child(section.getRef_key()).child("user_ids");
                         Map<String, Object> userUpdates = new HashMap<>();
                         userUpdates.put(user.getUser_id(), user.getUsername());
                         userIDref.updateChildren(userUpdates);

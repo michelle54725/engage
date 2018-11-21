@@ -37,7 +37,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
     final static String END = "2018-12-31-2200";
     final static String TA_NAME = "John Denero";
     final static String SECTION_ID = "CS70134A";
-    final static int MAGICKEY = 420;
+    final static int MAGICKEY = 421;
 
     ImageButton backBtn;
     EditText dateEditText;
