@@ -49,23 +49,25 @@ public class StartActivity extends AppCompatActivity {
         joinTeacherBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToCreateClassActivity();
+                if (FirebaseUtils.teacherIsInDB()) {
+                    // Teacher already in DB
+                    Intent intent = new Intent(StartActivity.this, TeacherOptionsActivity.class);
+                    intent.putExtra("name", getName());
+                    startActivity(intent);
+                } else {
+                    // Teacher not in DB yet (first time user)
+                    goToCreateClassActivity();
+                }
             }
         });
 
         FirebaseUtils.setUserListener();
+        FirebaseUtils.setTeacherListener();
     }
 
     void goToCreateClassActivity(){
         if (isValidName()) {
-            Intent intent;
-            if (FirebaseUtils.teacherIsInDB() != "") {
-                // Teacher already in DB
-                intent = new Intent(StartActivity.this, TeacherOptionsActivity.class);
-            } else {
-                // Teacher not in DB yet (first time user)
-                intent = new Intent(StartActivity.this, TeacherCreateClassActivity.class);
-            }
+            Intent intent = new Intent(StartActivity.this, TeacherCreateClassActivity.class);
             intent.putExtra("name", getName());
             startActivity(intent);
         } else {
