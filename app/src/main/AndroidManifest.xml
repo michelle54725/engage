@@ -20,7 +20,8 @@
         <activity android:name=".StudentLoginActivity" />
         <activity android:name=".StudentClassActivity" />
         <activity android:name=".TeacherCreateClassActivity" />
-        <activity android:name=".TeacherClassActivity"></activity>
+        <activity android:name=".TeacherClassActivity" />
+        <activity android:name=".TeacherOptionsActivity"></activity>
     </application>
 
 </manifest>

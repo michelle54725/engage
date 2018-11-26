@@ -29,6 +29,7 @@ public class FirebaseUtils {
 
     private static DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
     private static DatabaseReference mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions");
+    private static DatabaseReference mTeachersRef = FirebaseDatabase.getInstance().getReference("/Teachers");
 
     //Local variables as copy of Database
     static HashMap<String, String> allUsers = new HashMap<>(); // K: user_id; V: section_ref_key
@@ -116,6 +117,32 @@ public class FirebaseUtils {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+    }
+
+    public static boolean teacherIsInDB() {
+        Log.d("TEST", "in teacherIsInDB method...");
+        final String deviceID = getPsuedoUniqueID();
+
+        mTeachersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            boolean returnValue = false;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("TEST", "in teacherIsInDB -> onDataChange...");
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if (snapshot.getKey().equals(deviceID)) {
+                        Log.d("TEST", "found Teacher!");
+                        returnValue = true;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        });
+        return returnValue;
     }
 
     /**
