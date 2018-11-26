@@ -59,7 +59,7 @@ public class StartActivity extends AppCompatActivity {
     void goToCreateClassActivity(){
         if (isValidName()) {
             Intent intent;
-            if (FirebaseUtils.teacherIsInDB() != "") {
+            if (FirebaseUtils.teacherIsInDB()) {
                 // Teacher already in DB
                 intent = new Intent(StartActivity.this, TeacherOptionsActivity.class);
             } else {

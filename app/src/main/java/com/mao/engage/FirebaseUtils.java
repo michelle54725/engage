@@ -122,16 +122,15 @@ public class FirebaseUtils {
     public static boolean teacherIsInDB() {
         Log.d("TEST", "in teacherIsInDB method...");
         final String deviceID = getPsuedoUniqueID();
-
+        boolean returnValue = true;
         mTeachersRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            boolean returnValue = false;
+
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d("TEST", "in teacherIsInDB -> onDataChange...");
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     if (snapshot.getKey().equals(deviceID)) {
                         Log.d("TEST", "found Teacher!");
-                        returnValue = true;
                     }
                 }
             }
