@@ -67,6 +67,7 @@ public class StartActivity extends AppCompatActivity {
 
     void goToCreateClassActivity(){
         if (isValidName()) {
+
             Intent intent = new Intent(StartActivity.this, TeacherCreateClassActivity.class);
             intent.putExtra("name", getName());
             startActivity(intent);
