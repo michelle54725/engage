@@ -100,6 +100,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         String amPm;
+                        Log.d("BOBOBOB", "onTimeSet: " + hourOfDay + minute);
                         if (hourOfDay == 0) {
                             hourOfDay = 12;
                             amPm = "AM";

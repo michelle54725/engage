@@ -7,6 +7,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,14 +24,6 @@ import java.util.TimerTask;
 import static java.lang.Math.abs;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MeFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MeFragment extends Fragment {
 
     SeekBar seekBar;
@@ -45,8 +39,6 @@ public class MeFragment extends Fragment {
     private String mParam2;
 
     private Boolean elastic;
-
-    private OnFragmentInteractionListener mListener;
 
     public MeFragment() {
         // Required empty public constructor
@@ -85,10 +77,20 @@ public class MeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_me, container, false);
         seekBar = view.findViewById(R.id.seekBar);
-        Drawable original = getResources().getDrawable(R.drawable.ic_slider_thumb);
-        original.setBounds(0, 0, 1000, 1000);
-        seekBar.setThumb(original);
-        elastic = true;
+
+        final Drawable original =  getResources().getDrawable(R.drawable.ic_slider_thumb);
+        seekBar.post(new Runnable() {
+            @Override
+            public void run() {
+
+                ScaleDrawable test = new ScaleDrawable(original, 0, 0, 1);
+                Drawable d = test;
+                d.setLevel((seekBar.getHeight() - 1) * 10 / 3);
+                Log.d("BOBOOBO3BO", "RUNN: " + seekBar.getHeight() + " " );
+                seekBar.setThumb(d);
+            }
+        });
+        elastic = false;
 
         setSlider();
 
@@ -106,43 +108,10 @@ public class MeFragment extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.d("BOBOOBO2BO", "onCreateView: " + seekBar.getHeight());
     }
 
     private int elasticFunction(int current) {
@@ -157,9 +126,7 @@ public class MeFragment extends Fragment {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Toast.makeText(getActivity(),
-                        "Seekbar value " + progress, Toast.LENGTH_SHORT).show();
-                sliderValue = progress;
+                Log.d("ADAS", "onProgressChanged: " + sliderValue);
             }
 
             @Override
@@ -173,8 +140,6 @@ public class MeFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Toast.makeText(getActivity(),
                         "Seekbar touch stopped", Toast.LENGTH_SHORT).show();
-//                elastic = true;
-                // push to FB
                 FirebaseUtils.setSliderVal(uID, sliderValue);
             }
         });

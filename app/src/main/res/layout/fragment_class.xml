@@ -25,7 +25,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
-            android:src="@mipmap/ic_launcher_round"
+            android:src="@drawable/thumbs_up"
             app:layout_constraintEnd_toStartOf="@+id/chart"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +36,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginBottom="8dp"
-            android:src="@mipmap/ic_launcher_round"
+            android:src="@drawable/thumbs_down"
             app:layout_constraintBottom_toBottomOf="@+id/chart"
             app:layout_constraintEnd_toEndOf="@+id/thumbsUpIcon"
             app:layout_constraintStart_toStartOf="@+id/thumbsUpIcon" />

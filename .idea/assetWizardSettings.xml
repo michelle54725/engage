@@ -3,6 +3,11 @@
   <component name="WizardSettings">
     <option name="children">
       <map>
+        <entry key="imageWizard">
+          <value>
+            <PersistentState />
+          </value>
+        </entry>
         <entry key="vectorWizard">
           <value>
             <PersistentState>
@@ -14,13 +19,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-<<<<<<< HEAD
-                            <entry key="outputName" value="ic_slider_thumb" />
-                            <entry key="sourceFile" value="$USER_HOME$/Downloads/slider_thumb (1).svg" />
-=======
-                            <entry key="outputName" value="ic_round_arrow_back_24px" />
-                            <entry key="sourceFile" value="$USER_HOME$/Downloads/round-arrow_back-24px.svg" />
->>>>>>> 69e7b31... working on the slideybar screen now
+                            <entry key="outputName" value="ic_slider_track" />
+                            <entry key="sourceFile" value="$USER_HOME$/Downloads/slider_gradient.svg" />
                           </map>
                         </option>
                       </PersistentState>

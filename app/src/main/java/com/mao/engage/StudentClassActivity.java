@@ -24,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
-public class StudentClassActivity extends AppCompatActivity implements MeFragment.OnFragmentInteractionListener {
+public class StudentClassActivity extends AppCompatActivity {
 
     SegmentedGroup segmentedBar;
     RadioButton meTabBtn;
@@ -101,8 +101,4 @@ public class StudentClassActivity extends AppCompatActivity implements MeFragmen
         });
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        Log.d("BOBOB", "onFragmentInteraction: " + uri.toString());
-    }
 }
