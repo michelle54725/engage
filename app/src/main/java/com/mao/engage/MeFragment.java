@@ -140,7 +140,7 @@ public class MeFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Toast.makeText(getActivity(),
                         "Seekbar touch stopped", Toast.LENGTH_SHORT).show();
-                FirebaseUtils.setSliderVal(uID, sliderValue);
+                FirebaseUtils.setSliderVal(uID, seekBar.getProgress());
             }
         });
     }
