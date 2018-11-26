@@ -155,12 +155,14 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
         createClassBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // create SectionSesh and push to Firebase
                 DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
                 final String mSectionRefKey = mSectionRef.push().getKey(); //create empty node to get key of it
                 final SectionSesh mSectionSesh = new SectionSesh(
                         START, END, TA_NAME, SECTION_ID, mSectionRefKey, MAGICKEY, new ArrayList<String>());
                 FirebaseUtils.createSection(mSectionSesh);
+                FirebaseUtils.updateTeacher(mSectionRefKey, mSectionSesh.getSection_id()); // update Teachers in Firebase
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(TeacherCreateClassActivity.this);
                 builder.setTitle("Success!");

@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 
@@ -32,7 +33,8 @@ public class FirebaseUtils {
     private static DatabaseReference mTeachersRef = FirebaseDatabase.getInstance().getReference("/Teachers");
 
     //Local variables as copy of Database
-    static HashMap<String, String> allUsers = new HashMap<>(); // K: user_id; V: section_ref_key
+    static HashMap<String, String> allUsers = new HashMap<>(); // K: user_id (device key); V: section_ref_key
+    static HashSet<String> allTeachers = new HashSet<>(); // device keys (DB reference key)
 
     // Add a section child in SectionSesh
     public static void createSection(SectionSesh section) {
@@ -75,6 +77,11 @@ public class FirebaseUtils {
         });
     }
 
+    public static void updateTeacher(String sectionRefKey, String sectionID) {
+        Log.d("TEST", "updating Teacher w device ID " + getPsuedoUniqueID());
+        mTeachersRef.child(getPsuedoUniqueID()).child(sectionRefKey).setValue(sectionID);
+    }
+
     public static void setSliderVal(String user_id, final int value) {
         String key = allUsers.get(user_id);
         Log.d("TEST", "Attempting to write " + value + " to " + user_id + "...");
@@ -109,7 +116,11 @@ public class FirebaseUtils {
             }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                UserSesh newUser = dataSnapshot.getValue(UserSesh.class);
+                Log.d("TEST", "[deleting User Child] \n" + newUser.getUser_id() + "\n" + newUser.getSection_ref_key());
+                allUsers.remove(newUser.getUser_id());
+            }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
@@ -119,29 +130,42 @@ public class FirebaseUtils {
         });
     }
 
+
+    public static void setTeacherListener() {
+        mTeachersRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                String id = dataSnapshot.getKey();
+                Log.d("TEST", "[new Teacher Child] \n" + id);
+                allTeachers.add(id);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                String id = dataSnapshot.getKey();
+                Log.d("TEST", "[deleting Teacher Child] \n" + id);
+                allTeachers.remove(id);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+    }
+
+
     public static boolean teacherIsInDB() {
         Log.d("TEST", "in teacherIsInDB method...");
-        final String deviceID = getPsuedoUniqueID();
-        boolean returnValue = true;
-        mTeachersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        Log.d("TEST", "teacherIsInDB RESULT: " + allTeachers.contains(getPsuedoUniqueID()));
 
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("TEST", "in teacherIsInDB -> onDataChange...");
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    if (snapshot.getKey().equals(deviceID)) {
-                        Log.d("TEST", "found Teacher!");
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-        });
-        return returnValue;
+        return allTeachers.contains(getPsuedoUniqueID());
     }
 
     /**
