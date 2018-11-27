@@ -88,13 +88,30 @@ public class NowFragment extends Fragment {
 
     private void retrieveData() {
 
-        List<BarEntry> entries = new ArrayList<>();
-        int[] arr = {10, 20, 40, 55, 60, 65, 50, 45, 20, 5};
-        for(int i = 0; i < arr.length; i++) {
-            entries.add(new BarEntry(i, arr[i]));
+
+        //TODO @Michelle: this should be the students' scores
+        int[] individualEngagements = {
+                5, 5,
+                15, 15, 15, 15,
+                25, 25, 25, 25, 25, 25, 25, 25,
+                35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
+                45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45,
+                55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
+                65, 65, 65, 65, 65, 65, 65, 65, 65, 65,
+                75, 75, 75, 75, 75, 75, 75, 75, 75,
+                85, 85, 85, 85,
+                95
+        };
+
+        int[] countsArray = new int[10];
+        for(int engagement : individualEngagements) {
+            countsArray[engagement / 10] += 1;
         }
 
-        //TODO: make these values like real
+        List<BarEntry> entries = new ArrayList<>();
+        for(int i = 0; i < countsArray.length; i++) {
+            entries.add(new BarEntry(i, countsArray[i]));
+        }
 
         BarDataSet disengagedBarSet = new BarDataSet(entries.subList(0, thresholdBar.getProgress()), "BarDataSet");
         disengagedBarSet.setColor(getResources().getColor(R.color.colorAccentRed));
@@ -102,12 +119,12 @@ public class NowFragment extends Fragment {
         engagedBarSet.setColor(getResources().getColor(R.color.colorAccentBlue));
 
         int engagedStudents = 0;
-        for(int i = thresholdBar.getProgress(); i < arr.length; i++) {
-            engagedStudents += arr[i];
+        for(int i = thresholdBar.getProgress(); i < countsArray.length; i++) {
+            engagedStudents += countsArray[i];
         }
         int disengagedStudents = 0;
         for(int i = 0; i < thresholdBar.getProgress(); i++) {
-            disengagedStudents += arr[i];
+            disengagedStudents += countsArray[i];
         }
 
         List<PieEntry> engagementEntries = new ArrayList<>();
