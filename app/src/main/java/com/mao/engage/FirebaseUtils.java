@@ -41,19 +41,20 @@ public class FirebaseUtils {
     // Add a section child in SectionSesh
     public static void createSection(final SectionSesh section) {
         mSectionRef.child(section.ref_key).setValue(section);
-        // TODO: and create Listeners for each corresponding User object in FB to update sectionSliders values
+
         // a Listener on a Section's user_ids to maintain local sectionSliders HashMap
         mSectionRef.child(section.ref_key).child("user_ids").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Log.d("TEST", "copying user to local sectionSliders: " + dataSnapshot.getKey());
-                sectionSliders.put(dataSnapshot.getKey(), 50); // degfault slider = 50
-
-                // create Listener with User corresponding to key
+                String user_id = dataSnapshot.getKey();
+                sectionSliders.put(user_id, 50); // default slider = 50
+                setSliderListener(user_id);
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                // Someone changed their name
 
             }
 
@@ -61,8 +62,8 @@ public class FirebaseUtils {
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 Log.d("TEST", "removing user from local sectionSliders: " + dataSnapshot.getKey());
                 sectionSliders.remove(dataSnapshot.getKey());
-
-                // stop Listener of User corresponding to key
+                String user_id = dataSnapshot.getKey();
+                // TODO: stop Listener
             }
 
             @Override
@@ -137,6 +138,34 @@ public class FirebaseUtils {
                 }
             });
         }
+    }
+
+    private static void setSliderListener(final String user_id) {
+        // creates Listener for UserSessions's slider_val to update sectionSliders HashMap
+        mUsersRef.child(user_id).child("slider_val").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (sectionSliders.containsKey(user_id)) {
+                    Log.d("TEST", "\nreading '" + user_id + "'; \n with slider val: " + dataSnapshot.getValue());
+                    sectionSliders.put(user_id, Integer.valueOf(dataSnapshot.getValue().toString()));
+
+                    // For testing purposes
+                    Log.d("PRINT_TEST" , "\n Printing contents of sectionSliders Hashmap...");
+                    for (String user: sectionSliders.keySet()){
+                        Integer value = sectionSliders.get(user);
+                        Log.d("PRINT_TEST" , value.toString());
+                    }
+
+                } else {
+                    Log.d("TEST", "ERROR: user_id not found in sectionSlider HashMap");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public static void setUserListener() {
