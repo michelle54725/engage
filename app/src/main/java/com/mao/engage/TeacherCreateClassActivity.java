@@ -7,6 +7,8 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,12 +25,23 @@ import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Random;
 
 public class TeacherCreateClassActivity extends AppCompatActivity {
     // Hardcoded instance variables (that should not be hardcoded)
@@ -45,6 +58,11 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
     EditText endTimeEditText;
     Button createClassBtn;
 
+    DatabaseReference mMagicKeyRef;
+    HashMap<Integer, String> activeMagicKeys;
+    private int magicKey;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +72,8 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_teacher_create_class);
+
+        generateMagicWord();
 
         backBtn = findViewById(R.id.backBtn);
         classNameEditText = findViewById(R.id.classNameEditText);
@@ -159,11 +179,12 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
                 // check validity of fields
                 if (fieldsValid()) {
                     setFields();
+
                     // create SectionSesh and push to Firebase
                     DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
                     final String mSectionRefKey = mSectionRef.push().getKey(); //create empty node to get key of it
                     final SectionSesh mSectionSesh = new SectionSesh(
-                            START, END, TA_KEY, SECTION_ID, mSectionRefKey, MAGICKEY, new ArrayList<String>());
+                            START, END, TA_KEY, classNameEditText.getText().toString(), mSectionRefKey, magicKey, new ArrayList<String>());
                     FirebaseUtils.createSection(mSectionSesh);
                     FirebaseUtils.updateTeacher(getIntent().getStringExtra("name"), mSectionRefKey, mSectionSesh.getSection_id()); // update Teachers in Firebase
 
@@ -192,7 +213,75 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
             }
         });
 
+        activeMagicKeys = new HashMap<>();
+        mMagicKeyRef = FirebaseDatabase.getInstance().getReference("/MagicKeys");
+        mMagicKeyRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.d("BOBCHILD", "onChildAdded: " + dataSnapshot.getKey() + dataSnapshot.getValue());
+                activeMagicKeys.put(Integer.valueOf(dataSnapshot.getKey()), dataSnapshot.getValue(String.class));
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.d("BOBCHILD", "onChildCHANGED: " + dataSnapshot.getKey() + dataSnapshot.getValue());
+                activeMagicKeys.put(Integer.valueOf(dataSnapshot.getKey()), dataSnapshot.getValue(String.class));
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("BOBCHILD", "onChildREMOVED: " + dataSnapshot.getKey() + dataSnapshot.getValue());
+                activeMagicKeys.remove(Integer.valueOf(dataSnapshot.getKey()));
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
+
+    private void generateMagicWord() {
+        magicKey = new Random().nextInt(1000);
+        Log.d("LOOOOOP", "generateMagicWord: LOOOOOOOOP");
+        if (activeMagicKeys.containsKey(magicKey)) {
+            Log.d("BOBOBactive", "CONFLICT Time to resolve" + activeMagicKeys.get(magicKey));
+            final DatabaseReference conflictingSectionRef = FirebaseDatabase.getInstance().getReference("/Sections/").child(activeMagicKeys.get(magicKey));
+            Log.d("BOBOBdelete", " " + conflictingSectionRef.getKey());
+            conflictingSectionRef.child("b_end").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy-HH:mma", Locale.US);
+                    try {
+                        Date endTime = dateFormat.parse((String) dataSnapshot.getValue());
+                        Date now = Calendar.getInstance().getTime();
+                        Log.d("BOBOB", "onDataChange: " + endTime + " " + now);
+                        if (now.after(endTime)) {
+                            Log.d("BOBOBB", "onDataChange: " + "CAN DELETE");
+                            conflictingSectionRef.removeValue();
+                            FirebaseDatabase.getInstance().getReference("/MagicKeys/"+magicKey).removeValue();
+                        } else {
+                            generateMagicWord();
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
     private void setFields() {
         START = getField(dateEditText) +"-"+ getField(startTimeEditText);
         END = getField(dateEditText) +"-"+ getField(endTimeEditText);
