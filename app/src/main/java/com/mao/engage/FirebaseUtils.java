@@ -39,14 +39,17 @@ public class FirebaseUtils {
     static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: slider;
 
     // Add a section child in SectionSesh
-    public static void createSection(SectionSesh section) {
+    public static void createSection(final SectionSesh section) {
         mSectionRef.child(section.ref_key).setValue(section);
-        // TODO: create Listener on user_ids, use onChildAdd(/Delete) to update sectionSliders keys
         // TODO: and create Listeners for each corresponding User object in FB to update sectionSliders values
-        mSectionRef.child(section.ref_key).addChildEventListener(new ChildEventListener() {
+        // a Listener on a Section's user_ids to maintain local sectionSliders HashMap
+        mSectionRef.child(section.ref_key).child("user_ids").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.d("TEST", "copying user to local sectionSliders: " + dataSnapshot.getKey());
+                sectionSliders.put(dataSnapshot.getKey(), 50); // degfault slider = 50
 
+                // create Listener with User corresponding to key
             }
 
             @Override
@@ -56,7 +59,10 @@ public class FirebaseUtils {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("TEST", "removing user from local sectionSliders: " + dataSnapshot.getKey());
+                sectionSliders.remove(dataSnapshot.getKey());
 
+                // stop Listener of User corresponding to key
             }
 
             @Override
