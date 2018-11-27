@@ -192,7 +192,6 @@ public class FirebaseUtils {
         });
     }
 
-
     public static boolean teacherIsInDB() {
         Log.d("TEST", "in teacherIsInDB method...");
         Log.d("TEST", "teacherIsInDB RESULT: " + allTeachers.contains(getPsuedoUniqueID()));

@@ -30,7 +30,9 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -61,6 +63,24 @@ public class NowFragment extends Fragment {
         disengagedPieChart = view.findViewById(R.id.disengagedPieChart);
         thresholdBar = view.findViewById(R.id.thresholdSeekBar);
 
+        thresholdBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                retrieveData();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        barChart.setViewPortOffsets(0f, 0f, 0f, 0);
         retrieveData();
 
         return view;
@@ -68,32 +88,50 @@ public class NowFragment extends Fragment {
 
     private void retrieveData() {
 
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0f, 1));
-        entries.add(new BarEntry(1f, 40));
-        entries.add(new BarEntry(2f, 40));
-        entries.add(new BarEntry(3f, 40));
-        entries.add(new BarEntry(4f, 40));
-        entries.add(new BarEntry(5f, 40));
-        entries.add(new BarEntry(6f, 40));
-        entries.add(new BarEntry(7f, 40));
-        entries.add(new BarEntry(8f, 80));
-        entries.add(new BarEntry(9f, 100));
 
-        //TODO: make these values like real
-        int totalStudents = new Random().nextInt(100);
-        int engagedStudents = new Random().nextInt(totalStudents);
-        int disengagedStudents = totalStudents - engagedStudents;
+        //TODO @Michelle: this should be the students' scores
+        int[] individualEngagements = {
+                5, 5,
+                15, 15, 15, 15,
+                25, 25, 25, 25, 25, 25, 25, 25,
+                35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
+                45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45,
+                55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
+                65, 65, 65, 65, 65, 65, 65, 65, 65, 65,
+                75, 75, 75, 75, 75, 75, 75, 75, 75,
+                85, 85, 85, 85,
+                95
+        };
+
+        int[] countsArray = new int[10];
+        for(int engagement : individualEngagements) {
+            countsArray[engagement / 10] += 1;
+        }
+
+        List<BarEntry> entries = new ArrayList<>();
+        for(int i = 0; i < countsArray.length; i++) {
+            entries.add(new BarEntry(i, countsArray[i]));
+        }
+
+        BarDataSet disengagedBarSet = new BarDataSet(entries.subList(0, thresholdBar.getProgress()), "BarDataSet");
+        disengagedBarSet.setColor(getResources().getColor(R.color.colorAccentRed));
+        BarDataSet engagedBarSet = new BarDataSet(entries.subList(thresholdBar.getProgress(), entries.size()), "BarDataSet");
+        engagedBarSet.setColor(getResources().getColor(R.color.colorAccentBlue));
+
+        int engagedStudents = 0;
+        for(int i = thresholdBar.getProgress(); i < countsArray.length; i++) {
+            engagedStudents += countsArray[i];
+        }
+        int disengagedStudents = 0;
+        for(int i = 0; i < thresholdBar.getProgress(); i++) {
+            disengagedStudents += countsArray[i];
+        }
 
         List<PieEntry> engagementEntries = new ArrayList<>();
         engagementEntries.add(new PieEntry(disengagedStudents));
         engagementEntries.add(new PieEntry(engagedStudents));
 
-        BarDataSet engagedBarSet = new BarDataSet(entries.subList(0, 5), "BarDataSet");
-        engagedBarSet.setColor(getResources().getColor(R.color.colorAccentRed));
-
-        BarDataSet disengagedBarSet = new BarDataSet(entries.subList(5, entries.size()), "BarDataSet");
-        disengagedBarSet.setColor(getResources().getColor(R.color.colorAccentBlue));
+        Log.d("SEEKBAR", "retrieveData: " + thresholdBar.getProgress());
 
         BarData barData = new BarData();
         barData.addDataSet(engagedBarSet);
@@ -114,14 +152,11 @@ public class NowFragment extends Fragment {
         xAxis.setDrawLabels(false);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
-        barChart.setDrawBorders(true);
-        barChart.setViewPortOffsets(0f, 0f, 0f, 0);
         barChart.fitScreen();
 
         Description description = new Description();
         description.setText("");
         barChart.setDescription(description);
-        barChart.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         Legend legend = barChart.getLegend();
         legend.setEnabled(false);
