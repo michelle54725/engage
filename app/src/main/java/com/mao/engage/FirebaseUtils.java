@@ -63,7 +63,7 @@ public class FirebaseUtils {
                 Log.d("TEST", "removing user from local sectionSliders: " + dataSnapshot.getKey());
                 sectionSliders.remove(dataSnapshot.getKey());
                 String user_id = dataSnapshot.getKey();
-                // TODO: stop Listener
+                // TODO: stop Listener?
             }
 
             @Override
@@ -90,20 +90,24 @@ public class FirebaseUtils {
         mSectionRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("TEST", "in OnDataChange w MW: " + String.valueOf(user.getMagic_key()));
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    SectionSesh section = snapshot.getValue(SectionSesh.class);
-                    if (section.getMagic_key() == user.getMagic_key()) {
-                        Log.d("TEST", "\n[FOUND MATCH] " + "\nmagic key: " + section.getMagic_key() + "; \n" + "ref key: " + section.getRef_key());
-                        // Reflect change in section_ref_key in both DB and UserSesh object
-                        user.setSection_ref_key(section.getRef_key());
-                        mUsersRef.child(user.getUser_id()).setValue(user);
+                if (dataSnapshot.exists()) {
+                    Log.d("TEST", "in OnDataChange w MW: " + String.valueOf(user.getMagic_key()));
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        SectionSesh section = snapshot.getValue(SectionSesh.class);
+                        if (section.getMagic_key() == user.getMagic_key()) {
+                            Log.d("TEST", "\n[FOUND MATCH] " + "\nmagic key: " + section.getMagic_key() + "; \n" + "ref key: " + section.getRef_key());
+                            // Reflect change in section_ref_key in both DB and UserSesh object
+                            user.setSection_ref_key(section.getRef_key());
+                            mUsersRef.child(user.getUser_id()).setValue(user);
 
-                        DatabaseReference userIDref = mSectionRef.child(section.getRef_key()).child("user_ids");
-                        Map<String, Object> userUpdates = new HashMap<>();
-                        userUpdates.put(user.getUser_id(), user.getUsername());
-                        userIDref.updateChildren(userUpdates);
+                            DatabaseReference userIDref = mSectionRef.child(section.getRef_key()).child("user_ids");
+                            Map<String, Object> userUpdates = new HashMap<>();
+                            userUpdates.put(user.getUser_id(), user.getUsername());
+                            userIDref.updateChildren(userUpdates);
+                        }
                     }
+                } else {
+                    Log.d("TEST-FAIL", "dataSnapshot DNE");
                 }
             }
 
@@ -145,19 +149,24 @@ public class FirebaseUtils {
         mUsersRef.child(user_id).child("slider_val").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (sectionSliders.containsKey(user_id)) {
-                    Log.d("TEST", "\nreading '" + user_id + "'; \n with slider val: " + dataSnapshot.getValue());
-                    sectionSliders.put(user_id, Integer.valueOf(dataSnapshot.getValue().toString()));
+                if (dataSnapshot.exists()) {
+                    if (sectionSliders.containsKey(user_id)) {
+                        Log.d("TEST", "\nreading '" + user_id + "'; \n with slider val: " + dataSnapshot.getValue());
+                        sectionSliders.put(user_id, Integer.valueOf(dataSnapshot.getValue().toString()));
 
-                    // For testing purposes
-                    Log.d("PRINT_TEST" , "\n Printing contents of sectionSliders Hashmap...");
-                    for (String user: sectionSliders.keySet()){
-                        Integer value = sectionSliders.get(user);
-                        Log.d("PRINT_TEST" , value.toString());
+                        // For testing purposes
+                        Log.d("PRINT_TEST", "\n Printing contents of sectionSliders Hashmap...");
+                        for (String user : sectionSliders.keySet()) {
+                            Integer value = sectionSliders.get(user);
+                            Log.d("PRINT_TEST", user + ": " + value.toString());
+                        }
+
+                    } else {
+                        Log.d("TEST", "ERROR: user_id not found in sectionSlider HashMap");
                     }
-
                 } else {
-                    Log.d("TEST", "ERROR: user_id not found in sectionSlider HashMap");
+                    Log.d("TEST", "deleting Listener for " + user_id);
+                    mUsersRef.child(user_id).child("slider_val").removeEventListener(this);
                 }
             }
 
