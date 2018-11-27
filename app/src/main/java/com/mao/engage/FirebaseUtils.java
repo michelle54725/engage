@@ -2,6 +2,7 @@ package com.mao.engage;
 
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,10 +36,39 @@ public class FirebaseUtils {
     //Local variables as copy of Database
     static HashMap<String, String> allUsers = new HashMap<>(); // K: user_id (device key); V: section_ref_key
     static HashSet<String> allTeachers = new HashSet<>(); // device keys (DB reference key)
+    static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: slider;
 
     // Add a section child in SectionSesh
     public static void createSection(SectionSesh section) {
         mSectionRef.child(section.ref_key).setValue(section);
+        // TODO: create Listener on user_ids, use onChildAdd(/Delete) to update sectionSliders keys
+        // TODO: and create Listeners for each corresponding User object in FB to update sectionSliders values
+        mSectionRef.child(section.ref_key).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public static void createSection(String start, String end, String ta_name, String section_id,
