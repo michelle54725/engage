@@ -30,7 +30,9 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -61,6 +63,24 @@ public class NowFragment extends Fragment {
         disengagedPieChart = view.findViewById(R.id.disengagedPieChart);
         thresholdBar = view.findViewById(R.id.thresholdSeekBar);
 
+        thresholdBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                retrieveData();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        barChart.setViewPortOffsets(0f, 0f, 0f, 0);
         retrieveData();
 
         return view;
@@ -69,31 +89,32 @@ public class NowFragment extends Fragment {
     private void retrieveData() {
 
         List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0f, 1));
-        entries.add(new BarEntry(1f, 40));
-        entries.add(new BarEntry(2f, 40));
-        entries.add(new BarEntry(3f, 40));
-        entries.add(new BarEntry(4f, 40));
-        entries.add(new BarEntry(5f, 40));
-        entries.add(new BarEntry(6f, 40));
-        entries.add(new BarEntry(7f, 40));
-        entries.add(new BarEntry(8f, 80));
-        entries.add(new BarEntry(9f, 100));
+        int[] arr = {10, 20, 40, 55, 60, 65, 50, 45, 20, 5};
+        for(int i = 0; i < arr.length; i++) {
+            entries.add(new BarEntry(i, arr[i]));
+        }
 
         //TODO: make these values like real
-        int totalStudents = new Random().nextInt(100);
-        int engagedStudents = new Random().nextInt(totalStudents);
-        int disengagedStudents = totalStudents - engagedStudents;
+
+        BarDataSet disengagedBarSet = new BarDataSet(entries.subList(0, thresholdBar.getProgress()), "BarDataSet");
+        disengagedBarSet.setColor(getResources().getColor(R.color.colorAccentRed));
+        BarDataSet engagedBarSet = new BarDataSet(entries.subList(thresholdBar.getProgress(), entries.size()), "BarDataSet");
+        engagedBarSet.setColor(getResources().getColor(R.color.colorAccentBlue));
+
+        int engagedStudents = 0;
+        for(int i = thresholdBar.getProgress(); i < arr.length; i++) {
+            engagedStudents += arr[i];
+        }
+        int disengagedStudents = 0;
+        for(int i = 0; i < thresholdBar.getProgress(); i++) {
+            disengagedStudents += arr[i];
+        }
 
         List<PieEntry> engagementEntries = new ArrayList<>();
         engagementEntries.add(new PieEntry(disengagedStudents));
         engagementEntries.add(new PieEntry(engagedStudents));
 
-        BarDataSet engagedBarSet = new BarDataSet(entries.subList(0, 5), "BarDataSet");
-        engagedBarSet.setColor(getResources().getColor(R.color.colorAccentRed));
-
-        BarDataSet disengagedBarSet = new BarDataSet(entries.subList(5, entries.size()), "BarDataSet");
-        disengagedBarSet.setColor(getResources().getColor(R.color.colorAccentBlue));
+        Log.d("SEEKBAR", "retrieveData: " + thresholdBar.getProgress());
 
         BarData barData = new BarData();
         barData.addDataSet(engagedBarSet);
@@ -114,14 +135,11 @@ public class NowFragment extends Fragment {
         xAxis.setDrawLabels(false);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
-        barChart.setDrawBorders(true);
-        barChart.setViewPortOffsets(0f, 0f, 0f, 0);
         barChart.fitScreen();
 
         Description description = new Description();
         description.setText("");
         barChart.setDescription(description);
-        barChart.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         Legend legend = barChart.getLegend();
         legend.setEnabled(false);
