@@ -49,7 +49,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
     private String END = "2018-12-31-2200";
     private String TA_KEY = "hardcoded device key";
     private String SECTION_ID = "CS70134A";
-    private int MAGICKEY = 421;
+    private int MAGICKEY = 422;
 
     ImageButton backBtn;
     EditText classNameEditText;
@@ -283,8 +283,8 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
     }
 
     private void setFields() {
-        START = getField(dateEditText) +"-"+ getField(startTimeEditText);
-        END = getField(dateEditText) +"-"+ getField(endTimeEditText);
+        START = getField(dateEditText).replace("/", "-") +"-"+ getField(startTimeEditText);
+        END = getField(dateEditText).replace("/", "-") +"-"+ getField(endTimeEditText);
         TA_KEY = FirebaseUtils.getPsuedoUniqueID();
         SECTION_ID = getField(classNameEditText);
     }

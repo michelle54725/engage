@@ -89,19 +89,24 @@ public class NowFragment extends Fragment {
     private void retrieveData() {
 
 
-        //TODO @Michelle: this should be the students' scores
-        int[] individualEngagements = {
-                5, 5,
-                15, 15, 15, 15,
-                25, 25, 25, 25, 25, 25, 25, 25,
-                35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
-                45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45,
-                55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
-                65, 65, 65, 65, 65, 65, 65, 65, 65, 65,
-                75, 75, 75, 75, 75, 75, 75, 75, 75,
-                85, 85, 85, 85,
-                95
-        };
+        // get all Slider values
+        ArrayList<Integer> individualEngagements = new ArrayList<>();
+        for (String user : FirebaseUtils.sectionSliders.keySet()) {
+            individualEngagements.add(FirebaseUtils.sectionSliders.get(user));
+        }
+
+//                {
+//                5, 5,
+//                15, 15, 15, 15,
+//                25, 25, 25, 25, 25, 25, 25, 25,
+//                35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35,
+//                45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45,
+//                55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55,
+//                65, 65, 65, 65, 65, 65, 65, 65, 65, 65,
+//                75, 75, 75, 75, 75, 75, 75, 75, 75,
+//                85, 85, 85, 85,
+//                95
+//                };
 
         int[] countsArray = new int[10];
         for(int engagement : individualEngagements) {
