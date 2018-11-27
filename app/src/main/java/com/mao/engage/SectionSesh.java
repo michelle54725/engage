@@ -12,7 +12,7 @@ import java.util.Map;
 public class SectionSesh implements Serializable {
     String a_start;
     String b_end;
-    String ta_name;
+    String ta_key;
     String section_id;
     String ref_key;
     int magic_key;
@@ -25,8 +25,8 @@ public class SectionSesh implements Serializable {
         return b_end;
     }
 
-    public String getTa_name() {
-        return ta_name;
+    public String getTa_key() {
+        return ta_key;
     }
 
     public String getSection_id() {
@@ -57,13 +57,13 @@ public class SectionSesh implements Serializable {
 
 
     public SectionSesh(String a_start, String b_end,
-                       String ta_name, String section_id,
+                       String ta_key, String section_id,
                        String ref_key, int magic_key,
                        ArrayList<String> user_ids) {
         // fed by constructor
         this.a_start = a_start;
         this.b_end = b_end;
-        this.ta_name = ta_name;
+        this.ta_key = ta_key;
         this.section_id = section_id;
         this.ref_key = ref_key;
 
@@ -78,13 +78,13 @@ public class SectionSesh implements Serializable {
     }
 
     public SectionSesh(String a_start, String b_end,
-                       String ta_name, String section_id,
+                       String ta_key, String section_id,
                        String ref_key, int magic_key,
                        Map<String, String> user_ids) {
         // fed by constructor
         this.a_start = a_start;
         this.b_end = b_end;
-        this.ta_name = ta_name;
+        this.ta_key = ta_key;
         this.section_id = section_id;
         this.ref_key = ref_key;
 

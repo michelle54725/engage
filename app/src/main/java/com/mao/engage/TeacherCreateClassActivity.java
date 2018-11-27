@@ -21,6 +21,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -31,15 +32,14 @@ import java.util.Locale;
 
 public class TeacherCreateClassActivity extends AppCompatActivity {
     // Hardcoded instance variables (that should not be hardcoded)
-    final static String USER_ID = "user_id_1";
-    final static String USERNAME = "Michelle Mao";
-    final static String START = "2018-12-31-2000";
-    final static String END = "2018-12-31-2200";
-    final static String TA_NAME = "John Denero";
-    final static String SECTION_ID = "CS70134A";
-    final static int MAGICKEY = 421;
+    private String START = "2018-12-31-2000";
+    private String END = "2018-12-31-2200";
+    private String TA_KEY = "hardcoded device key";
+    private String SECTION_ID = "CS70134A";
+    private int MAGICKEY = 421;
 
     ImageButton backBtn;
+    EditText classNameEditText;
     EditText dateEditText;
     EditText startTimeEditText;
     EditText endTimeEditText;
@@ -56,6 +56,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
         setContentView(R.layout.activity_teacher_create_class);
 
         backBtn = findViewById(R.id.backBtn);
+        classNameEditText = findViewById(R.id.classNameEditText);
         dateEditText = findViewById(R.id.dateEditText);
         startTimeEditText = findViewById(R.id.startTimeEditText);
         endTimeEditText = findViewById(R.id.endTimeEditText);
@@ -155,36 +156,61 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
         createClassBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // check validity of fields
+                if (fieldsValid()) {
+                    setFields();
+                    // create SectionSesh and push to Firebase
+                    DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
+                    final String mSectionRefKey = mSectionRef.push().getKey(); //create empty node to get key of it
+                    final SectionSesh mSectionSesh = new SectionSesh(
+                            START, END, TA_KEY, SECTION_ID, mSectionRefKey, MAGICKEY, new ArrayList<String>());
+                    FirebaseUtils.createSection(mSectionSesh);
+                    FirebaseUtils.updateTeacher(getIntent().getStringExtra("name"), mSectionRefKey, mSectionSesh.getSection_id()); // update Teachers in Firebase
 
-                // create SectionSesh and push to Firebase
-                DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
-                final String mSectionRefKey = mSectionRef.push().getKey(); //create empty node to get key of it
-                final SectionSesh mSectionSesh = new SectionSesh(
-                        START, END, TA_NAME, SECTION_ID, mSectionRefKey, MAGICKEY, new ArrayList<String>());
-                FirebaseUtils.createSection(mSectionSesh);
-                FirebaseUtils.updateTeacher(mSectionRefKey, mSectionSesh.getSection_id()); // update Teachers in Firebase
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(TeacherCreateClassActivity.this);
-                builder.setTitle("Success!");
-                builder.setMessage("Magic word: 420\nShare this with the class");
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                builder.setPositiveButton("Start Class", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        Intent intent = new Intent(TeacherCreateClassActivity.this, TeacherClassActivity.class);
-                        intent.putExtra("sectionRefKey", mSectionRefKey);
-                        startActivity(intent);
-                    }
-                });
-                builder.show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(TeacherCreateClassActivity.this);
+                    builder.setTitle("Success!");
+                    builder.setMessage("Magic word: 420\nShare this with the class");
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    builder.setPositiveButton("Start Class", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Intent intent = new Intent(TeacherCreateClassActivity.this, TeacherClassActivity.class);
+                            intent.putExtra("sectionRefKey", mSectionRefKey);
+                            startActivity(intent);
+                        }
+                    });
+                    builder.show();
+                } else {
+                    Toast.makeText(TeacherCreateClassActivity.this, "Invalid Fields", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
+    }
+    private void setFields() {
+        START = getField(dateEditText) +"-"+ getField(startTimeEditText);
+        END = getField(dateEditText) +"-"+ getField(endTimeEditText);
+        TA_KEY = FirebaseUtils.getPsuedoUniqueID();
+        SECTION_ID = getField(classNameEditText);
+    }
+
+    private boolean fieldsValid() {
+        if (!getField(classNameEditText).isEmpty()
+                & !getField(dateEditText).isEmpty()
+                & !getField(startTimeEditText).isEmpty()
+                & !getField(endTimeEditText).isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    private String getField(EditText field) {
+        return field.getText().toString();
     }
 }

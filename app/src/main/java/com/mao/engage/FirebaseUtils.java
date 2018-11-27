@@ -77,9 +77,11 @@ public class FirebaseUtils {
         });
     }
 
-    public static void updateTeacher(String sectionRefKey, String sectionID) {
+    public static void updateTeacher(String name, String sectionRefKey, String sectionID) {
         Log.d("TEST", "updating Teacher w device ID " + getPsuedoUniqueID());
-        mTeachersRef.child(getPsuedoUniqueID()).child(sectionRefKey).setValue(sectionID);
+        DatabaseReference mRef = mTeachersRef.child(getPsuedoUniqueID());
+        mRef.child("name").setValue(name);
+        mRef.child("existingSections").child(sectionRefKey).setValue(sectionID);
     }
 
     public static void setSliderVal(String user_id, final int value) {
