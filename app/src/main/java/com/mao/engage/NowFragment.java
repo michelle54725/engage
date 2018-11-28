@@ -93,7 +93,7 @@ public class NowFragment extends Fragment {
                 retrieveData();
             }
         };
-        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 1000);
+        new Timer().scheduleAtFixedRate(retrieveDataTask, 1000, 5000);
 
         return view;
     }
