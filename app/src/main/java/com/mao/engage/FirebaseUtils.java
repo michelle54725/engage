@@ -153,6 +153,7 @@ public class FirebaseUtils {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     if (sectionSliders.containsKey(user_id)) {
+                        Log.d("TEST", "\nreading '" + user_id + "'; \n with slider val: " + dataSnapshot.getValue());
                         sectionSliders.put(user_id, Integer.valueOf(dataSnapshot.getValue().toString()));
 
                         // For testing purposes
