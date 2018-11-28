@@ -61,6 +61,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
     DatabaseReference mMagicKeyRef;
     HashMap<Integer, String> activeMagicKeys;
     private int magicKey;
+    private int counter = 0;
 
 
     @Override
@@ -250,7 +251,8 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
         magicKey = new Random().nextInt(1000);
         Log.d("LOOOOOP", "generateMagicWord: LOOOOOOOOP");
         if (activeMagicKeys.containsKey(magicKey)) { //TODO: @Jaiveer activeMagicKeys is null = crash
-            Log.d("BOBOBactive", "CONFLICT Time to resolve" + activeMagicKeys.get(magicKey));
+            final String conflictingSectionId = activeMagicKeys.get(magicKey);
+            Log.d("BOBOBactive", "CONFLICT Time to resolve" + conflictingSectionId);
             final DatabaseReference conflictingSectionRef = FirebaseDatabase.getInstance().getReference("/Sections/").child(activeMagicKeys.get(magicKey));
             conflictingSectionRef.child("b_end").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -267,8 +269,11 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     String ta_key = (String) dataSnapshot.getValue();
-                                    Log.d("BOBOBOBBOB", "onDataChange: BOBOBOBOBOBOBO TEACHER DELETE");
-                                    FirebaseDatabase.getInstance().getReference("/Teachers/" + ta_key + "/existingSections").child(activeMagicKeys.get(magicKey)).removeValue();
+                                    DatabaseReference tempRef = FirebaseDatabase.getInstance().getReference("/Teachers/" + ta_key + "/existingSections");
+                                    Log.d("BOBOBOBBOB", "onDataChange: BOBOBOBOBOBOBO TEACHER DELETE" + tempRef.getPath().toString());
+                                    tempRef.child(conflictingSectionId).removeValue();
+                                    conflictingSectionRef.removeValue();
+                                    FirebaseDatabase.getInstance().getReference("/MagicKeys/"+magicKey).removeValue();
                                 }
 
                                 @Override
@@ -276,8 +281,6 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
 
                                 }
                             });
-                            conflictingSectionRef.removeValue();
-                            FirebaseDatabase.getInstance().getReference("/MagicKeys/"+magicKey).removeValue();
                             //TODO: REMOVE FROM TEACHERS' REFERENCE TOO
 
                         } else {
