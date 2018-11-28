@@ -261,6 +261,19 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
                             //late enough to remove
 
                             Log.d("BOBOBB", "onDataChange: " + "CAN DELETE");
+                            conflictingSectionRef.child("ta_key").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    String ta_key = (String) dataSnapshot.getValue();
+                                    Log.d("BOBOBOBBOB", "onDataChange: BOBOBOBOBOBOBO TEACHER DELETE");
+                                    FirebaseDatabase.getInstance().getReference("/Teachers/" + ta_key + "/existingSections").child(activeMagicKeys.get(magicKey)).removeValue();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
                             conflictingSectionRef.removeValue();
                             FirebaseDatabase.getInstance().getReference("/MagicKeys/"+magicKey).removeValue();
                             //TODO: REMOVE FROM TEACHERS' REFERENCE TOO
