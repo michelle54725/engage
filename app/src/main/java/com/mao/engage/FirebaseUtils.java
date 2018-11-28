@@ -39,7 +39,8 @@ public class FirebaseUtils {
     static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: slider;
 
     // Add a section child in SectionSesh
-    public static void createSection(final SectionSesh section) {
+    public static void createSection(SectionSesh section) {
+        Log.d("TEST", "in FirebaseUtils.createSection...");
         mSectionRef.child(section.ref_key).setValue(section);
         FirebaseDatabase.getInstance().getReference("/MagicKeys").child("" + section.getMagic_key()).setValue(section.getRef_key());
 
@@ -47,7 +48,7 @@ public class FirebaseUtils {
         mSectionRef.child(section.ref_key).child("user_ids").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.d("TEST", "copying user to local sectionSliders: " + dataSnapshot.getKey());
+                Log.d("TEST", "LISTENER SAYS copying user to local sectionSliders: " + dataSnapshot.getKey());
                 String user_id = dataSnapshot.getKey();
                 sectionSliders.put(user_id, 50); // default slider = 50
                 setSliderListener(user_id);

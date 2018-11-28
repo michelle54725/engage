@@ -5,10 +5,12 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.format.Time;
 import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -31,10 +33,13 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 
 import java.lang.reflect.Array;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class NowFragment extends Fragment {
 
@@ -81,7 +86,14 @@ public class NowFragment extends Fragment {
         });
 
         barChart.setViewPortOffsets(0f, 0f, 0f, 0);
-        retrieveData();
+        TimerTask retrieveDataTask = new TimerTask() {
+            @Override
+            public void run() {
+                Log.d("TEST", "TIMER WORKING...");
+                retrieveData();
+            }
+        };
+        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 1000);
 
         return view;
     }
