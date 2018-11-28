@@ -15,8 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -131,15 +129,11 @@ public class MeFragment extends Fragment {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(getActivity(),
-                        "Seekbar touch started", Toast.LENGTH_SHORT).show();
                 elastic = false;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(getActivity(),
-                        "Seekbar touch stopped", Toast.LENGTH_SHORT).show();
                 FirebaseUtils.setSliderVal(uID, seekBar.getProgress());
             }
         });
