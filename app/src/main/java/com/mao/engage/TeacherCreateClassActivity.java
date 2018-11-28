@@ -250,7 +250,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
     private void generateMagicWord() {
         magicKey = new Random().nextInt(1000);
         Log.d("LOOOOOP", "generateMagicWord: LOOOOOOOOP");
-        if (activeMagicKeys.containsKey(magicKey)) {
+        if (activeMagicKeys.containsKey(magicKey)) { //TODO: @Jaiveer activeMagicKeys is null = crash
             Log.d("BOBOBactive", "CONFLICT Time to resolve" + activeMagicKeys.get(magicKey));
             final DatabaseReference conflictingSectionRef = FirebaseDatabase.getInstance().getReference("/Sections/").child(activeMagicKeys.get(magicKey));
             Log.d("BOBOBdelete", " " + conflictingSectionRef.getKey());
@@ -290,13 +290,10 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
     }
 
     private boolean fieldsValid() {
-        if (!getField(classNameEditText).isEmpty()
+        return !getField(classNameEditText).isEmpty()
                 & !getField(dateEditText).isEmpty()
                 & !getField(startTimeEditText).isEmpty()
-                & !getField(endTimeEditText).isEmpty()) {
-            return true;
-        }
-        return false;
+                & !getField(endTimeEditText).isEmpty();
     }
 
     private String getField(EditText field) {

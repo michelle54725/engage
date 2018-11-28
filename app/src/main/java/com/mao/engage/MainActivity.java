@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> mListUsers = new ArrayList<>();
 
     // Views to set
-    TextView readValue; //TA-side: read slider_val from DB TODO: Read from DB (UserSesh's slider_val)
+    TextView readValue; //TA-side: read slider_val from DB
     TextView magicValue; //randomly generated magic key
     TextView refValue; //FireBase-generated ref key
     TextView refView; //Student-side: read section_ref from DB via. magic_key
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     void setSlider() {
         // slider
-        SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar2);
+        SeekBar seekBar = findViewById(R.id.seekBar2);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
