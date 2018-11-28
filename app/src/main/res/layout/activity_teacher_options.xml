@@ -7,19 +7,21 @@
     tools:context=".TeacherOptionsActivity">
 
     <TextView
-        android:id="@+id/helloText2"
+        android:id="@+id/helloText3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:text="Hi, Brandon"
+        android:layout_marginTop="16dp"
+        android:text="Hi, "
         android:textColor="@android:color/white"
         android:textSize="24sp"
         app:fontFamily="@font/quicksand_bold"
         app:layout_constraintBottom_toTopOf="@id/magicWordLabel"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.40"

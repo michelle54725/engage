@@ -37,7 +37,7 @@ public class StartActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (isValidName()) {
                     Intent intent = new Intent(StartActivity.this, StudentLoginActivity.class);
-                    intent.putExtra("name", getName());
+                    intent.putExtra("name", nameEditText.getText().toString());
                     startActivity(intent);
                 } else {
                     // TODO: replace Toasts with something cleaner
@@ -52,7 +52,7 @@ public class StartActivity extends AppCompatActivity {
                 if (FirebaseUtils.teacherIsInDB()) {
                     // Teacher already in DB
                     Intent intent = new Intent(StartActivity.this, TeacherOptionsActivity.class);
-                    intent.putExtra("name", getName());
+                    intent.putExtra("name", nameEditText.getText().toString());
                     startActivity(intent);
                 } else {
                     // Teacher not in DB yet (first time user)

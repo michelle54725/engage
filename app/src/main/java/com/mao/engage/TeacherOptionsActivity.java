@@ -5,11 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class TeacherOptionsActivity extends AppCompatActivity {
 
     Button createButton;
     Button resumeButton;
+    TextView helloText;
+
     String name;
 
     @Override
@@ -20,6 +23,8 @@ public class TeacherOptionsActivity extends AppCompatActivity {
         name = getIntent().getStringExtra("name");
         createButton = findViewById(R.id.createNewBtn);
         resumeButton = findViewById(R.id.resumeBtn);
+        helloText = findViewById(R.id.helloText3);
+        helloText.setText(String.format("Hi, %s", name));
 
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override

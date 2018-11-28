@@ -190,7 +190,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(TeacherCreateClassActivity.this);
                     builder.setTitle("Success!");
-                    builder.setMessage("Magic word: 420\nShare this with the class");
+                    builder.setMessage("Magic word: " + magicKey + "\nShare this with the class");
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -203,6 +203,8 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
                             dialog.dismiss();
                             Intent intent = new Intent(TeacherCreateClassActivity.this, TeacherClassActivity.class);
                             intent.putExtra("sectionRefKey", mSectionRefKey);
+                            intent.putExtra("magic_word", magicKey);
+                            intent.putExtra("section_name", classNameEditText.getText().toString());
                             startActivity(intent);
                         }
                     });

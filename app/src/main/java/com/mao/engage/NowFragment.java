@@ -49,6 +49,8 @@ public class NowFragment extends Fragment {
 
     private SeekBar thresholdBar;
 
+    TimerTask retrieveDataTask;
+
     public NowFragment() {
         // Required empty public constructor
     }
@@ -86,7 +88,7 @@ public class NowFragment extends Fragment {
         });
 
         barChart.setViewPortOffsets(0f, 0f, 0f, 0);
-        TimerTask retrieveDataTask = new TimerTask() {
+        retrieveDataTask = new TimerTask() {
             @Override
             public void run() {
                 Log.d("TEST", "TIMER WORKING...");
@@ -221,5 +223,12 @@ public class NowFragment extends Fragment {
         disengagedPieChart.getLegend().setEnabled(false);
         disengagedPieChart.getDescription().setEnabled(false);
         disengagedPieChart.invalidate();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d("TEST", "Destroying View & TimerTask");
+        retrieveDataTask.cancel();
     }
 }
