@@ -73,7 +73,6 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_teacher_create_class);
 
-        generateMagicWord();
 
         backBtn = findViewById(R.id.backBtn);
         classNameEditText = findViewById(R.id.classNameEditText);
@@ -220,6 +219,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Log.d("BOBCHILD", "onChildAdded: " + dataSnapshot.getKey() + dataSnapshot.getValue());
                 activeMagicKeys.put(Integer.valueOf(dataSnapshot.getKey()), dataSnapshot.getValue(String.class));
+                generateMagicWord();
             }
 
             @Override
@@ -244,7 +244,6 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void generateMagicWord() {
@@ -253,7 +252,6 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
         if (activeMagicKeys.containsKey(magicKey)) { //TODO: @Jaiveer activeMagicKeys is null = crash
             Log.d("BOBOBactive", "CONFLICT Time to resolve" + activeMagicKeys.get(magicKey));
             final DatabaseReference conflictingSectionRef = FirebaseDatabase.getInstance().getReference("/Sections/").child(activeMagicKeys.get(magicKey));
-            Log.d("BOBOBdelete", " " + conflictingSectionRef.getKey());
             conflictingSectionRef.child("b_end").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -261,11 +259,14 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
                     try {
                         Date endTime = dateFormat.parse((String) dataSnapshot.getValue());
                         Date now = Calendar.getInstance().getTime();
-                        Log.d("BOBOB", "onDataChange: " + endTime + " " + now);
                         if (now.after(endTime)) {
+                            //late enough to remove
+
                             Log.d("BOBOBB", "onDataChange: " + "CAN DELETE");
                             conflictingSectionRef.removeValue();
                             FirebaseDatabase.getInstance().getReference("/MagicKeys/"+magicKey).removeValue();
+                            //TODO: REMOVE FROM TEACHERS' REFERENCE TOO
+
                         } else {
                             generateMagicWord();
                         }
