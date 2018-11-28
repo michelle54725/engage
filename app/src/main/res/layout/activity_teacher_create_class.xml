@@ -199,6 +199,6 @@
         app:fontFamily="@font/quicksand_bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_round_arrow_back_24px" />
+        android:src="@drawable/ic_round_arrow_back_24px" />
 
 </android.support.constraint.ConstraintLayout>
