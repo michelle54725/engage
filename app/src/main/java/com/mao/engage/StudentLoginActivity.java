@@ -109,6 +109,7 @@ public class StudentLoginActivity extends AppCompatActivity {
     boolean findSection(final UserSesh user) {
         FirebaseUtils.createUser(user);
         //TODO: problem: this code runs faster than EventListeners do their work. Use runnable?
+        //TODO: or use local magic key/section ref key
 //        user.setSection_ref_key(FirebaseUtils.allUsers.get(user.getUser_id()));
 //        Log.d("TEST", "User's Ref Key is now: " + user.getSection_ref_key());
 //        return user.getSection_ref_key() != null;

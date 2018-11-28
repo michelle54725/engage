@@ -27,7 +27,7 @@ public class UserSesh implements Serializable {
     }
 
     public void save_slider_vals() {
-        //TODO: save_slider_vals function
+        //TODO: still need this?
     }
 
     public String getUser_id() {
