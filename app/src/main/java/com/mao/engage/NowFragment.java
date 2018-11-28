@@ -109,7 +109,7 @@ public class NowFragment extends Fragment {
                 retrieveData();
             }
         };
-        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 10000);
+        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 3000);
 
         return view;
     }
@@ -242,7 +242,14 @@ public class NowFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d("TEST", "Destroying View & TimerTask");
+        Log.d("TEST", "onDestroyView: Destroying View & TimerTask");
+        retrieveDataTask.cancel();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("TEST", "onStop: Stopping & Destroying TimerTask");
         retrieveDataTask.cancel();
     }
 }
