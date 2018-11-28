@@ -51,6 +51,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         nowFragment = new NowFragment();
         Bundle bundle = new Bundle();
         bundle.putString("magic_word", getIntent().getStringExtra("magic_word"));
+        Log.d("TEST-MAGIC", "in TeacherClassActivity: " + getIntent().getStringExtra("magic_word"));
         bundle.putString("section_name", getIntent().getStringExtra("section_name"));
         nowFragment.setArguments(bundle);
 
