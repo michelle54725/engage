@@ -71,7 +71,7 @@ public class NowFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_now, container, false);
 
         sectionNameText = view.findViewById(R.id.sectionNameText);
-        magicWordText = view.findViewById(R.id.magicWordEditText);
+        magicWordText = view.findViewById(R.id.magicWordText);
         if (getArguments() != null) {
             sectionNameText.setText(getArguments().getString("section_name"));
             magicWordText.setText(String.format("Magic word: %s", getArguments().getString("magic_word")));

@@ -203,7 +203,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
                             dialog.dismiss();
                             Intent intent = new Intent(TeacherCreateClassActivity.this, TeacherClassActivity.class);
                             intent.putExtra("sectionRefKey", mSectionRefKey);
-                            intent.putExtra("magic_word", magicKey);
+                            intent.putExtra("magic_word", String.valueOf(magicKey));
                             intent.putExtra("section_name", classNameEditText.getText().toString());
                             startActivity(intent);
                         }
