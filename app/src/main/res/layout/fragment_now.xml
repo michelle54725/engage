@@ -11,15 +11,15 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/headerText"
+            android:id="@+id/sectionNameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:fontFamily="@font/quicksand_bold"
-            android:text="CS61A Section 100\nMagic word: 420"
+            android:text="CS61A Section 100"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="24sp"
@@ -29,22 +29,22 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/headerText2"
+            android:id="@+id/magicWordText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:fontFamily="@font/quicksand_bold"
-            android:text="CS61A Section 100\nMagic word: 420"
+            android:text="Magic word: 420"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/sectionNameText" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/engagedPieChart"
@@ -75,19 +75,20 @@
             android:id="@+id/frameLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toTopOf="@+id/engagedPieChart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/headerText">
+            app:layout_constraintTop_toBottomOf="@+id/magicWordText">
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/engagedBar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="8dp"
+                android:layout_height="266dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp" />
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp" />
 
             <SeekBar
                 android:id="@+id/thresholdSeekBar"

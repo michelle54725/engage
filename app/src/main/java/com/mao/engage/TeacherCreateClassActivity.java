@@ -274,8 +274,29 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
                                     DatabaseReference tempRef = FirebaseDatabase.getInstance().getReference("/Teachers/" + ta_key + "/existingSections");
                                     Log.d("BOBOBOBBOB", "onDataChange: BOBOBOBOBOBOBO TEACHER DELETE" + tempRef.getPath().toString());
                                     tempRef.child(conflictingSectionId).removeValue();
-                                    conflictingSectionRef.removeValue();
-                                    FirebaseDatabase.getInstance().getReference("/MagicKeys/"+magicKey).removeValue();
+                                    conflictingSectionRef.child("user_ids").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                                String user_key = (String) userSnapshot.getValue();
+                                                DatabaseReference tempRef = FirebaseDatabase.getInstance().getReference("/UserSessions/" + user_key);
+                                                Log.d("BOBOBOBBOB", "onDataChange: BOBOBOBOBOBOBO USERS DELETE" + tempRef.getPath().toString());
+                                                if (FirebaseUtils.allUsers.get(user_key).equals(conflictingSectionId)) {
+                                                    tempRef.removeValue();
+                                                } else {
+                                                    Log.d("BOBOB", "onChildAdded: REEEE FIREBASE" + FirebaseUtils.allUsers.get(user_key));
+                                                }
+                                            }
+                                            conflictingSectionRef.removeValue();
+                                            FirebaseDatabase.getInstance().getReference("/MagicKeys/" + magicKey).removeValue();
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
                                 }
 
                                 @Override
