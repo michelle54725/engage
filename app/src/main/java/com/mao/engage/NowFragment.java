@@ -74,7 +74,9 @@ public class NowFragment extends Fragment {
         magicWordText = view.findViewById(R.id.magicWordText);
         if (getArguments() != null) {
             sectionNameText.setText(getArguments().getString("section_name"));
+            Log.d("TEST-MAGIC", "in NowFragment: " + getArguments().getString("magic_word"));
             magicWordText.setText(String.format("Magic word: %s", getArguments().getString("magic_word")));
+
         }
 
         barChart = view.findViewById(R.id.engagedBar);
@@ -107,7 +109,7 @@ public class NowFragment extends Fragment {
                 retrieveData();
             }
         };
-        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 1000);
+        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 10000);
 
         return view;
     }

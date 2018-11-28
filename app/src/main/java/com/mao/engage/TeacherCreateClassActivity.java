@@ -185,12 +185,13 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
                     final String mSectionRefKey = mSectionRef.push().getKey(); //create empty node to get key of it
                     final SectionSesh mSectionSesh = new SectionSesh(
                             START, END, TA_KEY, classNameEditText.getText().toString(), mSectionRefKey, magicKey, new ArrayList<String>());
+                    final String mMagicWord = String.valueOf(magicKey);
                     FirebaseUtils.createSection(mSectionSesh);
                     FirebaseUtils.updateTeacher(getIntent().getStringExtra("name"), mSectionRefKey, mSectionSesh.getSection_id()); // update Teachers in Firebase
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(TeacherCreateClassActivity.this);
                     builder.setTitle("Success!");
-                    builder.setMessage("Magic word: " + magicKey + "\nShare this with the class");
+
+                    builder.setMessage("Magic word: " + mMagicWord + "\nShare this with the class");
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -203,7 +204,8 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
                             dialog.dismiss();
                             Intent intent = new Intent(TeacherCreateClassActivity.this, TeacherClassActivity.class);
                             intent.putExtra("sectionRefKey", mSectionRefKey);
-                            intent.putExtra("magic_word", String.valueOf(magicKey));
+                            Log.d("TEST-MAGIC", mMagicWord);
+                            intent.putExtra("magic_word", mMagicWord);
                             intent.putExtra("section_name", classNameEditText.getText().toString());
                             startActivity(intent);
                         }
