@@ -1,3 +1,8 @@
+/**
+ * StartActivity: the home screen
+ *
+ * User inputs name and selects "Student" or "Teacher".
+ */
 package com.mao.engage;
 
 import android.content.Intent;
@@ -25,7 +30,6 @@ public class StartActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         setContentView(R.layout.activity_start);
 
         joinStudentBtn = findViewById(R.id.joinStudentBtn);
@@ -55,7 +59,7 @@ public class StartActivity extends AppCompatActivity {
                     intent.putExtra("name", nameEditText.getText().toString());
                     startActivity(intent);
                 } else {
-                    // Teacher not in DB yet (first time user)
+                    // Teacher not in DB yet (i.e. first time user)
                     goToCreateClassActivity();
                 }
             }
@@ -65,9 +69,9 @@ public class StartActivity extends AppCompatActivity {
         FirebaseUtils.setTeacherListener();
     }
 
+    // Send user's name to CreateClassActivity and start it
     void goToCreateClassActivity(){
         if (isValidName()) {
-
             Intent intent = new Intent(StartActivity.this, TeacherCreateClassActivity.class);
             intent.putExtra("name", getName());
             startActivity(intent);
@@ -76,11 +80,14 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
+    // Removes spaces
     private String getName() {
         return nameEditText.getText().toString().replaceAll("\\s","");
     }
 
+    // Name validity check
     private boolean isValidName() {
+        //TODO: make more rigorous check
         return !getName().isEmpty();
     }
 }

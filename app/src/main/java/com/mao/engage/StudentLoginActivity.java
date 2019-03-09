@@ -1,11 +1,20 @@
+/**
+ * StudentLoginActivity: where students input the magic word to key into a section
+ *  - If magic word matches existing section, create a new UserSession in the DB
+ *
+ * Triggered by:
+ *  "JOIN AS STUDENT" button in StartActivity
+ *
+ * Transitions to:
+ *  StudentClassActivity
+ */
+
 package com.mao.engage;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -16,15 +25,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class StudentLoginActivity extends AppCompatActivity {
 
@@ -35,10 +37,12 @@ public class StudentLoginActivity extends AppCompatActivity {
 
     String mUsername;
     String mUID;
+    UserSesh mUser;
+
+    //for ease of access to different data
     DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
     DatabaseReference mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions");
-    UserSesh mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,6 @@ public class StudentLoginActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         setContentView(R.layout.activity_student_login);
 
         joinClassBtn = findViewById(R.id.joinClassBtn);
@@ -55,24 +58,26 @@ public class StudentLoginActivity extends AppCompatActivity {
         magicWordEditText = findViewById(R.id.magicWordEditText);
         helloText = findViewById(R.id.helloText);
         mUsername = getIntent().getStringExtra("name");
-
         helloText.setText(String.format("Hi, %s", mUsername));
 
         joinClassBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Verify the magic word exists
                 if (authenticateMagicWord()) {
                     // Create new UserSesh & store in DB
                     mUID = FirebaseUtils.getPsuedoUniqueID();
                     mUser = new UserSesh(mUID, mUsername,
                             Integer.valueOf(getMagicWord()), null);
 
-                    // Make Sure mUser has a SectionSesh ref key
+                    // Verify the current UserSession has a section_ref_key
                     if (findSection(mUser)) {
                         Log.d("TEST", "set User's ref key to: " + mUser.getSection_ref_key());
                         Toast.makeText(StudentLoginActivity.this, "SUCCESS! Entering Section...", Toast.LENGTH_SHORT).show();
+
                         Intent intent = new Intent(StudentLoginActivity.this, StudentClassActivity.class);
                         intent.putExtra("uID", mUID);
+
                         Log.d("TEST", "put intent: " + mUID);
                         startActivity(intent);
                     } else {
@@ -92,8 +97,10 @@ public class StudentLoginActivity extends AppCompatActivity {
         });
     }
 
-    // TODO: Firebase verify (make sure MagicWord not in use)
+    // TODO: Firebase verify (make sure MagicWord exists)
+    // TODO: further upgrade: check MagicWord corresponds to a section CURRENTLY in session
     private boolean authenticateMagicWord() {
+        //not correctly implemented so students can key into non-existent sections
         return getMagicWord().length() == 3;
     }
 

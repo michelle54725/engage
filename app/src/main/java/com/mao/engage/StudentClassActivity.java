@@ -1,23 +1,28 @@
+/**
+ * StudentClassActivity: primary student interface
+ *  - Contains 2 fragments: MeFragment and ClassFragment
+ *
+ * Triggered by:
+ *  "JOIN CLASS" button in StudentLoginActivity
+ *
+ * Transitions to:
+ *  (None)
+ */
 package com.mao.engage;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -34,6 +39,7 @@ public class StudentClassActivity extends AppCompatActivity {
     ClassFragment classFragment;
     FragmentManager fragmentManager;
 
+    //for ease of access to different data
     DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
     DatabaseReference mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions");
 

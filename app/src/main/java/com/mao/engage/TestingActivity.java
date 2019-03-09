@@ -1,9 +1,15 @@
+/**
+ * TestingActivity is not used in the actual app. It is used to demo & test logic/functionality.
+ *
+ * Note: this was originally MainActivity (i.e. the first Activity ever created and the default
+ * "home" activity but the starting activity has since been changed to StartActivity in
+ * AndroidManifest.xml
+ */
+
 package com.mao.engage;
 
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,12 +25,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.sql.Time;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity {
+public class TestingActivity extends AppCompatActivity {
     // Hardcoded instance variables (that should not be hardcoded)
     final static String USER_ID = "user_id_1";
     final static String USERNAME = "Michelle Mao";
@@ -60,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_testing);
 
         readValue = findViewById(R.id.readView);
         magicValue = findViewById(R.id.codeView);
@@ -118,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                Toast.makeText(MainActivity.this,
+                Toast.makeText(TestingActivity.this,
                         "Seekbar vale " + i, Toast.LENGTH_SHORT).show();
                 String key = mUser.getSection_ref_key();
                 if (key != null) {
@@ -131,13 +134,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(MainActivity.this,
+                Toast.makeText(TestingActivity.this,
                         "Seekbar touch started", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(MainActivity.this,
+                Toast.makeText(TestingActivity.this,
                         "Seekbar touch stopped", Toast.LENGTH_SHORT).show();
             }
         });
