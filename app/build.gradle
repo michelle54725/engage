@@ -37,5 +37,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'info.hoang8f:android-segmented:1.0.6'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-rc02'
 }
 apply plugin: 'com.google.gms.google-services'

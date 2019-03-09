@@ -105,7 +105,7 @@ public class NowFragment extends Fragment {
         retrieveDataTask = new TimerTask() {
             @Override
             public void run() {
-                Log.d("TEST", "TIMER WORKING...");
+//                Log.d("TEST", "TIMER WORKING...");
                 retrieveData();
             }
         };
