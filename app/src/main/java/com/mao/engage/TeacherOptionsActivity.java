@@ -40,6 +40,6 @@ public class TeacherOptionsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // show list of existing sections to choose from
             }
-        });
+        }); //hello
     }
 }
