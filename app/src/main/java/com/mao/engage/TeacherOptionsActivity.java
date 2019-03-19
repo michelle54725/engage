@@ -38,6 +38,8 @@ public class TeacherOptionsActivity extends AppCompatActivity {
         resumeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(TeacherOptionsActivity.this, TeacherResumeActivity.class);
+                startActivity(intent);
                 // show list of existing sections to choose from
             }
         }); //hello
