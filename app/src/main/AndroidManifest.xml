@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".TeacherResumeActivity"/>
         <activity android:name=".TestingActivity" />
         <activity android:name=".StartActivity">
             <intent-filter>
@@ -21,7 +22,7 @@
         <activity android:name=".StudentClassActivity" />
         <activity android:name=".TeacherCreateClassActivity" />
         <activity android:name=".TeacherClassActivity" />
-        <activity android:name=".TeacherOptionsActivity"></activity>
+        <activity android:name=".TeacherOptionsActivity" />
     </application>
 
 </manifest>

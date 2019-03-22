@@ -1,7 +1,7 @@
 package com.mao.engage;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +38,8 @@ public class TeacherOptionsActivity extends AppCompatActivity {
         resumeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(TeacherOptionsActivity.this, TeacherResumeActivity.class);
+                startActivity(intent);
                 // show list of existing sections to choose from
             }
         }); //hello
