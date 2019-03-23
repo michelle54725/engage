@@ -9,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHolder> {
     private List<SectionSesh> sectionSeshList;
+    private HashMap<String, SectionSesh> sectionKeys;
 
     /*
     section buttons referenced button design from section_list_row
@@ -29,16 +31,11 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
                 public void onClick(View v) {
                     // open Section sesh with given magic word, section name, section ref key
                     //Todo: find better way to find the current magic key instead of iterating over every value in the list
-                    int mMagicWord = sectionSeshList.get(0).magic_key;
-                    int i = 0;
-                    for (SectionSesh s : sectionSeshList) {
-                        if(s.section_id.equals(section.getText().toString())) {
-                            mMagicWord = sectionSeshList.get(i).magic_key;
-                        }
-                        i++;
-                    }
+                    SectionSesh mySection = sectionKeys.get(section.getText().toString());
+                    int mMagicWord = mySection.magic_key;
+                    String mSectionRefKey = mySection.ref_key;
                     //TODO: get section ref key from database; currently is just fake data.
-                    final String mSectionRefKey = "REFKEY";
+
 
 
                     Intent intent = new Intent(section.getContext(), TeacherClassActivity.class);
@@ -57,8 +54,9 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
     constructs an adapter based on the section list passed in -- pass db
     through TeacherResumeActivity
      */
-    public SectionAdapter(List<SectionSesh> sectionSeshList) {
+    public SectionAdapter(List<SectionSesh> sectionSeshList, HashMap<String, SectionSesh> h) {
         this.sectionSeshList = sectionSeshList;
+        this.sectionKeys = h;
     }
 
     @Override

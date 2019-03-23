@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class TeacherResumeActivity extends AppCompatActivity {
@@ -28,7 +31,8 @@ public class TeacherResumeActivity extends AppCompatActivity {
     private FirebaseDatabase db;
     private DatabaseReference dbr;
     private RecyclerView.LayoutManager layoutManager;
-
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private HashMap<String, SectionSesh> sectionSeshKeys = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +59,12 @@ public class TeacherResumeActivity extends AppCompatActivity {
         //getFirebaseData();
         ArrayList<SectionSesh> existingSectionsList = FirebaseUtils.getExistingSections(); //TODO: implement this func
         mAdapter = new SectionAdapter(existingSectionsList);
+        //existingSectionsList should have k: section_ref_key v: section name,
+        //so only need one input to SectionAdapter
     }
 
     public void getFirebaseData() {
-        //String userID = user.getUid();
+        String userID = user.getUid();
         //dbr = db.getReference("Teachers").child(userID);
         //dbr = db.getReference("Teachers/" + userID + "/existingSections");
         dbr = db.getReference("Sections"); //only path that has worked
@@ -67,6 +73,7 @@ public class TeacherResumeActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 SectionSesh section = dataSnapshot.getValue(SectionSesh.class);
                 sectionSeshList.add(section);
+                sectionSeshKeys.put(section.section_id, section);
                 recyclerView.setAdapter(mAdapter);
             }
 
