@@ -44,6 +44,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         SectionSesh section = sectionSeshList.get(position);
+        //SectionSesh section = new SectionSesh();
         holder.section.setText(section.getSection_id());
     }
 
