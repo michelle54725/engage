@@ -62,8 +62,6 @@ public class TeacherResumeActivity extends AppCompatActivity {
 
     public void getFirebaseData() {
         String userID = user.getUid();
-        //dbr = db.getReference("Teachers").child(userID);
-        //dbr = db.getReference("Teachers/" + userID + "/existingSections");
         dbr = db.getReference("Sections"); //only path that has worked
         dbr.addChildEventListener(new ChildEventListener() {
             @Override
