@@ -1,6 +1,9 @@
 package com.mao.engage;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,33 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
         public MyViewHolder(View view) {
             super(view);
             section = (Button) view.findViewById(R.id.sectionBtn);
+
+            section.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // open Section sesh with given magic word, section name, section ref key
+                    //Todo: find better way to find the current magic key instead of iterating over every value in the list
+                    int mMagicWord = sectionSeshList.get(0).magic_key;
+                    int i = 0;
+                    for (SectionSesh s : sectionSeshList) {
+                        if(s.section_id.equals(section.getText().toString())) {
+                            mMagicWord = sectionSeshList.get(i).magic_key;
+                        }
+                        i++;
+                    }
+                    //TODO: get section ref key from database; currently is just fake data.
+                    final String mSectionRefKey = "REFKEY";
+
+
+                    Intent intent = new Intent(section.getContext(), TeacherClassActivity.class);
+                    intent.putExtra("sectionRefKey", mSectionRefKey);
+                    Log.d("TEST-MAGIC", "" + mMagicWord);
+                    intent.putExtra("magic_word", "" + mMagicWord);
+                    intent.putExtra("section_name", section.getText().toString());
+                    section.getContext().startActivity(intent);
+
+                }
+            });
         }
     }
 
