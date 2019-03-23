@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class TeacherResumeActivity extends AppCompatActivity {
@@ -28,6 +29,7 @@ public class TeacherResumeActivity extends AppCompatActivity {
     private FirebaseDatabase db;
     private DatabaseReference dbr;
     private RecyclerView.LayoutManager layoutManager;
+    private HashMap<String, SectionSesh> sectionSeshKeys = new HashMap<>();
 
 
     @Override
@@ -53,7 +55,7 @@ public class TeacherResumeActivity extends AppCompatActivity {
         //create Adapter that accesses firebase section data based teacher and display as buttons
         db = FirebaseDatabase.getInstance();
         getFirebaseData();
-        mAdapter = new SectionAdapter(sectionSeshList);
+        mAdapter = new SectionAdapter(sectionSeshList, sectionSeshKeys);
     }
 
     public void getFirebaseData() {
@@ -66,6 +68,7 @@ public class TeacherResumeActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 SectionSesh section = dataSnapshot.getValue(SectionSesh.class);
                 sectionSeshList.add(section);
+                sectionSeshKeys.put(section.section_id, section);
                 recyclerView.setAdapter(mAdapter);
             }
 
