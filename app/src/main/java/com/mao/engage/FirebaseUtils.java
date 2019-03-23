@@ -14,8 +14,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -37,6 +39,49 @@ public class FirebaseUtils {
     static HashMap<String, String> allUsers = new HashMap<>(); // K: user_id (device key); V: section_ref_key
     static HashSet<String> allTeachers = new HashSet<>(); // device keys (DB reference key)
     static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: slider;
+    static HashMap<String, SectionSesh> existingSections = new HashMap<>(); //K: section_name; V: section;
+
+
+    //returns arraylist of existing sections for a user
+    public static ArrayList<SectionSesh> getExistingSections(String userID) {
+        ArrayList<SectionSesh> existingList = new ArrayList<>();
+        for (String key : existingSections.keySet()) {
+            existingList.add(existingSections.get(key));
+        }
+        return existingList;
+    }
+
+    //adds existing section information to hasmap
+    public static void setExistingSections(String userID) {
+        mTeachersRef.child(userID).child("existingSections").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                SectionSesh section = dataSnapshot.getValue(SectionSesh.class);
+                existingSections.put(section.section_id, section);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        })
+    }
+
 
     // Add a section child in SectionSesh
     public static void createSection(SectionSesh section) {
