@@ -14,7 +14,7 @@ import java.util.List;
 
 public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHolder> {
     private List<SectionSesh> sectionSeshList;
-    private HashMap<String, SectionSesh> sectionKeys;
+    private HashMap<String, String> sectionKeys;
 
     /*
     section buttons referenced button design from section_list_row
@@ -54,8 +54,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
     constructs an adapter based on the section list passed in -- pass db
     through TeacherResumeActivity
      */
-    public SectionAdapter(List<SectionSesh> sectionSeshList, HashMap<String, SectionSesh> h) {
-        this.sectionSeshList = sectionSeshList;
+    public SectionAdapter(HashMap<String, String> h) {
         this.sectionKeys = h;
     }
 
