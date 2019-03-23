@@ -43,7 +43,7 @@ public class FirebaseUtils {
         Log.d("TEST", "in FirebaseUtils.createSection...");
         mSectionRef.child(section.ref_key).setValue(section);
         FirebaseDatabase.getInstance().getReference("/MagicKeys").child("" + section.getMagic_key()).setValue(section.getRef_key());
-
+        
         // a Listener on a Section's user_ids to maintain local sectionSliders HashMap
         mSectionRef.child(section.ref_key).child("user_ids").addChildEventListener(new ChildEventListener() {
             @Override
