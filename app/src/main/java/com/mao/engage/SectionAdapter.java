@@ -14,7 +14,7 @@ import java.util.List;
 
 public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHolder> {
     private List<SectionSesh> sectionSeshList;
-    private HashMap<String, String> sectionKeys;
+    //private HashMap<String, String> sectionKeys;
 
     /*
     section buttons referenced button design from section_list_row
@@ -30,13 +30,14 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
                 @Override
                 public void onClick(View v) {
                     // open Section sesh with given magic word, section name, section ref key
-                    //Todo: find better way to find the current magic key instead of iterating over every value in the list
-                    SectionSesh mySection = sectionKeys.get(section.getText().toString());
-                    int mMagicWord = mySection.magic_key;
-                    String mSectionRefKey = mySection.ref_key;
-                    //TODO: get section ref key from database; currently is just fake data.
+                    /**TODO: add a method: getExistingSectionsHashmap to FireBaseUtils.java that returns a hashmap of
+                     * a key section id and val section.
+                     */
+                    HashMap<String, SectionSesh> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap(FirebaseUtils.getPsuedoUniqueID());
 
-
+                    SectionSesh mSection = mySectionsHashMap.get(section.getText().toString());
+                    String mSectionRefKey = mSection.ref_key;
+                    int mMagicWord = mSection.magic_key;
 
                     Intent intent = new Intent(section.getContext(), TeacherClassActivity.class);
                     intent.putExtra("sectionRefKey", mSectionRefKey);
@@ -54,8 +55,8 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
     constructs an adapter based on the section list passed in -- pass db
     through TeacherResumeActivity
      */
-    public SectionAdapter(HashMap<String, String> h) {
-        this.sectionKeys = h;
+    public SectionAdapter(List<SectionSesh> lst) {
+        this.sectionSeshList = lst;
     }
 
     @Override
