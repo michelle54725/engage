@@ -56,10 +56,7 @@ public class TeacherResumeActivity extends AppCompatActivity {
 
         //create Adapter that accesses firebase section data based teacher and display as buttons
         db = FirebaseDatabase.getInstance();
-        //getFirebaseData();
         ArrayList<SectionSesh> existingSectionsList = FirebaseUtils.getExistingSections(FirebaseUtils.getPsuedoUniqueID()); //TODO: implement this func
         mAdapter = new SectionAdapter(existingSectionsList);
-        //existingSectionsList should have k: section_name v: section_ref_key,
-        //so only need one input to SectionAdapter
     }
 }
