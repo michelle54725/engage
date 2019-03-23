@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +28,6 @@ public class TeacherResumeActivity extends AppCompatActivity {
     private ImageButton backBtn;
     private RecyclerView recyclerView;
     private SectionAdapter mAdapter;
-    private List<SectionSesh> sectionSeshList = new ArrayList<>();
     private FirebaseDatabase db;
     private DatabaseReference dbr;
     private RecyclerView.LayoutManager layoutManager;
@@ -56,8 +56,11 @@ public class TeacherResumeActivity extends AppCompatActivity {
 
         //create Adapter that accesses firebase section data based teacher and display as buttons
         db = FirebaseDatabase.getInstance();
-        getFirebaseData();
-        mAdapter = new SectionAdapter(sectionSeshList, sectionSeshKeys);
+        //getFirebaseData();
+        ArrayList<SectionSesh> existingSectionsList = FirebaseUtils.getExistingSections(); //TODO: implement this func
+        mAdapter = new SectionAdapter(existingSectionsList);
+        //existingSectionsList should have k: section_ref_key v: section name,
+        //so only need one input to SectionAdapter
     }
 
     public void getFirebaseData() {
