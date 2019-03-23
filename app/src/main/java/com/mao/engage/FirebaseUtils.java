@@ -79,7 +79,7 @@ public class FirebaseUtils {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        })
+        });
     }
 
 
