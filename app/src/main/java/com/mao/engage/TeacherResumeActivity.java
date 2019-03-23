@@ -31,8 +31,7 @@ public class TeacherResumeActivity extends AppCompatActivity {
     private FirebaseDatabase db;
     private DatabaseReference dbr;
     private RecyclerView.LayoutManager layoutManager;
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private HashMap<String, SectionSesh> sectionSeshKeys = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
