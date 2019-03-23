@@ -41,6 +41,7 @@ public class TeacherOptionsActivity extends AppCompatActivity {
                 Intent intent = new Intent(TeacherOptionsActivity.this, TeacherResumeActivity.class);
                 startActivity(intent);
                 // show list of existing sections to choose from
+                FirebaseUtils.setExistingSections(FirebaseUtils.getPsuedoUniqueID());
             }
         }); //hello
     }
