@@ -11,7 +11,7 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/movieBtn"
+        android:id="@+id/sectionBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
