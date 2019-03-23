@@ -51,6 +51,11 @@ public class FirebaseUtils {
         return existingList;
     }
 
+    public static HashMap<String, SectionSesh> getExistingSectionsHashMap(String userID) {
+        return existingSections;
+
+    }
+
     //adds existing section information to hasmap
     public static void setExistingSections(String userID) {
         mTeachersRef.child(userID).child("existingSections").addChildEventListener(new ChildEventListener() {
