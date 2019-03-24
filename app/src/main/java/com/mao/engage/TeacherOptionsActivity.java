@@ -38,10 +38,10 @@ public class TeacherOptionsActivity extends AppCompatActivity {
         resumeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseUtils.setExistingSections(FirebaseUtils.getPsuedoUniqueID());
                 Intent intent = new Intent(TeacherOptionsActivity.this, TeacherResumeActivity.class);
                 startActivity(intent);
                 // show list of existing sections to choose from
-                FirebaseUtils.setExistingSections(FirebaseUtils.getPsuedoUniqueID());
             }
         }); //hello
     }

@@ -43,10 +43,13 @@ public class FirebaseUtils {
 
 
     //returns arraylist of existing sections for a user
-    public static ArrayList<SectionSesh> getExistingSections(String userID) {
+    public static ArrayList<SectionSesh> getExistingSections() {
         ArrayList<SectionSesh> existingList = new ArrayList<>();
         for (String key : existingSections.keySet()) {
             existingList.add(existingSections.get(key));
+            int i = 0;
+            Log.d("Test", "" + i);
+            i++;
         }
         return existingList;
     }
@@ -56,9 +59,9 @@ public class FirebaseUtils {
 
     }
 
-    //adds existing section information to hasmap
+    //adds existing section information to hashmap
     public static void setExistingSections(String userID) {
-        mTeachersRef.child(userID).child("existingSections").addChildEventListener(new ChildEventListener() {
+        mTeachersRef.child(userID).child("existingSection").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 SectionSesh section = dataSnapshot.getValue(SectionSesh.class);

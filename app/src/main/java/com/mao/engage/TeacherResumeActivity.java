@@ -28,8 +28,6 @@ public class TeacherResumeActivity extends AppCompatActivity {
     private ImageButton backBtn;
     private RecyclerView recyclerView;
     private SectionAdapter mAdapter;
-    private FirebaseDatabase db;
-    private DatabaseReference dbr;
     private RecyclerView.LayoutManager layoutManager;
 
 
@@ -54,8 +52,8 @@ public class TeacherResumeActivity extends AppCompatActivity {
         });
 
         //create Adapter that accesses firebase section data based teacher and display as buttons
-        db = FirebaseDatabase.getInstance();
-        ArrayList<SectionSesh> existingSectionsList = FirebaseUtils.getExistingSections(FirebaseUtils.getPsuedoUniqueID()); //TODO: implement this func
+        ArrayList<SectionSesh> existingSectionsList = FirebaseUtils.getExistingSections(); //TODO: implement this func
         mAdapter = new SectionAdapter(existingSectionsList);
+        recyclerView.setAdapter(mAdapter);
     }
 }
