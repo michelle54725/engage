@@ -39,12 +39,12 @@ public class FirebaseUtils {
     static HashMap<String, String> allUsers = new HashMap<>(); // K: user_id (device key); V: section_ref_key
     static HashSet<String> allTeachers = new HashSet<>(); // device keys (DB reference key)
     static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: slider;
-    static HashMap<String, SectionSesh> existingSections = new HashMap<>(); //K: section_name; V: section;
+    static HashMap<String, String> existingSections = new HashMap<>(); //K: section_name; V: section_ref;
 
 
     //returns arraylist of existing sections for a user
-    public static ArrayList<SectionSesh> getExistingSections() {
-        ArrayList<SectionSesh> existingList = new ArrayList<>();
+    public static ArrayList<String> getExistingSections() {
+        ArrayList<String> existingList = new ArrayList<>();
         for (String key : existingSections.keySet()) {
             existingList.add(existingSections.get(key));
             int i = 0;
@@ -54,27 +54,28 @@ public class FirebaseUtils {
         return existingList;
     }
 
-    public static HashMap<String, SectionSesh> getExistingSectionsHashMap(String userID) {
-        return existingSections;
-
-    }
+//    public static HashMap<String, SectionSesh> getExistingSectionsHashMap(String userID) {
+//        return existingSections;
+//
+//    }
 
     //adds existing section information to hashmap
-    public static void setExistingSections(String userID) {
+    public static void setExistingSectionsListener(String userID) {
         Log.d("TEST: ", "setExistingSections Called");
-        mTeachersRef.child(userID).child("existingSection").addChildEventListener(new ChildEventListener() {
+        mTeachersRef.child(userID).child("existingSections").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                SectionSesh section = dataSnapshot.getValue(SectionSesh.class);
-                existingSections.put(section.section_id, section);
+
+                //SectionSesh section = dataSnapshot.getValue(SectionSesh.class);
+                //existingSections.put(section.section_id, section);
+                String section_id = dataSnapshot.getKey();
+                String section_ref = dataSnapshot.getValue(String.class);
+                existingSections.put(section_id, section_ref);
                 Log.d("TEST: ", "EXISTING SECTIONS added");
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                SectionSesh section = dataSnapshot.getValue(SectionSesh.class);
-                existingSections.put(section.section_id, section);
-                Log.d("TEST: ", "EXISTING SECTIONS CHANGED");
 
             }
 
@@ -85,8 +86,6 @@ public class FirebaseUtils {
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                SectionSesh section = dataSnapshot.getValue(SectionSesh.class);
-                existingSections.put(section.section_id, section);
             }
 
             @Override

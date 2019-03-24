@@ -52,8 +52,8 @@ public class TeacherResumeActivity extends AppCompatActivity {
         });
 
         //create Adapter that accesses firebase section data based teacher and display as buttons
-        ArrayList<SectionSesh> existingSectionsList = FirebaseUtils.getExistingSections();
-        mAdapter = new SectionAdapter(existingSectionsList);
+        ArrayList<String> existingSectionsList = FirebaseUtils.getExistingSections();
+        mAdapter = new SectionAdapter(existingSectionsList); //existingSectionList of String section_ids
         recyclerView.setAdapter(mAdapter);
     }
 }

@@ -43,7 +43,6 @@ public class TeacherOptionsActivity extends AppCompatActivity {
                 // show list of existing sections to choose from
             }
         });
-
-        FirebaseUtils.setExistingSections(FirebaseUtils.getPsuedoUniqueID());
+        FirebaseUtils.setExistingSectionsListener(FirebaseUtils.getPsuedoUniqueID());
     }
 }

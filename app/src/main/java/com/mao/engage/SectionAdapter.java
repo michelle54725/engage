@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHolder> {
-    private List<SectionSesh> sectionSeshList;
+    private List<String> sectionSeshList;
     //private HashMap<String, String> sectionKeys;
 
     /*
@@ -26,28 +26,28 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
             super(view);
             section = (Button) view.findViewById(R.id.sectionBtn);
 
-            section.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // open Section sesh with given magic word, section name, section ref key
-                    /**TODO: add a method: getExistingSectionsHashmap to FireBaseUtils.java that returns a hashmap of
-                     * a key section id and val section.
-                     */
-                    HashMap<String, SectionSesh> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap(FirebaseUtils.getPsuedoUniqueID());
-
-                    SectionSesh mSection = mySectionsHashMap.get(section.getText().toString());
-                    String mSectionRefKey = mSection.ref_key;
-                    int mMagicWord = mSection.magic_key;
-
-                    Intent intent = new Intent(section.getContext(), TeacherClassActivity.class);
-                    intent.putExtra("sectionRefKey", mSectionRefKey);
-                    Log.d("TEST-MAGIC", "" + mMagicWord);
-                    intent.putExtra("magic_word", "" + mMagicWord);
-                    intent.putExtra("section_name", section.getText().toString());
-                    section.getContext().startActivity(intent);
-
-                }
-            });
+//            section.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    // open Section sesh with given magic word, section name, section ref key
+//                    /**TODO: add a method: getExistingSectionsHashmap to FireBaseUtils.java that returns a hashmap of
+//                     * a key section id and val section.
+//                     */
+//                    HashMap<String, SectionSesh> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap(FirebaseUtils.getPsuedoUniqueID());
+//
+//                    SectionSesh mSection = mySectionsHashMap.get(section.getText().toString());
+//                    String mSectionRefKey = mSection.ref_key;
+//                    int mMagicWord = mSection.magic_key;
+//
+//                    Intent intent = new Intent(section.getContext(), TeacherClassActivity.class);
+//                    intent.putExtra("sectionRefKey", mSectionRefKey);
+//                    Log.d("TEST-MAGIC", "" + mMagicWord);
+//                    intent.putExtra("magic_word", "" + mMagicWord);
+//                    intent.putExtra("section_name", section.getText().toString());
+//                    section.getContext().startActivity(intent);
+//
+//                }
+//            });
         }
     }
 
@@ -55,7 +55,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
     constructs an adapter based on the section list passed in -- pass db
     through TeacherResumeActivity
      */
-    public SectionAdapter(List<SectionSesh> lst) {
+    public SectionAdapter(List<String> lst) {
         this.sectionSeshList = lst;
     }
 
@@ -71,9 +71,10 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
      */
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        SectionSesh section = sectionSeshList.get(position);
-        //SectionSesh section = new SectionSesh();
-        holder.section.setText(section.getSection_id());
+        String section_id = sectionSeshList.get(position);
+        //SectionSesh section = sectionSeshList.get(position);
+        //holder.section.setText(section.getSection_id());
+        holder.section.setText(section_id);
     }
 
     @Override
