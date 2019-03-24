@@ -29,7 +29,7 @@
 
     <Button
         android:id="@+id/createNewBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -37,7 +37,11 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="CREATE NEW SECTION"
+        android:text="Create new section"
+        android:background="@drawable/button_background"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:fontFamily="@font/quicksand_bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -47,7 +51,7 @@
 
     <Button
         android:id="@+id/resumeBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -55,11 +59,31 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="RESUME SECTION"
+        android:text="Resume section"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:fontFamily="@font/quicksand_bold"
+        android:background="@drawable/button_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.712" />
+
+    <ImageButton
+        android:id="@+id/backBtn"
+        android:layout_width="32dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:tint="@android:color/white"
+        app:fontFamily="@font/quicksand_bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_round_arrow_back_24px" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

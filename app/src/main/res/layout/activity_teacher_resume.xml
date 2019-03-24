@@ -8,18 +8,18 @@
 
     <ImageButton
         android:id="@+id/teacherBackBtn"
-        android:layout_width="64dp"
+        android:layout_width="32dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_round_arrow_back_24px"
         android:tint="@android:color/white"
         app:fontFamily="@font/quicksand_bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_round_arrow_back_24px" />
 
     <TextView
         android:id="@+id/instructionsResumeText"
