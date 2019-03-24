@@ -61,15 +61,20 @@ public class FirebaseUtils {
 
     //adds existing section information to hashmap
     public static void setExistingSections(String userID) {
+        Log.d("TEST: ", "setExistingSections Called");
         mTeachersRef.child(userID).child("existingSection").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 SectionSesh section = dataSnapshot.getValue(SectionSesh.class);
                 existingSections.put(section.section_id, section);
+                Log.d("TEST: ", "EXISTING SECTIONS added");
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                SectionSesh section = dataSnapshot.getValue(SectionSesh.class);
+                existingSections.put(section.section_id, section);
+                Log.d("TEST: ", "EXISTING SECTIONS CHANGED");
 
             }
 
@@ -80,7 +85,8 @@ public class FirebaseUtils {
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                SectionSesh section = dataSnapshot.getValue(SectionSesh.class);
+                existingSections.put(section.section_id, section);
             }
 
             @Override

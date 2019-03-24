@@ -52,7 +52,7 @@ public class TeacherResumeActivity extends AppCompatActivity {
         });
 
         //create Adapter that accesses firebase section data based teacher and display as buttons
-        ArrayList<SectionSesh> existingSectionsList = FirebaseUtils.getExistingSections(); //TODO: implement this func
+        ArrayList<SectionSesh> existingSectionsList = FirebaseUtils.getExistingSections();
         mAdapter = new SectionAdapter(existingSectionsList);
         recyclerView.setAdapter(mAdapter);
     }
