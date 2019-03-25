@@ -34,6 +34,7 @@ public class FirebaseUtils {
     private static DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
     private static DatabaseReference mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions");
     private static DatabaseReference mTeachersRef = FirebaseDatabase.getInstance().getReference("/Teachers");
+    private static Long mMagicKey = -1L; //invalid magic key
 
     //Local variables as copy of Database
     static HashMap<String, String> allUsers = new HashMap<>(); // K: user_id (device key); V: section_ref_key
@@ -46,19 +47,39 @@ public class FirebaseUtils {
     public static ArrayList<String> getExistingSections() {
         ArrayList<String> existingList = new ArrayList<>();
         for (String key : existingSections.keySet()) {
-            existingList.add(existingSections.get(key));
+            existingList.add(key);
             int i = 0;
-            Log.d("Test", "" + i);
             i++;
         }
         return existingList;
     }
 
-//    public static HashMap<String, SectionSesh> getExistingSectionsHashMap(String userID) {
-//        return existingSections;
-//
-//    }
+    public static HashMap<String, String> getExistingSectionsHashMap() {
+        return existingSections;
+    }
 
+    public static void magicKeyListener(String refKey) {
+        Log.d("TEST: ", "setExistingSections Called");
+        mSectionRef.child(refKey).child("magic_key").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String key = dataSnapshot.getKey();
+                mMagicKey = dataSnapshot.getValue(Long.class);
+                Log.d("TEST: ", "magicKeyListener magic key INNER " + mMagicKey);
+                Log.d("TEST: ", "GET magic key inner" + getMagicKey());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        Log.d("TEST: ", "magicKeyListener magic key OUTER " + mMagicKey);
+    }
+
+    public static long getMagicKey() {
+        return mMagicKey;
+    }
     //adds existing section information to hashmap
     public static void setExistingSectionsListener(String userID) {
         Log.d("TEST: ", "setExistingSections Called");
@@ -70,7 +91,7 @@ public class FirebaseUtils {
                 //existingSections.put(section.section_id, section);
                 String section_id = dataSnapshot.getKey();
                 String section_ref = dataSnapshot.getValue(String.class);
-                existingSections.put(section_id, section_ref);
+                existingSections.put(section_ref, section_id);
                 Log.d("TEST: ", "EXISTING SECTIONS added");
             }
 

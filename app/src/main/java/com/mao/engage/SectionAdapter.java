@@ -26,28 +26,22 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
             super(view);
             section = (Button) view.findViewById(R.id.sectionBtn);
 
-//            section.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    // open Section sesh with given magic word, section name, section ref key
-//                    /**TODO: add a method: getExistingSectionsHashmap to FireBaseUtils.java that returns a hashmap of
-//                     * a key section id and val section.
-//                     */
-//                    HashMap<String, SectionSesh> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap(FirebaseUtils.getPsuedoUniqueID());
-//
-//                    SectionSesh mSection = mySectionsHashMap.get(section.getText().toString());
-//                    String mSectionRefKey = mSection.ref_key;
-//                    int mMagicWord = mSection.magic_key;
-//
-//                    Intent intent = new Intent(section.getContext(), TeacherClassActivity.class);
-//                    intent.putExtra("sectionRefKey", mSectionRefKey);
-//                    Log.d("TEST-MAGIC", "" + mMagicWord);
-//                    intent.putExtra("magic_word", "" + mMagicWord);
-//                    intent.putExtra("section_name", section.getText().toString());
-//                    section.getContext().startActivity(intent);
-//
-//                }
-//            });
+            section.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // open Section sesh with given magic word, section name, section ref key
+                    HashMap<String, String> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap();
+                    String mSectionRefKey = mySectionsHashMap.get(section.getText().toString());
+
+                    FirebaseUtils.magicKeyListener(mSectionRefKey);
+
+                    Intent intent = new Intent(section.getContext(), TeacherClassActivity.class);
+                    intent.putExtra("sectionRefKey", mSectionRefKey);
+                    intent.putExtra("section_name", section.getText().toString());
+                    section.getContext().startActivity(intent);
+
+                }
+            });
         }
     }
 

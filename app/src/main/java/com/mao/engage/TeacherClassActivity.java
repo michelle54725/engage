@@ -45,8 +45,15 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
 
         nowFragment = new NowFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("magic_word", getIntent().getStringExtra("magic_word"));
-        Log.d("TEST-MAGIC", "in TeacherClassActivity: " + getIntent().getStringExtra("magic_word"));
+
+        if (getIntent().hasExtra("magic_word")) {
+            bundle.putString("magic_word", getIntent().getStringExtra("magic_word"));
+            Log.d("TEST-MAGIC", "in TeacherClassActivity incorrect: " + getIntent().getStringExtra("magic_word"));
+
+        } else {
+            bundle.putString("magic_word", "" + FirebaseUtils.getMagicKey());
+            Log.d("TEST-MAGIC", "in TeacherClassActivity correct: " + FirebaseUtils.getMagicKey());
+        }
         bundle.putString("section_name", getIntent().getStringExtra("section_name"));
         nowFragment.setArguments(bundle);
 
@@ -73,6 +80,8 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         });
 
         mSectionRefKey = getIntent().getStringExtra("sectionRefKey");
+
+
     }
 
     @Override
