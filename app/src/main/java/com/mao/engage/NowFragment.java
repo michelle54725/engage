@@ -94,24 +94,26 @@ public class NowFragment extends Fragment {
 
         barChart.setViewPortOffsets(0f, 0f, 0f, 0);
         retrieveDataTask = new TimerTask() {
+            int test_val = 0; //for testing
             @Override
             public void run() {
-//                Log.d("TEST", "TIMER WORKING...");
+                Log.d("TEST", "TIMER WORKING..." + test_val++);
                 retrieveData();
             }
         };
-        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 10000);
+        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 5000);
 
         return view;
     }
 
     private void retrieveData() {
-
+        Log.d("TEST", "in retrieveData...");
 
         // get all Slider values
         ArrayList<Integer> individualEngagements = new ArrayList<>();
         for (String user : FirebaseUtils.sectionSliders.keySet()) {
             individualEngagements.add(FirebaseUtils.sectionSliders.get(user));
+            Log.d("TEST", individualEngagements.size() + ") added: " + user + ": " + FirebaseUtils.sectionSliders.get(user));
         }
 
 //                {
@@ -228,6 +230,8 @@ public class NowFragment extends Fragment {
         disengagedPieChart.getLegend().setEnabled(false);
         disengagedPieChart.getDescription().setEnabled(false);
         disengagedPieChart.invalidate();
+
+        Log.d("TEST", "...end retrieveData");
     }
 
     @Override
