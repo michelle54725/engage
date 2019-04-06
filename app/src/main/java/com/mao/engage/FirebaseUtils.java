@@ -3,6 +3,8 @@ package com.mao.engage;
 import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -34,13 +36,13 @@ public class FirebaseUtils {
     private static DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
     private static DatabaseReference mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions");
     private static DatabaseReference mTeachersRef = FirebaseDatabase.getInstance().getReference("/Teachers");
-    private static Long mMagicKey = -1L; //invalid magic key
 
     //Local variables as copy of Database
     static HashMap<String, String> allUsers = new HashMap<>(); // K: user_id (device key); V: section_ref_key
     static HashSet<String> allTeachers = new HashSet<>(); // device keys (DB reference key)
     static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: slider;
     static HashMap<String, String> existingSections = new HashMap<>(); //K: section_name; V: section_ref;
+    static HashMap<String, Long> sectionsMagicKey = new HashMap<>(); //K: section ref key; V: magic key;
 
 
     //returns arraylist of existing sections for a user
@@ -48,8 +50,6 @@ public class FirebaseUtils {
         ArrayList<String> existingList = new ArrayList<>();
         for (String key : existingSections.keySet()) {
             existingList.add(key);
-            int i = 0;
-            i++;
         }
         return existingList;
     }
@@ -59,14 +59,29 @@ public class FirebaseUtils {
     }
 
     public static void magicKeyListener(String refKey) {
-        Log.d("TEST: ", "setExistingSections Called");
-        mSectionRef.child(refKey).child("magic_key").addValueEventListener(new ValueEventListener() {
+        final String reference = refKey;
+        mSectionRef.child(refKey).addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String key = dataSnapshot.getKey();
-                mMagicKey = dataSnapshot.getValue(Long.class);
-                Log.d("TEST: ", "magicKeyListener magic key INNER " + mMagicKey);
-                Log.d("TEST: ", "GET magic key inner" + getMagicKey());
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if (dataSnapshot.getValue().getClass().equals(Long.class)) {
+                    long magicKey = (long) dataSnapshot.getValue();
+                    Log.d("TEST: ", "magicKeyListener magic key" + magicKey);
+                    sectionsMagicKey.put(reference, magicKey);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             }
 
             @Override
@@ -74,12 +89,12 @@ public class FirebaseUtils {
 
             }
         });
-        Log.d("TEST: ", "magicKeyListener magic key OUTER " + mMagicKey);
     }
 
-    public static long getMagicKey() {
-        return mMagicKey;
+    public static long getMagicKey(String refKey) {
+        return sectionsMagicKey.get(refKey);
     }
+
     //adds existing section information to hashmap
     public static void setExistingSectionsListener(String userID) {
         Log.d("TEST: ", "setExistingSections Called");
@@ -92,6 +107,7 @@ public class FirebaseUtils {
                 String section_id = dataSnapshot.getKey();
                 String section_ref = dataSnapshot.getValue(String.class);
                 existingSections.put(section_ref, section_id);
+                magicKeyListener(section_id);
                 Log.d("TEST: ", "EXISTING SECTIONS added");
             }
 
@@ -121,6 +137,8 @@ public class FirebaseUtils {
     public static void createSection(SectionSesh section) {
         Log.d("TEST", "in FirebaseUtils.createSection...");
         mSectionRef.child(section.ref_key).setValue(section);
+        //sectionsMagicKey.put(section.ref_key, section.magic_key);
+        //Log.d("TEST", "sectionsMagicKey key: " + sectionsMagicKey.keySet() + " value: " + sectionsMagicKey.values());
         FirebaseDatabase.getInstance().getReference("/MagicKeys").child("" + section.getMagic_key()).setValue(section.getRef_key());
         
         // a Listener on a Section's user_ids to maintain local sectionSliders HashMap
