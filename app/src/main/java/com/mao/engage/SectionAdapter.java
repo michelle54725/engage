@@ -33,11 +33,10 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
                     HashMap<String, String> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap();
                     String mSectionRefKey = mySectionsHashMap.get(section.getText().toString());
 
-                    FirebaseUtils.magicKeyListener(mSectionRefKey);
-
                     Intent intent = new Intent(section.getContext(), TeacherClassActivity.class);
                     intent.putExtra("sectionRefKey", mSectionRefKey);
                     intent.putExtra("section_name", section.getText().toString());
+                    intent.putExtra("magic_word", FirebaseUtils.getMagicKey(mSectionRefKey) + "");
                     section.getContext().startActivity(intent);
 
                 }
