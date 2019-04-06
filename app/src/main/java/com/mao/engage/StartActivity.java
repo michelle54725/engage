@@ -67,6 +67,7 @@ public class StartActivity extends AppCompatActivity {
 
         FirebaseUtils.setUserListener();
         FirebaseUtils.setTeacherListener();
+        FirebaseUtils.setSectionListener();
     }
 
     // Send user's name to CreateClassActivity and start it

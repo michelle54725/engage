@@ -42,27 +42,54 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-public class StudentTimelineActivitiy extends Fragment {
+public class StudentTimelineFragment extends Fragment {
 
     TimerTask retrieveDataTask;
     private TextView sectionNameText;
     private TextView magicWordText;
-    private ArrayList<Entry> classValues;
-    private ArrayList<Entry> threshold;
 
-    private LineDataSet mThreshold;
+    private ArrayList<Entry> classValues;
+    private ArrayList<Entry> myValues;
+    private LineDataSet mySet;
     private LineDataSet classSet;
 
     private LineData lineData;
-
     private LineChart chart;
     private TextView startTimeText;
     private TextView endTimeText;
 
-    //public View onCreateView()
+    //Required empty public constructor
+    public StudentTimelineFragment() {
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    /**
+     * TODO:
+     * Send slider value from Class fragment via Intent.putExtra("class")
+     * Create various additional variables for our graph (startTimeText, endTimeText, set these times to appropriate times from our db)
+     * Implement a Timer here that calls the retrieveData function every 10s to get new updated values
+     * make sure timer terminates after allotted time
+     */
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_student_timeline, container, false);
+        chart = view.findViewById(R.id.chart);
+        //startTimeText = view.findViewById(R.id.startTimeText); endTimeText = view.findViewById(R.id.endTimeText);
+        //startTimeText.setText("3:00PM"); endTimeText.setText("4:00PM");
+        retrieveData();
+
+        return view;
+    }
 
     /*
-        Retrieve the data from the entire section using sectionID or magic key
+        Retrieve the data from the entire section using sectionID
         to average for the Average line
         While retrieving from section, if sectionID is of the user, add data to user's timeline
         Call from retrieveDataTask=new TimerTask() every 10 seconds
@@ -70,7 +97,7 @@ public class StudentTimelineActivitiy extends Fragment {
         Put values in a line graph
      */
     private void retrieveData() {
-        threshold = new ArrayList<>();
+        myValues = new ArrayList<>();
         classValues = new ArrayList<>();
 
         ArrayList<Integer> meColors = new ArrayList<>();
@@ -81,7 +108,7 @@ public class StudentTimelineActivitiy extends Fragment {
 
         for (int i = 0; i < count; i++) {
             float val = (float) (Math.random() * range);
-            threshold.add(new Entry(i, val));
+            myValues.add(new Entry(i, val));
             meColors.add(Color.TRANSPARENT);
         }
         meColors.remove(meColors.size() - 1);
@@ -95,30 +122,30 @@ public class StudentTimelineActivitiy extends Fragment {
         classColors.remove(classColors.size() - 1);
         classColors.add(getResources().getColor(R.color.colorAccentBlue));
 
-        mThreshold = new LineDataSet(threshold, "Me");
+        mySet = new LineDataSet(myValues, "Me");
         classSet = new LineDataSet(classValues, "Class");
 
-        mThreshold.setLineWidth(2f);
-        mThreshold.setColor(Color.WHITE);
-        mThreshold.setCircleColors(meColors);
-        mThreshold.setCircleRadius(3f);
-        mThreshold.setDrawCircleHole(false);
-        mThreshold.setValueFormatter(new IValueFormatter() {
+        mySet.setLineWidth(2f);
+        mySet.setColor(Color.WHITE);
+        mySet.setCircleColors(meColors);
+        mySet.setCircleRadius(3f);
+        mySet.setDrawCircleHole(false);
+        mySet.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                if(entry == mThreshold.getEntryForIndex(9)) {
+                if(entry == mySet.getEntryForIndex(9)) {
                     return "Me";
                 } else {
                     return "";
                 }
             }
         });
-        mThreshold.setValueTextColor(Color.WHITE);
-        mThreshold.setValueTextSize(12f);
+        mySet.setValueTextColor(Color.WHITE);
+        mySet.setValueTextSize(12f);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mThreshold.setValueTypeface(getResources().getFont(R.font.quicksand_bold));
+            mySet.setValueTypeface(getResources().getFont(R.font.quicksand_bold));
         }
-        mThreshold.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+        mySet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
 
         classSet.setLineWidth(2f);
         classSet.setColor(getResources().getColor(R.color.colorAccentBlue));
@@ -143,7 +170,7 @@ public class StudentTimelineActivitiy extends Fragment {
         classSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
 
 
-        lineData = new LineData(mThreshold, classSet);
+        lineData = new LineData(mySet, classSet);
         chart.setData(lineData);
 
         chart.setTouchEnabled(false);
@@ -233,36 +260,6 @@ public class StudentTimelineActivitiy extends Fragment {
         //args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        /**if (getArguments() != null) {
-         mParam1 = getArguments().getString(ARG_PARAM1);
-         mParam2 = getArguments().getString(ARG_PARAM2);
-         }**/
-    }
-
-    /**
-     * TODO:
-     * Send threshold value from previous Now fragment via Intent.putExtra("threshold")
-     * Need to grab threshold value from previous Now fragment via Intent.getExtra() and set to global variable
-     * Create various additional variables for our graph (startTimeText, endTimeText, set these times to appropriate times from our db)
-     * Implement a Timer here that calls the retrieveData function every 10s to get new updated values
-     * make sure timer terminates after allotted time
-     */
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_timeline, container, false);
-        chart = view.findViewById(R.id.chart);
-        //startTimeText = view.findViewById(R.id.startTimeText); endTimeText = view.findViewById(R.id.endTimeText);
-        //startTimeText.setText("3:00PM"); endTimeText.setText("4:00PM");
-        retrieveData();
-
-        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
