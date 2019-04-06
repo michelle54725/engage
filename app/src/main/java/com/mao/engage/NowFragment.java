@@ -98,7 +98,12 @@ public class NowFragment extends Fragment {
             @Override
             public void run() {
                 Log.d("TEST", "TIMER WORKING..." + test_val++);
-                retrieveData();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        retrieveData();
+                    }
+                });
             }
         };
         new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 5000);

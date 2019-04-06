@@ -1,5 +1,6 @@
 package com.mao.engage;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -57,36 +58,6 @@ public class StudentTimelineActivitiy extends Fragment {
     private LineChart chart;
     private TextView startTimeText;
     private TextView endTimeText;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_timeline, container, false);
-        chart = view.findViewById(R.id.chart);
-
-        //make sure time retrieved is from the section data
-        startTimeText = view.findViewById(R.id.startTimeText);
-        endTimeText = view.findViewById(R.id.endTimeText);
-
-        retrieveData();
-
-        startTimeText.setText("3:00PM");
-        endTimeText.setText("4:00PM");
-
-        retrieveDataTask = new TimerTask() {
-            int test_val = 0; //for testing
-            @Override
-            public void run() {
-                Log.d("TEST", "STUDENT TIMELINE TIMER WORKING..." + test_val++);
-                retrieveData();
-            }
-        };
-        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 5000);
-
-        return view;
-    }
 
     //public View onCreateView()
 
@@ -235,4 +206,86 @@ public class StudentTimelineActivitiy extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    //private static final String ARG_PARAM1 = "param1";
+    //private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    //private String mParam1;
+    //private String mParam2;
+
+    private TimelineFragment.OnFragmentInteractionListener mListener;
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment TimelineFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static TimelineFragment newInstance(String param1, String param2) {
+        TimelineFragment fragment = new TimelineFragment();
+        Bundle args = new Bundle();
+        //args.putString(ARG_PARAM1, param1);
+        //args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        /**if (getArguments() != null) {
+         mParam1 = getArguments().getString(ARG_PARAM1);
+         mParam2 = getArguments().getString(ARG_PARAM2);
+         }**/
+    }
+
+    /**
+     * TODO:
+     * Send threshold value from previous Now fragment via Intent.putExtra("threshold")
+     * Need to grab threshold value from previous Now fragment via Intent.getExtra() and set to global variable
+     * Create various additional variables for our graph (startTimeText, endTimeText, set these times to appropriate times from our db)
+     * Implement a Timer here that calls the retrieveData function every 10s to get new updated values
+     * make sure timer terminates after allotted time
+     */
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_timeline, container, false);
+        chart = view.findViewById(R.id.chart);
+        //startTimeText = view.findViewById(R.id.startTimeText); endTimeText = view.findViewById(R.id.endTimeText);
+        //startTimeText.setText("3:00PM"); endTimeText.setText("4:00PM");
+        retrieveData();
+
+        return view;
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof TimelineFragment.OnFragmentInteractionListener) {
+            mListener = (TimelineFragment.OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
 }
