@@ -91,19 +91,23 @@ public class TimelineFragment extends Fragment {
         }**/
     }
 
+    /**
+     * TODO: Psuedocode for onCreateView:
+     * Send threshold value from previous Now fragment via Intent.putExtra("threshold")
+     * Need to grab threshold value from previous Now fragment via Intent.getExtra() and set to global variable
+     * Create various additional variables for our graph (startTimeText, endTimeText, set these times to appropriate times from our db)
+     * Implement a Timer here that calls the retrieveData function every 10s to get new updated values
+     * make sure timer terminates after allotted time
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_timeline, container, false);
         chart = view.findViewById(R.id.chart);
-        //startTimeText = view.findViewById(R.id.startTimeText);
-        //endTimeText = view.findViewById(R.id.endTimeText);
-
+        //startTimeText = view.findViewById(R.id.startTimeText); endTimeText = view.findViewById(R.id.endTimeText);
+        //startTimeText.setText("3:00PM"); endTimeText.setText("4:00PM");
         retrieveData();
-
-        //startTimeText.setText("3:00PM");
-        //endTimeText.setText("4:00PM");
 
         return view;
     }
@@ -132,6 +136,27 @@ public class TimelineFragment extends Fragment {
         mListener = null;
     }
 
+    /**
+     * TODO: Psuedocode for retrieveData: (will be called every 10 seconds from onCreateView)
+     * Grab threshold value from global variable mThreshold mentioned in onCreateView
+     *  - extend entire value across the graph
+     * Create classValues arrayList (MAKE SURE TO += our current values so we don't overwrite our previous ones
+     * For now, set data being added from TimelineDataRetrieval class by calling createRandomStudentData
+     * Later, replace the previous code and grab data from Firebase (UserSessions > all User Id's slider val with the associated magic key)
+     * Average the current data via our TimeLineDataRetrieval class by passing in an arraylist into calculateAverageData
+     * add this averaged data point to classValues
+     * (BAD IMPLEMENTATION; ASK ABOUT FASTER METHOD) -- this is for the two numbers at the bottom
+     *  - create new TreeMap every 10 seconds that stores all slider values
+     *      - (compare slider values for order) K: sliderval V: repetitions
+     *  - If there is a duplicate, add it to the value of the sliderVal
+     *  - Find the closest sliderVal to the threshold in our Map
+     *  - add all the values to the right of that to get the positive (blue) values
+     *  - subtract classValues.size() by blue values to get the leftValues (redVal)
+     *  - Implement pie chart from MPAndroidChart for both values and display at the bottom
+     * Make sure that the last point of the graph has a little circle indicator.
+     * Add the graphics for the threshold mark and insert threshold value as text on the graph.
+     * TODO: Ask about realtime data ... can we maybe implement a different api since this one doesn't support real time?
+     */
     private void retrieveData() {
         threshold = new ArrayList<>();
         classValues = new ArrayList<>();
