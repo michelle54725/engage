@@ -43,8 +43,70 @@ public class FirebaseUtils {
     static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: slider;
     static HashMap<String, String> existingSections = new HashMap<>(); //K: section_name; V: section_ref;
     static HashMap<String, Long> sectionsMagicKey = new HashMap<>(); //K: section ref key; V: magic key;
+    static HashMap<String, HashMap> sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, and what else?
 
 
+    /*
+        Section listener called in StartActivity
+        Retrieves section data from Firebase to update a HashMap<String section_ref_key, Hashmap<String x, y>>
+     */
+    public static void setSectionListener() {
+        mSectionRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                SectionSesh section = dataSnapshot.getValue(SectionSesh.class);
+                Log.d("TEST", "[new Section Child] \n" + section.getRef_key());
+                //update internal hashmaps
+                //add hashmaps to sectionMap
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        })
+//        mUsersRef.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+//                UserSesh newUser = dataSnapshot.getValue(UserSesh.class);
+//                Log.d("TEST", "[new User Child] \n" + newUser.getUser_id() + "\n" + newUser.getSection_ref_key());
+//                allUsers.put(newUser.getUser_id(), newUser.getSection_ref_key());
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//                UserSesh newUser = dataSnapshot.getValue(UserSesh.class);
+//                Log.d("TEST", "[deleting User Child] \n" + newUser.getUser_id() + "\n" + newUser.getSection_ref_key());
+//                allUsers.remove(newUser.getUser_id());
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {}
+//        });
+    }
     //returns arraylist of existing sections for a user
     public static ArrayList<String> getExistingSections() {
         ArrayList<String> existingList = new ArrayList<>();
