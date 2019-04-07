@@ -79,7 +79,7 @@ public class FirebaseUtils {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        })
+        });
 //        mUsersRef.addChildEventListener(new ChildEventListener() {
 //            @Override
 //            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
