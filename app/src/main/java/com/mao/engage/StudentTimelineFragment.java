@@ -2,65 +2,64 @@ package com.mao.engage;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.core.content.res.ResourcesCompat;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.RelativeSizeSpan;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.sql.Time;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
 public class StudentTimelineFragment extends Fragment {
 
-    TimerTask retrieveDataTask;
-    private TextView sectionNameText;
-    private TextView magicWordText;
-
+    private ArrayList<Entry> meValues;
     private ArrayList<Entry> classValues;
-    private ArrayList<Entry> myValues;
-    private LineDataSet mySet;
+    private ArrayList<Integer> meColors;
+    private ArrayList<Integer> classColors;
+    private int index;
+
+    private LineDataSet meSet;
     private LineDataSet classSet;
+    private String startTime;
+    private String endTime;
 
     private LineData lineData;
     private LineChart chart;
+
     private TextView startTimeText;
     private TextView endTimeText;
 
-    //Required empty public constructor
-    public StudentTimelineFragment() {
+    private ConstraintLayout circleWrapper;
+    private TextView engagedCountText;
 
+    TimerTask retrieveDataTask;
+    private TimelineDataRetrieval dataRetrieval;
+
+    public StudentTimelineFragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -68,84 +67,151 @@ public class StudentTimelineFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    /**
-     * TODO:
-     * Send slider value from Class fragment via Intent.putExtra("class")
-     * Create various additional variables for our graph (startTimeText, endTimeText, set these times to appropriate times from our db)
-     * Implement a Timer here that calls the retrieveData function every 10s to get new updated values
-     * make sure timer terminates after allotted time
-     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_student_timeline, container, false);
+        View view = inflater.inflate(R.layout.fragment_class, container, false);
         chart = view.findViewById(R.id.chart);
-        //startTimeText = view.findViewById(R.id.startTimeText); endTimeText = view.findViewById(R.id.endTimeText);
-        //startTimeText.setText("3:00PM"); endTimeText.setText("4:00PM");
-        retrieveData();
+        startTimeText = view.findViewById(R.id.startTimeText);
+        endTimeText = view.findViewById(R.id.endTimeText);
+        circleWrapper = view.findViewById(R.id.circleWrapper);
+        engagedCountText = view.findViewById(R.id.engagedCount);
+
+        //initiating lists of data
+        meValues = new ArrayList<>();
+        classValues = new ArrayList<>();
+
+        //initiating lines for graph
+        meColors = new ArrayList<>();
+        classColors = new ArrayList<>();
+
+        retrieveDataTask = new TimerTask() {
+            int test_val = 0; //for testing
+            @Override
+            public void run() {
+                Log.d("TEST", "TIMER WORKING..." + test_val++);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        retrieveData();
+                        index++;
+                        Log.d("TEST", "INDEX: " + index);
+                    }
+                });
+            }
+        };
+        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 5000);
+
+        graphData();
+
+        startTimeText.setText("3:00PM");
+        endTimeText.setText("4:00PM");
+
+        setEngagedCount();
 
         return view;
     }
 
-    /*
-        Retrieve the data from the entire section using sectionID
-        to average for the Average line
-        While retrieving from section, if sectionID is of the user, add data to user's timeline
-        Call from retrieveDataTask=new TimerTask() every 10 seconds
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
 
-        Put values in a line graph
-     */
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
     private void retrieveData() {
-        myValues = new ArrayList<>();
+        //initiating lists of data
+        meValues = new ArrayList<>();
         classValues = new ArrayList<>();
 
-        ArrayList<Integer> meColors = new ArrayList<>();
-        ArrayList<Integer> classColors = new ArrayList<>();
+        //initiating lines for graph
+        meColors = new ArrayList<>();
+        classColors = new ArrayList<>();
 
-        final int count = 10;
+        dataRetrieval = new TimelineDataRetrieval();
+        meValues.add(new Entry(index, 10));
+        meColors.add(Color.TRANSPARENT);
+        ArrayList<Integer> list = dataRetrieval.average(101);
+        float avg = dataRetrieval.calculateAverageData(list);
+        classValues.add(new Entry(index, avg));
+        classColors.add(Color.TRANSPARENT);
+
+    }
+
+    private void graphData() {
+
+//        //initiating lists of data
+//        meValues = new ArrayList<>();
+//        classValues = new ArrayList<>();
+
+        //initiating lines for graph
+//        meColors = new ArrayList<>();
+//        classColors = new ArrayList<>();
+        dataRetrieval = new TimelineDataRetrieval();
+
+
+
+        final int count = 200;
         final int range = 100;
+        int rand = -1;
 
         for (int i = 0; i < count; i++) {
-            float val = (float) (Math.random() * range);
-            myValues.add(new Entry(i, val));
+            meValues.add(new Entry(i, i%100 * rand));
+            rand *= -1;
             meColors.add(Color.TRANSPARENT);
         }
+
+//        for (int i = 0; i < count; i++) {
+//            float val = (float) (Math.random() * range);
+//            meValues.add(new Entry(i, val));
+//            meColors.add(Color.TRANSPARENT);
+//        }
+
         meColors.remove(meColors.size() - 1);
         meColors.add(Color.WHITE);
 
         for (int i = 0; i < count; i++) {
-            float val = (float) (Math.random() * range);
-            classValues.add(new Entry(i, val));
+            ArrayList<Integer> list = dataRetrieval.average(101);
+            float avg = dataRetrieval.calculateAverageData(list);
+            classValues.add(new Entry(i, avg));
             classColors.add(Color.TRANSPARENT);
         }
+
+//        for (int i = 0; i < count; i++) {
+//            float val = (float) (Math.random() * range);
+//            classValues.add(new Entry(i, val));
+//            classColors.add(Color.TRANSPARENT);
+//        }
         classColors.remove(classColors.size() - 1);
         classColors.add(getResources().getColor(R.color.colorAccentBlue));
 
-        mySet = new LineDataSet(myValues, "Me");
+        meSet = new LineDataSet(meValues, "Me");
         classSet = new LineDataSet(classValues, "Class");
 
-        mySet.setLineWidth(2f);
-        mySet.setColor(Color.WHITE);
-        mySet.setCircleColors(meColors);
-        mySet.setCircleRadius(3f);
-        mySet.setDrawCircleHole(false);
-        mySet.setValueFormatter(new IValueFormatter() {
+        meSet.setLineWidth(2f);
+        meSet.setColor(Color.WHITE);
+        meSet.setCircleColors(meColors);
+        meSet.setCircleRadius(3f);
+        meSet.setDrawCircleHole(false);
+        meSet.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                if(entry == mySet.getEntryForIndex(9)) {
+                if(entry == meSet.getEntryForIndex(9)) {
                     return "Me";
                 } else {
                     return "";
                 }
             }
         });
-        mySet.setValueTextColor(Color.WHITE);
-        mySet.setValueTextSize(12f);
+        meSet.setValueTextColor(Color.WHITE);
+        meSet.setValueTextSize(12f);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mySet.setValueTypeface(getResources().getFont(R.font.quicksand_bold));
+            meSet.setValueTypeface(getResources().getFont(R.font.quicksand_bold));
         }
-        mySet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+        meSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
 
         classSet.setLineWidth(2f);
         classSet.setColor(getResources().getColor(R.color.colorAccentBlue));
@@ -170,7 +236,7 @@ public class StudentTimelineFragment extends Fragment {
         classSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
 
 
-        lineData = new LineData(mySet, classSet);
+        lineData = new LineData(meSet, classSet);
         chart.setData(lineData);
 
         chart.setTouchEnabled(false);
@@ -214,75 +280,15 @@ public class StudentTimelineFragment extends Fragment {
         xAxis.setAxisMinimum(0);
 
     }
-    private double averageData() {
-        return 0.0;
-    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    //private static final String ARG_PARAM1 = "param1";
-    //private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    //private String mParam1;
-    //private String mParam2;
-
-    private TimelineFragment.OnFragmentInteractionListener mListener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TimelineFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TimelineFragment newInstance(String param1, String param2) {
-        TimelineFragment fragment = new TimelineFragment();
-        Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof TimelineFragment.OnFragmentInteractionListener) {
-            mListener = (TimelineFragment.OnFragmentInteractionListener) context;
+    private void setEngagedCount() {
+        int engagedCount = new Random().nextInt(100);
+        engagedCountText.setText(String.format(Locale.US, "%d", engagedCount));
+        if(engagedCount < 10) {
+            circleWrapper.setVisibility(View.GONE);
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            circleWrapper.setVisibility(View.VISIBLE);
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 }

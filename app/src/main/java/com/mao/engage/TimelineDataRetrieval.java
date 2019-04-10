@@ -20,13 +20,12 @@ public class TimelineDataRetrieval {
         return studentSliderVals;
     }
 
-    public ArrayList<Integer> calculateAverageData(ArrayList<Integer> myList) {
-        int total = 0;
+    public float calculateAverageData(ArrayList<Integer> myList) {
+        float total = 0;
         for (int i : myList) {
             total += i;
         }
-        averageSliderVal.add(total/myList.size());
-        return averageSliderVal;
+        return total/myList.size();
     }
 
     //create fixed data
@@ -36,6 +35,16 @@ public class TimelineDataRetrieval {
             studentSliderVals.add(i%100);
         }
         return studentSliderVals;
+    }
+
+    //create fixed data average
+    public ArrayList<Integer> average(int count) {
+        ArrayList<Integer> vals = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            vals.add(i);
+        }
+
+        return vals;
     }
 }
 

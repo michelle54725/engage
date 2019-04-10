@@ -37,6 +37,7 @@ public class StudentClassActivity extends AppCompatActivity {
     ImageButton backBtn;
     MeFragment meFragment;
     ClassFragment classFragment;
+    StudentTimelineFragment studentTimelineFragment;
     FragmentManager fragmentManager;
 
     //for ease of access to different data
@@ -78,6 +79,11 @@ public class StudentClassActivity extends AppCompatActivity {
         meFragment.setArguments(bundle);
 
         classFragment = new ClassFragment();
+
+
+        studentTimelineFragment = new StudentTimelineFragment();
+
+
         fragmentTransaction.replace(R.id.constraintLayout, meFragment);
         fragmentTransaction.commit();
 
@@ -94,7 +100,7 @@ public class StudentClassActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.constraintLayout, classFragment);
+                fragmentTransaction.replace(R.id.constraintLayout, studentTimelineFragment);
                 fragmentTransaction.commit();
             }
         });
