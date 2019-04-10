@@ -23,9 +23,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import com.github.mikephil.charting.data.Entry;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
@@ -39,6 +42,9 @@ public class StudentClassActivity extends AppCompatActivity {
     ClassFragment classFragment;
     StudentTimelineFragment studentTimelineFragment;
     FragmentManager fragmentManager;
+
+    ArrayList<Entry> meValues;
+    ArrayList<Entry> classAverages;
 
     //for ease of access to different data
     DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
@@ -82,7 +88,8 @@ public class StudentClassActivity extends AppCompatActivity {
 
 
         studentTimelineFragment = new StudentTimelineFragment();
-
+        meValues = new ArrayList<>();
+        classAverages = new ArrayList<>();
 
         fragmentTransaction.replace(R.id.constraintLayout, meFragment);
         fragmentTransaction.commit();
@@ -100,7 +107,8 @@ public class StudentClassActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.constraintLayout, studentTimelineFragment);
+                fragmentTransaction.replace(R.id.constraintLayout,
+                        studentTimelineFragment(meValues, classAverages));
                 fragmentTransaction.commit();
             }
         });

@@ -58,7 +58,7 @@ public class StudentTimelineFragment extends Fragment {
     TimerTask retrieveDataTask;
     private TimelineDataRetrieval dataRetrieval;
 
-    public StudentTimelineFragment() {
+    public StudentTimelineFragment(ArrayList<Entry> meValues, ArrayList<Entry> classValues) {
         // Required empty public constructor
     }
 
