@@ -373,6 +373,10 @@ public class FirebaseUtils {
         return allTeachers.contains(getPsuedoUniqueID());
     }
 
+    public static String getMySection() {
+        return allUsers.get(getPsuedoUniqueID());
+    }
+
     /**
      * Return pseudo unique ID
      * @return ID
