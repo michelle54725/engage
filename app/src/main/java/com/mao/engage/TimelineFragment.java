@@ -361,7 +361,7 @@ public class TimelineFragment extends Fragment {
         xAxis.setDrawLabels(false);
         xAxis.setDrawAxisLine(false);
         xAxis.setDrawGridLines(false);
-        xAxis.setAxisMaximum(250);
+        //xAxis.setAxisMaximum(250);
         xAxis.setAxisMinimum(0);
 
         mThreshold.notifyDataSetChanged();
