@@ -107,8 +107,8 @@ public class StudentTimelineFragment extends Fragment {
         startTime = activity.getStartTime();
         endTime = activity.getEndTime();
 
-        startTimeText.setText("3:00PM");
-        endTimeText.setText("4:00PM");
+        startTimeText.setText(startTime);
+        endTimeText.setText(endTime);
 
         setEngagedCount();
 
