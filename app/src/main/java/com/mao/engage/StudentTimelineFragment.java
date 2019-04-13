@@ -1,5 +1,6 @@
 package com.mao.engage;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
@@ -92,7 +93,13 @@ public class StudentTimelineFragment extends Fragment {
             @Override
             public void run() {
                 Log.d("TEST", "TIMER WORKING..." + test_val++);
-                getActivity().runOnUiThread(new Runnable() {
+                Activity myActivity = getActivity();
+                while (myActivity == null) { //to prevent null object reference for runOnUiThread
+                    myActivity = getActivity();
+                    // TODO: possible: infinite loop (implement some timeout thing)
+                }
+
+                myActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         retrieveData();
