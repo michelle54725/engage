@@ -102,7 +102,7 @@ public class StudentTimelineFragment extends Fragment {
                 });
             }
         };
-        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 2000);
+        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 5000);
 
         //startTime = activity.getStartTime();
         //endTime = activity.getEndTime();
