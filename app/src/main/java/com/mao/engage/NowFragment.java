@@ -43,7 +43,7 @@ public class NowFragment extends Fragment {
     private PieChart disengagedPieChart;
 
     private SeekBar thresholdBar;
-
+    private String mSectionRefKey;
     TimerTask retrieveDataTask;
 
     public NowFragment() {
@@ -67,7 +67,7 @@ public class NowFragment extends Fragment {
             sectionNameText.setText(getArguments().getString("section_name"));
             Log.d("TEST-MAGIC", "in NowFragment: " + getArguments().getString("magic_word"));
             magicWordText.setText(String.format("Magic word: %s", getArguments().getString("magic_word")));
-
+            mSectionRefKey = getArguments().getString("sectionRefKey");
         }
 
         barChart = view.findViewById(R.id.engagedBar);
@@ -235,6 +235,8 @@ public class NowFragment extends Fragment {
         disengagedPieChart.getLegend().setEnabled(false);
         disengagedPieChart.getDescription().setEnabled(false);
         disengagedPieChart.invalidate();
+
+        FirebaseUtils.changeThresholdVal(mSectionRefKey, thresholdBar.getProgress());
 
         Log.d("TEST", "...end retrieveData");
     }

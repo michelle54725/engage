@@ -12,6 +12,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RadioButton;
 
+import java.util.ArrayList;
+
 import info.hoang8f.android.segmented.SegmentedGroup;
 
 public class TeacherClassActivity extends AppCompatActivity implements TimelineFragment.OnFragmentInteractionListener{
@@ -44,14 +46,18 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         nowFragment = new NowFragment();
+        timelineFragment = new TimelineFragment();
         Bundle bundle = new Bundle();
         bundle.putString("magic_word", getIntent().getStringExtra("magic_word"));
         Log.d("TEST-MAGIC", "in TeacherClassActivity CORRECT: " + getIntent().getStringExtra("magic_word"));
-
+        ArrayList<Integer> timelineData = new ArrayList();
         bundle.putString("section_name", getIntent().getStringExtra("section_name"));
+        mSectionRefKey = getIntent().getStringExtra("sectionRefKey");
+        bundle.putString("sectionRefKey", getIntent().getStringExtra("sectionRefKey"));
+        bundle.putIntegerArrayList("timelinedata", timelineData);
         nowFragment.setArguments(bundle);
+        timelineFragment.setArguments(bundle);
 
-        timelineFragment = new TimelineFragment();
         fragmentTransaction.replace(R.id.constraintLayout, nowFragment);
         fragmentTransaction.commit();
 
@@ -73,7 +79,6 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
             }
         });
 
-        mSectionRefKey = getIntent().getStringExtra("sectionRefKey");
 
     }
 

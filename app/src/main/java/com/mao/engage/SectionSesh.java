@@ -16,6 +16,7 @@ public class SectionSesh implements Serializable {
     String section_id;
     String ref_key;
     int magic_key;
+    double threshold = 5.0;
 
     public String getA_start() {
         return a_start;

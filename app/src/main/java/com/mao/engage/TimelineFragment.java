@@ -1,5 +1,6 @@
 package com.mao.engage;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -7,25 +8,41 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -43,11 +60,19 @@ public class TimelineFragment extends Fragment {
     private LineDataSet mThreshold;
     private LineDataSet classSet;
 
+
+    private PieChart mEngagedPieChart;
+    private PieChart mDisengagedPieChart;
+
     private LineData lineData;
 
     private LineChart chart;
     private TextView startTimeText;
     private TextView endTimeText;
+    private String sectionRefKey;
+    private double thresholdVal;
+    TimerTask retrieveDataTask;
+    private ArrayList<Integer> timelineData;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -105,9 +130,35 @@ public class TimelineFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_timeline, container, false);
         chart = view.findViewById(R.id.chart);
+        if (getArguments() != null) {
+            sectionRefKey = getArguments().getString("sectionRefKey");
+            timelineData = getArguments().getIntegerArrayList("timelinedata");
+        }
+        thresholdVal = FirebaseUtils.getThreshold(sectionRefKey) * 10.0;
+
+        mEngagedPieChart = view.findViewById(R.id.mEngagedPieChart);
+        mDisengagedPieChart = view.findViewById(R.id.mDisengagedPieChart);
         //startTimeText = view.findViewById(R.id.startTimeText); endTimeText = view.findViewById(R.id.endTimeText);
         //startTimeText.setText("3:00PM"); endTimeText.setText("4:00PM");
-        retrieveData();
+        retrieveDataTask = new TimerTask() {
+            int test_val = 0; //for testing
+            @Override
+            public void run() {
+                Log.d("TEST", "TIMER WORKING... timeline" + test_val++);
+                Activity activity = getActivity();
+                while (activity == null) {
+                    activity = getActivity();
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        retrieveData();
+                    }
+                });
+            }
+        };
+        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 5000);
+
 
         return view;
     }
@@ -160,42 +211,82 @@ public class TimelineFragment extends Fragment {
     private void retrieveData() {
         threshold = new ArrayList<>();
         classValues = new ArrayList<>();
+        Log.d("TEST", "in  retrieve data function in TIMELINE");
 
-        ArrayList<Integer> meColors = new ArrayList<>();
+        ArrayList<Integer> thresholdColor = new ArrayList<>();
         ArrayList<Integer> classColors = new ArrayList<>();
-
+        TimelineDataRetrieval timeline = new TimelineDataRetrieval();
         final int count = 10;
         final int range = 100;
 
-        for (int i = 0; i < count; i++) {
-            float val = (float) (Math.random() * range);
-            threshold.add(new Entry(i, val));
-            meColors.add(Color.TRANSPARENT);
-        }
-        meColors.remove(meColors.size() - 1);
-        meColors.add(Color.WHITE);
+        ArrayList<Integer> classvals = timeline.createRandomStudentData(10);
+        Log.d("TEST", "calculateaveragedata timeline" + timeline.calculateAverageData(classvals));
+        timelineData.add((int) timeline.calculateAverageData(classvals));
 
-        for (int i = 0; i < count; i++) {
-            float val = (float) (Math.random() * range);
-            classValues.add(new Entry(i, val));
+        ArrayList<Integer> individualEngagements = new ArrayList<>();
+        for (String user : FirebaseUtils.sectionSliders.keySet()) {
+            individualEngagements.add(FirebaseUtils.sectionSliders.get(user));
+            Log.d("TEST", individualEngagements.size() + ") added: " + user + ": " + FirebaseUtils.sectionSliders.get(user));
+        }
+
+        //ArrayList<Float> mTimelineArray = TimelineDataRetrieval.getTimelineArray();
+        for (int i = 0; i < timelineData.size(); i++) {
+            threshold.add(new Entry(i, (float) thresholdVal));
+            thresholdColor.add(Color.TRANSPARENT);
+        }
+        thresholdColor.remove(thresholdColor.size() - 1);
+        thresholdColor.add(Color.WHITE);
+
+        for (int i = 0; i < timelineData.size(); i++) {
+            //float val = (float) (Math.random() * range);
+            classValues.add(new Entry(i, (float) timelineData.get(i)));
+            Log.d("TEST", "values in averaged data" + classValues.get(i));
             classColors.add(Color.TRANSPARENT);
         }
         classColors.remove(classColors.size() - 1);
         classColors.add(getResources().getColor(R.color.colorAccentBlue));
 
-        mThreshold = new LineDataSet(threshold, "Me");
+        int[] countsArray = new int[10];
+        for(int engagement : individualEngagements) {
+            countsArray[engagement / 10] += 1;
+        }
+
+        List<BarEntry> entries = new ArrayList<>();
+        for(int i = 0; i < countsArray.length; i++) {
+            entries.add(new BarEntry(i, countsArray[i]));
+        }
+
+        BarDataSet disengagedBarSet = new BarDataSet(entries.subList(0, (int) (thresholdVal / 10)), "BarDataSet");
+        disengagedBarSet.setColor(getResources().getColor(R.color.colorAccentRed));
+        BarDataSet engagedBarSet = new BarDataSet(entries.subList((int) (thresholdVal / 10), entries.size()), "BarDataSet");
+        engagedBarSet.setColor(getResources().getColor(R.color.colorAccentBlue));
+
+        int engagedStudents = 0;
+        for(int i = (int) (thresholdVal / 10); i < countsArray.length; i++) {
+            engagedStudents += countsArray[i];
+        }
+        int disengagedStudents = 0;
+        for(int i = 0; i < (int) (thresholdVal / 10); i++) {
+            disengagedStudents += countsArray[i];
+        }
+
+        List<PieEntry> engagementEntries = new ArrayList<>();
+        engagementEntries.add(new PieEntry(disengagedStudents));
+        engagementEntries.add(new PieEntry(engagedStudents));
+
+        mThreshold = new LineDataSet(threshold, "Threshold");
         classSet = new LineDataSet(classValues, "Class");
 
         mThreshold.setLineWidth(2f);
         mThreshold.setColor(Color.WHITE);
-        mThreshold.setCircleColors(meColors);
+        mThreshold.setCircleColors(thresholdColor);
         mThreshold.setCircleRadius(3f);
         mThreshold.setDrawCircleHole(false);
         mThreshold.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                if(entry == mThreshold.getEntryForIndex(9)) {
-                    return "Me";
+                if(entry == mThreshold.getEntryForIndex(timelineData.size() - 1)) {
+                    return "Threshold";
                 } else {
                     return "";
                 }
@@ -216,7 +307,7 @@ public class TimelineFragment extends Fragment {
         classSet.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                if(entry == classSet.getEntryForIndex(9)) {
+                if(entry == classSet.getEntryForIndex(timelineData.size() - 1)) {
                     return "Class";
                 } else {
                     return "";
@@ -229,7 +320,6 @@ public class TimelineFragment extends Fragment {
             classSet.setValueTypeface(getResources().getFont(R.font.quicksand_bold));
         }
         classSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
-
 
         lineData = new LineData(mThreshold, classSet);
         chart.setData(lineData);
@@ -271,9 +361,58 @@ public class TimelineFragment extends Fragment {
         xAxis.setDrawLabels(false);
         xAxis.setDrawAxisLine(false);
         xAxis.setDrawGridLines(false);
-        xAxis.setAxisMaximum(10);
+        xAxis.setAxisMaximum(250);
         xAxis.setAxisMinimum(0);
 
+        mThreshold.notifyDataSetChanged();
+        classSet.notifyDataSetChanged();
+        chart.getLineData().notifyDataChanged();
+        chart.notifyDataSetChanged();
+        Log.d("TEST", "data changed");
+
+        PieDataSet engagedSet = new PieDataSet(engagementEntries, "EngagedPieSet");
+        engagedSet.setColors(Color.TRANSPARENT, getResources().getColor(R.color.colorAccentBlue));
+        PieData engagedData = new PieData(engagedSet);
+        engagedData.setDrawValues(false);
+        mEngagedPieChart.setData(engagedData);
+        mEngagedPieChart.setTouchEnabled(false);
+        mEngagedPieChart.setHoleColor(Color.TRANSPARENT);
+        mEngagedPieChart.setHoleRadius(75);
+        mEngagedPieChart.setTransparentCircleRadius(0);
+
+        String engagedStudentsString = String.valueOf(engagedStudents);
+        SpannableString engagedSpannable = new SpannableString(engagedStudentsString + "\nstudents");
+        engagedSpannable.setSpan(new RelativeSizeSpan(2.5f), 0, engagedStudentsString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mEngagedPieChart.setCenterText(engagedSpannable);
+        mEngagedPieChart.setCenterTextSize(18);
+        mEngagedPieChart.setCenterTextColor(Color.WHITE);
+        mEngagedPieChart.setCenterTextTypeface(ResourcesCompat.getFont(getContext(), R.font.quicksand_bold));
+        mEngagedPieChart.getLegend().setEnabled(false);
+        mEngagedPieChart.getDescription().setEnabled(false);
+        mEngagedPieChart.invalidate();
+
+        PieDataSet disengagedSet = new PieDataSet(engagementEntries, "DisengagedPieSet");
+        disengagedSet.setColors(getResources().getColor(R.color.colorAccentRed), Color.TRANSPARENT);
+        PieData disengagedData = new PieData(disengagedSet);
+        disengagedData.setDrawValues(false);
+        mDisengagedPieChart.setData(disengagedData);
+        mDisengagedPieChart.setTouchEnabled(false);
+        mDisengagedPieChart.setHoleColor(Color.TRANSPARENT);
+        mDisengagedPieChart.setHoleRadius(75);
+        mDisengagedPieChart.setTransparentCircleRadius(0);
+
+        String disengagedStudentsString = String.valueOf(disengagedStudents);
+        SpannableString disengagedSpannable = new SpannableString(disengagedStudentsString + "\nstudents");
+        disengagedSpannable.setSpan(new RelativeSizeSpan(2.5f), 0, disengagedStudentsString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mDisengagedPieChart.setCenterText(disengagedSpannable);
+        mDisengagedPieChart.setCenterTextSize(18);
+        mDisengagedPieChart.setCenterTextColor(Color.WHITE);
+        mDisengagedPieChart.setCenterTextTypeface(ResourcesCompat.getFont(getContext(), R.font.quicksand_bold));
+        mDisengagedPieChart.getLegend().setEnabled(false);
+        mDisengagedPieChart.getDescription().setEnabled(false);
+        mDisengagedPieChart.invalidate();
+
+        chart.invalidate();
     }
 
     /**

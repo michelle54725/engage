@@ -5,10 +5,10 @@ import java.util.ArrayList;
 public class TimelineDataRetrieval {
     //constructor
     private ArrayList<Integer> averageSliderVal; //each index is one time step (10s)
+    private static ArrayList<Float> timelineArray;
     public TimelineDataRetrieval() {
-
         averageSliderVal = new ArrayList<>();
-
+        timelineArray = new ArrayList<>();
     }
     //create random data
     public ArrayList<Integer> createRandomStudentData(int students) {
@@ -43,8 +43,15 @@ public class TimelineDataRetrieval {
         for (int i = 0; i < count; i++) {
             vals.add(i);
         }
-
         return vals;
+    }
+
+    public static void addData(float dataPoint) {
+        timelineArray.add(dataPoint);
+    }
+
+    public static ArrayList<Float> getTimelineArray() {
+        return timelineArray;
     }
 }
 
