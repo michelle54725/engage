@@ -65,7 +65,6 @@ public class FirebaseUtils {
                 }
                 Log.d("TEST: ", "SECTION ITEMS added");
                 sectionMap.put(section_ref_key, hashyMap);
-
             }
 
             @Override
@@ -103,11 +102,6 @@ public class FirebaseUtils {
         return existingSections;
     }
 
-
-    public static long getMagicKey(String refKey) {
-        return Long.parseLong(sectionMap.get(refKey).get("magic_key").toString());
-    }
-
     public static double getThreshold(String refKey) {
         Log.d("TEST: ", "getThreshold called" + Double.parseDouble(sectionMap.get(refKey).get("threshold").toString()));
         return Double.parseDouble(sectionMap.get(refKey).get("threshold").toString());
@@ -117,6 +111,28 @@ public class FirebaseUtils {
         //TODO:doesn't update the firebase, just updates local values -- ask if that is that ok?
         Log.d("TEST: ", "changeThresholdVal called");
         sectionMap.get(refKey).put("threshold", threshold);
+    }
+
+    public static long getMagicKey(String refKey) {
+        String s = sectionMap.get(refKey).get("magic_key").toString();
+        Log.d("TEST", s);
+        //Long.parseLong(sectionMap.get(refKey).get("magic_key").toString())
+        return Long.parseLong(s);
+    }
+
+    /*
+        Currently when called, has a HashMap get null object reference error even when called on magic_key
+     */
+    public static String getStartTime(String refKey) {
+        String s = sectionMap.get(refKey).get("a_start").toString();
+        Log.d("TEST", s);
+        return s.substring(s.length() - 7);
+    }
+
+    public static String getEndTime(String refKey) {
+        String s = sectionMap.get(refKey).get("b_end").toString();
+        Log.d("TEST", s);
+        return s.substring(s.length() - 7);
     }
 
     //adds existing section information to hashmap
@@ -363,6 +379,10 @@ public class FirebaseUtils {
         Log.d("TEST", "teacherIsInDB RESULT: " + allTeachers.contains(getPsuedoUniqueID()));
 
         return allTeachers.contains(getPsuedoUniqueID());
+    }
+
+    public static String getMySection() {
+        return allUsers.get(getPsuedoUniqueID());
     }
 
     /**

@@ -53,5 +53,14 @@ public class TimelineDataRetrieval {
     public static ArrayList<Float> getTimelineArray() {
         return timelineArray;
     }
+
+    //create fixed data, one datapoint
+    public int dataFixed(){
+        return 10;
+    }
+
+    public int dataRandom() {
+        return (int) (Math.random() * 101);
+    }
 }
 
