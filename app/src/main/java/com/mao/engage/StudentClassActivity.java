@@ -132,4 +132,12 @@ public class StudentClassActivity extends AppCompatActivity {
         return classAverages;
     }
 
+    public String getStartTime() {
+        return FirebaseUtils.getStartTime(FirebaseUtils.getPsuedoUniqueID());
+    }
+
+    public String getEndTime() {
+        return FirebaseUtils.getEndTime(FirebaseUtils.getPsuedoUniqueID());
+    }
+
 }

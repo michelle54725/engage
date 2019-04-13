@@ -48,8 +48,12 @@ public class TimelineDataRetrieval {
     }
 
     //create fixed data, one datapoint
-    public int data(){
+    public int dataFixed(){
         return 10;
+    }
+
+    public int dataRandom() {
+        return (int) (Math.random() * 101);
     }
 }
 

@@ -37,9 +37,9 @@ public class StudentTimelineFragment extends Fragment {
 
     private ArrayList<Entry> meValues;
     private ArrayList<Entry> classValues;
-    private ArrayList<Entry> currClassvalues;
     private ArrayList<Integer> meColors;
     private ArrayList<Integer> classColors;
+    private StudentClassActivity activity;
     private int index;
 
     private LineDataSet meSet;
@@ -77,12 +77,10 @@ public class StudentTimelineFragment extends Fragment {
         endTimeText = view.findViewById(R.id.endTimeText);
         circleWrapper = view.findViewById(R.id.circleWrapper);
         engagedCountText = view.findViewById(R.id.engagedCount);
-        StudentClassActivity activity = (StudentClassActivity) getActivity();
+        activity = (StudentClassActivity) getActivity();
 
         //initiating lists of data
-        //meValues = new ArrayList<>();
         meValues = activity.getMeValues();
-        //classValues = new ArrayList<>();
         classValues = activity.getClassValues();
 
         //initiating lines for graph
@@ -100,15 +98,15 @@ public class StudentTimelineFragment extends Fragment {
                         retrieveData();
                         index++;
                         Log.d("TEST", "INDEX: " + index);
-                        //graphData();
-                        //Log.d("TEST", "attempting graph");
                     }
                 });
             }
         };
-        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 5000);
+        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 2000);
 
-        //graphData();
+        //startTime = activity.getStartTime();
+        //endTime = activity.getEndTime();
+
         startTimeText.setText("3:00PM");
         endTimeText.setText("4:00PM");
 
@@ -128,34 +126,23 @@ public class StudentTimelineFragment extends Fragment {
     }
 
     private void retrieveData() {
-        //initiating lists of data
-//        meValues = new ArrayList<>();
-////        classValues = new ArrayList<>();
-
-        currClassvalues = new ArrayList<>();
-
         //initiating lines for graph
         meColors = new ArrayList<>();
         classColors = new ArrayList<>();
 
         dataRetrieval = new TimelineDataRetrieval();
 
-        //meValues.add(new Entry(index, 10));
-        int d = dataRetrieval.data();
+        int d = dataRetrieval.dataRandom();
         meValues.add(new Entry(index, d));
         Log.d("TEST", "Me value: " + d);
         Log.d("TEST", "Me Value size: " + meValues.size());
-//        meColors.add(Color.TRANSPARENT);
-//        Log.d("TEST", "" + meColors.get(meColors.size() - 1));
 
-        ArrayList<Integer> list = dataRetrieval.average(150);
-        float avg = dataRetrieval.calculateAverageData(list);
+
+        ArrayList<Integer> list = dataRetrieval.createRandomStudentData(150);
+        int avg = Math.round(dataRetrieval.calculateAverageData(list));
         classValues.add(new Entry(index, avg));
         Log.d("TEST", "Class avg: " + avg);
         Log.d("TEST", "ClassValues size:" + classValues.size());
-//        classColors.add(Color.TRANSPARENT);
-//        Log.d("TEST", "" + classColors.get(classColors.size() - 1));
-
 
         for (int i = 0; i < meValues.size(); i++) {
             meColors.add(Color.TRANSPARENT);
@@ -166,11 +153,9 @@ public class StudentTimelineFragment extends Fragment {
         meColors.remove(meColors.size() - 1);
         meColors.add(Color.WHITE);
 
-
         Log.d("TEST", "classColors size: " + classColors.size());
         classColors.remove(classColors.size() - 1);
         classColors.add(getResources().getColor(R.color.colorAccentBlue));
-
 
         meSet = new LineDataSet(meValues, "Me");
         classSet = new LineDataSet(classValues, "Class");
@@ -187,6 +172,7 @@ public class StudentTimelineFragment extends Fragment {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
                 if (entry == meSet.getEntryForIndex(meSet.getEntryCount() - 1)) {
+                    Log.d("TEST", "get last label");
                     return String.valueOf(entry.getY());
                 }  else {
                     return "";
@@ -221,7 +207,6 @@ public class StudentTimelineFragment extends Fragment {
             classSet.setValueTypeface(getResources().getFont(R.font.quicksand_bold));
         }
         classSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
-
 
         lineData = new LineData(meSet, classSet);
         chart.setData(lineData);
@@ -268,8 +253,8 @@ public class StudentTimelineFragment extends Fragment {
         xAxis.setDrawLabels(false);
         xAxis.setDrawAxisLine(false);
         xAxis.setDrawGridLines(false);
-        //xAxis.setAxisMaximum(10);
-        xAxis.setAxisMaximum(360);
+        xAxis.setAxisMaximum(index);
+        //xAxis.setAxisMaximum(360);
         xAxis.setAxisMinimum(0);
         Log.d("TEST", "end of graphData");
         chart.invalidate();

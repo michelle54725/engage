@@ -42,7 +42,6 @@ public class FirebaseUtils {
     static HashSet<String> allTeachers = new HashSet<>(); // device keys (DB reference key)
     static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: slider;
     static HashMap<String, String> existingSections = new HashMap<>(); //K: section_name; V: section_ref;
-    static HashMap<String, Long> sectionsMagicKey = new HashMap<>(); //K: section ref key; V: magic key;
     static HashMap<String, HashMap> sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, and what else?
 
 
@@ -54,10 +53,19 @@ public class FirebaseUtils {
         mSectionRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                SectionSesh section = dataSnapshot.getValue(SectionSesh.class);
-                Log.d("TEST", "[new Section Child] \n" + section.getRef_key());
-                //update internal hashmaps
-                //add hashmaps to sectionMap
+               String section_ref_key = dataSnapshot.getKey();
+               Log.d("TEST", "[new section child]: " + section_ref_key);
+               Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+               HashMap<String, String> hashyMap = new HashMap<>();
+               for(DataSnapshot child : children) {
+                   if(!(child.getKey().equals("user_ids"))) {
+                       hashyMap.put(child.getKey(), child.getValue().toString());
+                       Log.d("TEST", child.getKey() + " " + child.getValue());
+                   }
+               }
+
+               Log.d("TEST", "SECTION ITEMS added");
+               sectionMap.put(section_ref_key, hashyMap);
             }
 
             @Override
@@ -80,33 +88,8 @@ public class FirebaseUtils {
 
             }
         });
-//        mUsersRef.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-//                UserSesh newUser = dataSnapshot.getValue(UserSesh.class);
-//                Log.d("TEST", "[new User Child] \n" + newUser.getUser_id() + "\n" + newUser.getSection_ref_key());
-//                allUsers.put(newUser.getUser_id(), newUser.getSection_ref_key());
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//                UserSesh newUser = dataSnapshot.getValue(UserSesh.class);
-//                Log.d("TEST", "[deleting User Child] \n" + newUser.getUser_id() + "\n" + newUser.getSection_ref_key());
-//                allUsers.remove(newUser.getUser_id());
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {}
-//        });
     }
+
     //returns arraylist of existing sections for a user
     public static ArrayList<String> getExistingSections() {
         ArrayList<String> existingList = new ArrayList<>();
@@ -120,41 +103,28 @@ public class FirebaseUtils {
         return existingSections;
     }
 
-    public static void magicKeyListener(String refKey) {
-        final String reference = refKey;
-        mSectionRef.child(refKey).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.getValue().getClass().equals(Long.class)) {
-                    long magicKey = (long) dataSnapshot.getValue();
-                    Log.d("TEST: ", "magicKeyListener magic key" + magicKey);
-                    sectionsMagicKey.put(reference, magicKey);
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    public static long getMagicKey(String refKey) {
+        String s = sectionMap.get(refKey).get("magic_key").toString();
+        Log.d("TEST", s);
+        //Long.parseLong(sectionMap.get(refKey).get("magic_key").toString())
+        return Long.parseLong(s);
     }
 
-    public static long getMagicKey(String refKey) {
-        return sectionsMagicKey.get(refKey);
+    /*
+        Currently when called, has a HashMap get null object reference error even when called on magic_key
+     */
+    public static String getStartTime(String refKey) {
+        String s = sectionMap.get(refKey).get("a_start").toString();
+        Log.d("TEST", s);
+//        return s.substring(s.length() - 8);
+        return s;
+    }
+
+    public static String getEndTime(String refKey) {
+        String s = sectionMap.get(refKey).get("b_end").toString();
+        Log.d("TEST", s);
+//        return s.substring(s.length() - 8);
+        return s;
     }
 
     //adds existing section information to hashmap
@@ -169,7 +139,6 @@ public class FirebaseUtils {
                 String section_id = dataSnapshot.getKey();
                 String section_ref = dataSnapshot.getValue(String.class);
                 existingSections.put(section_ref, section_id);
-                magicKeyListener(section_id);
                 Log.d("TEST: ", "EXISTING SECTIONS added");
             }
 
