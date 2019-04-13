@@ -133,11 +133,11 @@ public class StudentClassActivity extends AppCompatActivity {
     }
 
     public String getStartTime() {
-        return FirebaseUtils.getStartTime(FirebaseUtils.getPsuedoUniqueID());
+        return FirebaseUtils.getStartTime(FirebaseUtils.getMySection());
     }
 
     public String getEndTime() {
-        return FirebaseUtils.getEndTime(FirebaseUtils.getPsuedoUniqueID());
+        return FirebaseUtils.getEndTime(FirebaseUtils.getMySection());
     }
 
 }

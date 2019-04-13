@@ -116,15 +116,13 @@ public class FirebaseUtils {
     public static String getStartTime(String refKey) {
         String s = sectionMap.get(refKey).get("a_start").toString();
         Log.d("TEST", s);
-//        return s.substring(s.length() - 8);
-        return s;
+        return s.substring(s.length() - 7);
     }
 
     public static String getEndTime(String refKey) {
         String s = sectionMap.get(refKey).get("b_end").toString();
         Log.d("TEST", s);
-//        return s.substring(s.length() - 8);
-        return s;
+        return s.substring(s.length() - 7);
     }
 
     //adds existing section information to hashmap

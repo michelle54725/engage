@@ -111,11 +111,11 @@ public class StudentTimelineFragment extends Fragment {
         };
         new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 5000);
 
-        //startTime = activity.getStartTime();
-        //endTime = activity.getEndTime();
+        startTime = activity.getStartTime();
+        endTime = activity.getEndTime();
 
-        startTimeText.setText("3:00PM");
-        endTimeText.setText("4:00PM");
+        startTimeText.setText(startTime);
+        endTimeText.setText(endTime);
 
         setEngagedCount();
 
