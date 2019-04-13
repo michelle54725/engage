@@ -108,7 +108,7 @@ public class StudentClassActivity extends AppCompatActivity {
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.constraintLayout,
-                        studentTimelineFragment(meValues, classAverages));
+                        studentTimelineFragment);
                 fragmentTransaction.commit();
             }
         });
@@ -119,6 +119,17 @@ public class StudentClassActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    /*
+        Methods to pass values between StudentTimelineFragement and activity
+     */
+    public ArrayList<Entry> getMeValues() {
+        return meValues;
+    }
+
+    public ArrayList<Entry> getClassValues() {
+        return classAverages;
     }
 
 }

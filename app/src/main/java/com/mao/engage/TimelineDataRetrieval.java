@@ -46,5 +46,10 @@ public class TimelineDataRetrieval {
 
         return vals;
     }
+
+    //create fixed data, one datapoint
+    public int data(){
+        return 10;
+    }
 }
 
