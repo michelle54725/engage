@@ -43,6 +43,8 @@ public class FirebaseUtils {
     static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: slider;
     static HashMap<String, String> existingSections = new HashMap<>(); //K: section_name; V: section_ref;
     static HashMap<String, HashMap> sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, and what else?
+    static HashMap<String, HashMap> userMap = new HashMap<>(); //K : section ref key V: hashmap of ( K: user id ) and (V: name).
+
 
 
     /*
@@ -61,10 +63,51 @@ public class FirebaseUtils {
                     if (!(child.getKey().equals("user_ids"))) {
                         hashyMap.put(child.getKey(), child.getValue().toString());
                         Log.d("TEST", child.getKey() + " " + child.getValue());
+                    } else {
+                        setUserIdListener(section_ref_key);
+                        Log.d("TEST", "USER IDS key " + child.getKey() + " value " + child.getValue());
                     }
                 }
                 Log.d("TEST: ", "SECTION ITEMS added");
                 sectionMap.put(section_ref_key, hashyMap);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public static void setUserIdListener(String sectionRefKey) {
+        final String sectionref = sectionRefKey;
+        mSectionRef.child(sectionRefKey).child("user_ids").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Iterable<DataSnapshot> users = dataSnapshot.getChildren();
+
+                HashMap<String, String> hashyMap = new HashMap<>();
+                for(DataSnapshot child : users) {
+                    hashyMap.put(child.getKey(), child.getValue().toString());
+                    Log.d("TEST", "User ids" + child.getKey() + " " + child.getValue());
+                }
+
+                userMap.put(sectionref, hashyMap);
             }
 
             @Override
@@ -171,6 +214,9 @@ public class FirebaseUtils {
         });
     }
 
+//    public static ArrayList<Integer> getSliderVals(String refKey) {
+//
+//    }
 
     // Add a section child in SectionSesh
     public static void createSection(SectionSesh section) {
@@ -314,6 +360,7 @@ public class FirebaseUtils {
             }
         });
     }
+
 
     public static void setUserListener() {
         mUsersRef.addChildEventListener(new ChildEventListener() {

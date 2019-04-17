@@ -16,8 +16,10 @@ import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -36,6 +38,9 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.sql.Time;
@@ -140,6 +145,7 @@ public class TimelineFragment extends Fragment {
         mDisengagedPieChart = view.findViewById(R.id.mDisengagedPieChart);
         //startTimeText = view.findViewById(R.id.startTimeText); endTimeText = view.findViewById(R.id.endTimeText);
         //startTimeText.setText("3:00PM"); endTimeText.setText("4:00PM");
+
         retrieveDataTask = new TimerTask() {
             int test_val = 0; //for testing
             @Override
@@ -240,7 +246,7 @@ public class TimelineFragment extends Fragment {
         for (int i = 0; i < timelineData.size(); i++) {
             //float val = (float) (Math.random() * range);
             classValues.add(new Entry(i, (float) timelineData.get(i)));
-            Log.d("TEST", "values in averaged data" + classValues.get(i));
+            //Log.d("TEST", "values in averaged data" + classValues.get(i));
             classColors.add(Color.TRANSPARENT);
         }
         classColors.remove(classColors.size() - 1);
@@ -325,6 +331,7 @@ public class TimelineFragment extends Fragment {
         chart.setData(lineData);
 
         chart.setTouchEnabled(false);
+        chart.setDragEnabled(true);
         Description description = new Description();
         description.setText("");
         chart.setDescription(description);
@@ -355,7 +362,7 @@ public class TimelineFragment extends Fragment {
 
 
         YAxis yAxis2 = chart.getAxisRight();
-        yAxis2.setEnabled(false);
+        yAxis2.setEnabled(true);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setDrawLabels(false);
