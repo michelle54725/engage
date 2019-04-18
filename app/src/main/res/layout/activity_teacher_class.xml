@@ -28,7 +28,7 @@
             android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Now"
+            android:text="Attendance"
             android:textSize="12sp"
             app:fontFamily="@font/quicksand_bold" />
 
