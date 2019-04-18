@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="false">
+    <item android:state_pressed="true">
         <shape android:shape="oval">
             <stroke android:color="#ffffff " android:width="1dp" />
             <solid android:color="#2F5CD8"/>
             <size android:width="140dp" android:height="140dp"/>
         </shape>
     </item>
-    <item android:state_pressed="true">
+    <item android:state_pressed="false">
         <shape android:shape="oval">
             <stroke android:color="#ffffff " android:width="1dp" />
             <solid android:color="#2FA6D8"/>

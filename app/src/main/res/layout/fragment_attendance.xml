@@ -30,22 +30,23 @@
         <TextView
             android:id="@+id/studentCount"
             android:layout_width="wrap_content"
-            android:layout_height="45dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="136dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/quicksand_bold"
-            android:text="256"
+            android:text="@string/_256"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="36sp"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sectionNameText3"
-            app:layout_constraintVertical_bias="0.545" />
+            app:layout_constraintTop_toTopOf="@+id/attendanceButton"
+            app:layout_constraintVertical_bias="0.436" />
 
         <TextView
             android:id="@+id/sectionNameText3"
@@ -65,23 +66,23 @@
 
         <Button
             android:id="@+id/attendanceButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/shape_drawable"
+            android:background="@drawable/attendance_button"
             android:contentDescription="@string/begin_taking_attendance"
             android:fontFamily="@font/quicksand_bold"
-            android:text="TAKE \n ATTENDANCE"
+            android:text="@string/take_attendance"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.499" />
+            app:layout_constraintVertical_bias="0.453" />
 
         <Button
             android:id="@+id/see_whos_here"
@@ -98,13 +99,13 @@
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.487"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.792" />
+            app:layout_constraintTop_toTopOf="@+id/attendanceButton"
+            app:layout_constraintVertical_bias="0.672" />
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/students_text"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginStart="8dp"
@@ -113,12 +114,13 @@
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/quicksand_bold"
             android:text="@string/students"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.494"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/studentCount"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="@+id/attendanceButton"
+            app:layout_constraintVertical_bias="0.509" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

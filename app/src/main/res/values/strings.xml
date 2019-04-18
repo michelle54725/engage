@@ -8,4 +8,7 @@
     <string name="magic_word_420">Magic Word: 420</string>
     <string name="students">students</string>
     <string name="see_who_s_here">See who\'s here</string>
+    <string name="take_attendance">TAKE \n ATTENDANCE</string>
+    <string name="_256">256</string>
+    <string name="stop_attendance">STOP \n ATTENDANCE</string>
 </resources>

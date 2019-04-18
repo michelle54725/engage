@@ -10,22 +10,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 
-public class AttendanceFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class AttendanceFragment extends Fragment implements View.OnClickListener {
 
     private TextView sectionNameText;
     private TextView magicWordText;
+    private TextView studentCount;
+    private TextView students;
     private String mSectionRefKey;
+    private Button attendanceButton;
+    private Button whosHereButton;
+    boolean attendancePressed = false;
 
 //    private OnFragmentInteractionListener mListener;
 
@@ -33,31 +31,9 @@ public class AttendanceFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AttendanceFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AttendanceFragment newInstance(String param1, String param2) {
-        AttendanceFragment fragment = new AttendanceFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -67,11 +43,19 @@ public class AttendanceFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_attendance, container, false);
         sectionNameText = view.findViewById(R.id.sectionNameText3);
         magicWordText = view.findViewById(R.id.magicWordText3);
+        studentCount = view.findViewById(R.id.studentCount);
+        students = view.findViewById(R.id.students_text);
+
         if (getArguments() != null) {
             sectionNameText.setText(getArguments().getString("section_name"));
             magicWordText.setText(String.format("Magic word: %s", getArguments().getString("magic_word")));
             mSectionRefKey = getArguments().getString("sectionRefKey");
         }
+
+        attendanceButton = view.findViewById(R.id.attendanceButton);
+        whosHereButton = view.findViewById(R.id.see_whos_here);
+        attendanceButton.setOnClickListener(this);
+        whosHereButton.setOnClickListener(this);
 
         return view;
     }
@@ -79,51 +63,34 @@ public class AttendanceFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d("TEST", "onDestroyView: Destroying View & TimerTask");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d("TEST", "onStop: Stopping & Destroying TimerTask");
     }
 
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-//
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.attendanceButton:
+                if (attendancePressed) {
+                    attendanceButton.setBackground(getResources().getDrawable(R.drawable.attendance_button));
+                    attendanceButton.setText(R.string.take_attendance);
+                } else {
+                    attendanceButton.setBackground(getResources().getDrawable(R.drawable.attendance_button2));
+                    attendanceButton.setText(R.string.stop_attendance);
+                    studentCount.setVisibility(View.VISIBLE);
+                    students.setVisibility(View.VISIBLE);
+                }
+                attendancePressed = !attendancePressed;
+                break;
+            case R.id.see_whos_here:
+                break;
+            default:
+                Log.d("TEST:","Button not accounted for");
+                break;
+        }
+
+    }
 }
