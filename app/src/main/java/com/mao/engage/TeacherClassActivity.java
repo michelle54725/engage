@@ -75,6 +75,8 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         fragmentTransaction.replace(R.id.constraintLayout, attendanceFragment);
         fragmentTransaction.commit();
 
+        FirebaseUtils.setSectionSliders(mSectionRefKey);
+
         nowTabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +94,6 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                 fragmentTransaction.commit();
             }
         });
-
 
     }
 

@@ -45,8 +45,6 @@ public class FirebaseUtils {
     static HashMap<String, HashMap> sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, and what else?
     static HashMap<String, HashMap> userMap = new HashMap<>(); //K : section ref key V: hashmap of ( K: user id ) and (V: name).
 
-
-
     /*
         Section listener called in StartActivity
         Retrieves section data from Firebase to update a HashMap<String section_ref_key, Hashmap<String x, String y>>
@@ -58,14 +56,19 @@ public class FirebaseUtils {
                 String section_ref_key = dataSnapshot.getKey();
                 Log.d("TEST", "[new Section Child]: " + section_ref_key);
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                HashMap<String, String> hashyMap = new HashMap<>();
+                HashMap<String, Object> hashyMap = new HashMap<>();
                 for(DataSnapshot child : children) {
                     if (!(child.getKey().equals("user_ids"))) {
                         hashyMap.put(child.getKey(), child.getValue().toString());
                         Log.d("TEST", child.getKey() + " " + child.getValue());
                     } else {
-                        setUserIdListener(section_ref_key);
-                        Log.d("TEST", "USER IDS key " + child.getKey() + " value " + child.getValue());
+                        DataSnapshot userChild = dataSnapshot.child("user_ids");
+                        HashMap<String, String> usersInSection = new HashMap<>(); //K: student ref key; V: student name
+                        for(DataSnapshot user : userChild.getChildren()) {
+                            Log.d("TEST", "USER IDS IN FOR LOOP key " + user.getKey() + " value " + user.getValue());
+                            usersInSection.put(user.getKey(), user.getValue().toString());
+                        }
+                        hashyMap.put(userChild.getKey(), usersInSection);
                     }
                 }
                 Log.d("TEST: ", "SECTION ITEMS added");
@@ -94,43 +97,6 @@ public class FirebaseUtils {
         });
     }
 
-    public static void setUserIdListener(String sectionRefKey) {
-        final String sectionref = sectionRefKey;
-        mSectionRef.child(sectionRefKey).child("user_ids").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Iterable<DataSnapshot> users = dataSnapshot.getChildren();
-
-                HashMap<String, String> hashyMap = new HashMap<>();
-                for(DataSnapshot child : users) {
-                    hashyMap.put(child.getKey(), child.getValue().toString());
-                    Log.d("TEST", "User ids" + child.getKey() + " " + child.getValue());
-                }
-
-                userMap.put(sectionref, hashyMap);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     //returns arraylist of existing sections for a user
     public static ArrayList<String> getExistingSections() {
@@ -227,7 +193,90 @@ public class FirebaseUtils {
         FirebaseDatabase.getInstance().getReference("/MagicKeys").child("" + section.getMagic_key()).setValue(section.getRef_key());
 
         // a Listener on a Section's user_ids to maintain local sectionSliders HashMap
-        mSectionRef.child(section.ref_key).child("user_ids").addChildEventListener(new ChildEventListener() {
+//        mSectionRef.child(section.ref_key).child("user_ids").addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                Log.d("TEST", "LISTENER SAYS copying user to local sectionSliders: " + dataSnapshot.getKey());
+//                String user_id = dataSnapshot.getKey();
+//                sectionSliders.put(user_id, 50); // default slider = 50
+//                setSliderListener(user_id);
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                // Someone changed their name
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//                Log.d("TEST", "removing user from local sectionSliders: " + dataSnapshot.getKey());
+//                sectionSliders.remove(dataSnapshot.getKey());
+//                String user_id = dataSnapshot.getKey();
+//                // TODO: stop Listener?
+//            }
+
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+    }
+
+    public static void createSection(String start, String end, String ta_name, String section_id,
+                                     String key, int magic_word) {
+    }
+
+
+    // Find SectionSesh corresponding to User's MagicWord
+    // Add UserID to corresponding Section's user_ids list
+    public static void createUser(final UserSesh user) {
+        Log.d("TEST", "in findSectionWithUser" + mSectionRef.getKey());
+        mSectionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Log.d("TEST", "in OnDataChange w MW: " + String.valueOf(user.getMagic_key()));
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        SectionSesh section = snapshot.getValue(SectionSesh.class);
+                        if (section.getMagic_key() == user.getMagic_key()) {
+                            Log.d("TEST", "\n[FOUND MATCH] " + "\nmagic key: " + section.getMagic_key() + "; \n" + "ref key: " + section.getRef_key());
+                            // Reflect change in section_ref_key in both DB and UserSesh object
+                            user.setSection_ref_key(section.getRef_key());
+                            mUsersRef.child(user.getUser_id()).setValue(user);
+                            DatabaseReference userIDref = mSectionRef.child(section.getRef_key()).child("user_ids");
+                            Map<String, Object> userUpdates = new HashMap<>();
+                            userUpdates.put(user.getUser_id(), user.getUsername());
+                            userIDref.updateChildren(userUpdates);
+                        }
+                    }
+                } else {
+                    Log.d("TEST-FAIL", "dataSnapshot DNE");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.d("TEST-FAIL", "failed to read value");
+            }
+        });
+    }
+
+    public static void updateTeacher(String name, String sectionRefKey, String sectionID) {
+        Log.d("TEST", "updating Teacher w device ID " + getPsuedoUniqueID());
+        DatabaseReference mRef = mTeachersRef.child(getPsuedoUniqueID());
+        mRef.child("name").setValue(name);
+        mRef.child("existingSections").child(sectionRefKey).setValue(sectionID);
+    }
+
+    public static void setSectionSliders(String ref_key) {
+        //TODO: how to typecast object --> hashmap
+        mSectionRef.child(ref_key).child("user_ids").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Log.d("TEST", "LISTENER SAYS copying user to local sectionSliders: " + dataSnapshot.getKey());
@@ -262,54 +311,7 @@ public class FirebaseUtils {
         });
     }
 
-    public static void createSection(String start, String end, String ta_name, String section_id,
-                                     String key, int magic_word) {
-    }
-
-
-    // Find SectionSesh corresponding to User's MagicWord
-    // Add UserID to corresponding Section's user_ids list
-    public static void createUser(final UserSesh user) {
-        Log.d("TEST", "in findSectionWithUser" + mSectionRef.getKey());
-        mSectionRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Log.d("TEST", "in OnDataChange w MW: " + String.valueOf(user.getMagic_key()));
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        SectionSesh section = snapshot.getValue(SectionSesh.class);
-                        if (section.getMagic_key() == user.getMagic_key()) {
-                            Log.d("TEST", "\n[FOUND MATCH] " + "\nmagic key: " + section.getMagic_key() + "; \n" + "ref key: " + section.getRef_key());
-                            // Reflect change in section_ref_key in both DB and UserSesh object
-                            user.setSection_ref_key(section.getRef_key());
-                            mUsersRef.child(user.getUser_id()).setValue(user);
-
-                            DatabaseReference userIDref = mSectionRef.child(section.getRef_key()).child("user_ids");
-                            Map<String, Object> userUpdates = new HashMap<>();
-                            userUpdates.put(user.getUser_id(), user.getUsername());
-                            userIDref.updateChildren(userUpdates);
-                        }
-                    }
-                } else {
-                    Log.d("TEST-FAIL", "dataSnapshot DNE");
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.d("TEST-FAIL", "failed to read value");
-            }
-        });
-    }
-
-    public static void updateTeacher(String name, String sectionRefKey, String sectionID) {
-        Log.d("TEST", "updating Teacher w device ID " + getPsuedoUniqueID());
-        DatabaseReference mRef = mTeachersRef.child(getPsuedoUniqueID());
-        mRef.child("name").setValue(name);
-        mRef.child("existingSections").child(sectionRefKey).setValue(sectionID);
-    }
-
-    public static void setSliderVal(String user_id, final int value) {
+    public static void setSliderVal(final String user_id, final int value) {
         String key = allUsers.get(user_id);
         Log.d("TEST", "Attempting to write " + value + " to " + user_id + "...");
         if (key != null) {
@@ -317,6 +319,8 @@ public class FirebaseUtils {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Log.d("TEST", "New slider wrote to DB: " + value);
+                    //sectionSliders.put(user_id, value);
+                    //Log.d("TEST", "new slider val in section sliders" + sectionSliders.get(user_id));
                 }
             })
                     .addOnFailureListener(new OnFailureListener() {
@@ -328,7 +332,7 @@ public class FirebaseUtils {
         }
     }
 
-    private static void setSliderListener(final String user_id) {
+    public static void setSliderListener(final String user_id) {
         // creates Listener for UserSessions's slider_val to update sectionSliders HashMap
         mUsersRef.child(user_id).child("slider_val").addValueEventListener(new ValueEventListener() {
             @Override
@@ -360,6 +364,40 @@ public class FirebaseUtils {
             }
         });
     }
+
+    public static void setSliderValues() {
+        // creates Listener for UserSessions's slider_val to update sectionSliders HashMap
+        mUsersRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                Log.d("TEST", "[new slider val] \n");
+                Iterable<DataSnapshot> userIds = dataSnapshot.getChildren();
+                for (DataSnapshot user : userIds) {
+                    String sliderVal = user.child("slider_val").toString();
+                    Log.d("TEST", "my current sliderVALS "  + sliderVal);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                UserSesh newUser = dataSnapshot.getValue(UserSesh.class);
+                Log.d("TEST", "[deleting User Child] \n" + newUser.getUser_id() + "\n" + newUser.getSection_ref_key());
+                allUsers.remove(newUser.getUser_id());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+    }
+
 
 
     public static void setUserListener() {
