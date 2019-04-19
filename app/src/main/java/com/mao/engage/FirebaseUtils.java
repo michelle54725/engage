@@ -230,10 +230,11 @@ public class FirebaseUtils {
         mSectionRef.child(section.ref_key).child("user_ids").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.d("TEST", "LISTENER SAYS copying user to local sectionSliders: " + dataSnapshot.getKey());
-                String user_id = dataSnapshot.getKey();
-                sectionSliders.put(user_id, 50); // default slider = 50
-                setSliderListener(user_id);
+                // **REMOVED b/c shouldn't be in createSection. Would not allow us to resume section
+                //Log.d("TEST", "LISTENER SAYS copying user to local sectionSliders: " + dataSnapshot.getKey());
+                //String user_id = dataSnapshot.getKey();
+                //sectionSliders.put(user_id, 50); // default slider = 50
+                //setSliderListener(user_id);
             }
 
             @Override
