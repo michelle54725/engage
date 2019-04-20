@@ -180,10 +180,6 @@ public class FirebaseUtils {
         });
     }
 
-//    public static ArrayList<Integer> getSliderVals(String refKey) {
-//
-//    }
-
     // Add a section child in SectionSesh
     public static void createSection(SectionSesh section) {
         Log.d("TEST", "in FirebaseUtils.createSection...");
@@ -311,6 +307,11 @@ public class FirebaseUtils {
         });
     }
 
+    public static int getSliderVal(String user_id) {
+        Log.d("TEST", "mySliderValue: " + sectionSliders.get(user_id));
+        return sectionSliders.get(user_id);
+    }
+
     public static void setSliderVal(final String user_id, final int value) {
         String key = allUsers.get(user_id);
         Log.d("TEST", "Attempting to write " + value + " to " + user_id + "...");
@@ -319,8 +320,8 @@ public class FirebaseUtils {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Log.d("TEST", "New slider wrote to DB: " + value);
-                    //sectionSliders.put(user_id, value);
-                    //Log.d("TEST", "new slider val in section sliders" + sectionSliders.get(user_id));
+                    sectionSliders.put(user_id, value);
+                    Log.d("TEST", "new slider val in section sliders" + sectionSliders.get(user_id));
                 }
             })
                     .addOnFailureListener(new OnFailureListener() {

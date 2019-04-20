@@ -119,7 +119,7 @@ public class StudentClassActivity extends AppCompatActivity {
                 finish();
             }
         });
-
+        FirebaseUtils.setSliderListener(FirebaseUtils.getPsuedoUniqueID());
     }
 
     /*
