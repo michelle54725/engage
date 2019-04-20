@@ -38,9 +38,6 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IValueFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.ChartTouchListener;
-import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.sql.Time;
@@ -78,6 +75,8 @@ public class TimelineFragment extends Fragment {
     private double thresholdVal;
     TimerTask retrieveDataTask;
     private ArrayList<Integer> timelineData;
+
+    private SeekBar threshBar;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -145,6 +144,25 @@ public class TimelineFragment extends Fragment {
         mDisengagedPieChart = view.findViewById(R.id.mDisengagedPieChart);
         //startTimeText = view.findViewById(R.id.startTimeText); endTimeText = view.findViewById(R.id.endTimeText);
         //startTimeText.setText("3:00PM"); endTimeText.setText("4:00PM");
+        threshBar = view.findViewById(R.id.mVerticalSeekBar);
+        threshBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                FirebaseUtils.changeThresholdVal(sectionRefKey, progress);
+                Log.d("TEST", "threshold value changed!" + progress);
+                retrieveData();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         retrieveDataTask = new TimerTask() {
             int test_val = 0; //for testing
@@ -225,9 +243,8 @@ public class TimelineFragment extends Fragment {
         final int count = 10;
         final int range = 100;
 
-        ArrayList<Integer> classvals = timeline.createRandomStudentData(10);
-        Log.d("TEST", "calculateaveragedata timeline" + timeline.calculateAverageData(classvals));
-        timelineData.add((int) timeline.calculateAverageData(classvals));
+        Log.d("TEST", "calculateaveragedata timeline" + timeline.calculateAverageData());
+        timelineData.add((int) timeline.calculateAverageData());
 
         ArrayList<Integer> individualEngagements = new ArrayList<>();
         for (String user : FirebaseUtils.sectionSliders.keySet()) {
@@ -331,7 +348,6 @@ public class TimelineFragment extends Fragment {
         chart.setData(lineData);
 
         chart.setTouchEnabled(false);
-        chart.setDragEnabled(true);
         Description description = new Description();
         description.setText("");
         chart.setDescription(description);
@@ -362,7 +378,7 @@ public class TimelineFragment extends Fragment {
 
 
         YAxis yAxis2 = chart.getAxisRight();
-        yAxis2.setEnabled(true);
+        yAxis2.setEnabled(false);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setDrawLabels(false);
@@ -420,6 +436,9 @@ public class TimelineFragment extends Fragment {
         mDisengagedPieChart.invalidate();
 
         chart.invalidate();
+        thresholdVal = FirebaseUtils.getThreshold(sectionRefKey) * 10.0;
+        Log.d("TEST", "my current threshold " + thresholdVal);
+        Log.d("TEST", "my actual threshold " + threshBar.getProgress());
     }
 
     /**

@@ -22,11 +22,8 @@ public class TimelineDataRetrieval {
         return studentSliderVals;
     }
 
-    public float calculateAverageData(ArrayList<Integer> myList) {
+    public float calculateAverageData() {
         float total = 0;
-//        for (int i : myList) {
-//            total += i;
-//        }
         for (int i : FirebaseUtils.sectionSliders.values()) {
             total += i;
             Log.d("TEST", "Firbase sectionslider called in Calculate Average Data" + i);
