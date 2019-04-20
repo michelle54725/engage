@@ -1,5 +1,7 @@
 package com.mao.engage;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 public class TimelineDataRetrieval {
@@ -20,12 +22,14 @@ public class TimelineDataRetrieval {
         return studentSliderVals;
     }
 
-    public float calculateAverageData(ArrayList<Integer> myList) {
+    public float calculateAverageData() {
         float total = 0;
-        for (int i : myList) {
+        for (int i : FirebaseUtils.sectionSliders.values()) {
             total += i;
+            Log.d("TEST", "Firbase sectionslider called in Calculate Average Data" + i);
         }
-        return total/myList.size();
+        Log.d("TEST", "calculate average : " + total/FirebaseUtils.sectionSliders.size());
+        return total/FirebaseUtils.sectionSliders.size();
     }
 
     //create fixed data

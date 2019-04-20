@@ -61,7 +61,7 @@ public class StudentClassActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
         }
-
+        FirebaseUtils.setSliderListener(FirebaseUtils.getPsuedoUniqueID());
         setContentView(R.layout.activity_student_class);
 
         segmentedBar = findViewById(R.id.segmentedBar);
@@ -119,6 +119,7 @@ public class StudentClassActivity extends AppCompatActivity {
                 finish();
             }
         });
+
     }
 
     /*

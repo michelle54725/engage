@@ -3,4 +3,12 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="begin_taking_attendance">Begin taking attendance</string>
+    <string name="cs61a_section_100">CS61A Section 100</string>
+    <string name="magic_word_420">Magic Word: 420</string>
+    <string name="students">students</string>
+    <string name="see_who_s_here">See who\'s here</string>
+    <string name="take_attendance">TAKE \n ATTENDANCE</string>
+    <string name="_256">256</string>
+    <string name="stop_attendance">STOP \n ATTENDANCE</string>
 </resources>

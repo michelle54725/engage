@@ -146,7 +146,7 @@ public class StudentTimelineFragment extends Fragment {
 
 
         ArrayList<Integer> list = dataRetrieval.createRandomStudentData(150);
-        int avg = Math.round(dataRetrieval.calculateAverageData(list));
+        int avg = Math.round(dataRetrieval.calculateAverageData());
         classValues.add(new Entry(index, avg));
         Log.d("TEST", "Class avg: " + avg);
         Log.d("TEST", "ClassValues size:" + classValues.size());

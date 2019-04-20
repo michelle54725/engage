@@ -21,7 +21,9 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
     RadioButton nowTabBtn;
     RadioButton timelineTabBtn;
     FragmentManager fragmentManager;
-    NowFragment nowFragment;
+//    NowFragment nowFragment;
+    AttendanceFragment attendanceFragment;
+
     TimelineFragment timelineFragment;
     String mSectionRefKey;
 
@@ -45,27 +47,41 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        nowFragment = new NowFragment();
+//        nowFragment = new NowFragment();
+//        timelineFragment = new TimelineFragment();
+//        Bundle bundle = new Bundle();
+//        bundle.putString("magic_word", getIntent().getStringExtra("magic_word"));
+//        Log.d("TEST-MAGIC", "in TeacherClassActivity CORRECT: " + getIntent().getStringExtra("magic_word"));
+//        ArrayList<Integer> timelineData = new ArrayList();
+//        bundle.putString("section_name", getIntent().getStringExtra("section_name"));
+//        mSectionRefKey = getIntent().getStringExtra("sectionRefKey");
+//        bundle.putString("sectionRefKey", getIntent().getStringExtra("sectionRefKey"));
+//        bundle.putIntegerArrayList("timelinedata", timelineData);
+//        nowFragment.setArguments(bundle);
+//        timelineFragment.setArguments(bundle);
+
+        attendanceFragment = new AttendanceFragment();
         timelineFragment = new TimelineFragment();
         Bundle bundle = new Bundle();
         bundle.putString("magic_word", getIntent().getStringExtra("magic_word"));
-        Log.d("TEST-MAGIC", "in TeacherClassActivity CORRECT: " + getIntent().getStringExtra("magic_word"));
         ArrayList<Integer> timelineData = new ArrayList();
         bundle.putString("section_name", getIntent().getStringExtra("section_name"));
         mSectionRefKey = getIntent().getStringExtra("sectionRefKey");
         bundle.putString("sectionRefKey", getIntent().getStringExtra("sectionRefKey"));
         bundle.putIntegerArrayList("timelinedata", timelineData);
-        nowFragment.setArguments(bundle);
+        attendanceFragment.setArguments(bundle);
         timelineFragment.setArguments(bundle);
 
-        fragmentTransaction.replace(R.id.constraintLayout, nowFragment);
+        fragmentTransaction.replace(R.id.constraintLayout, attendanceFragment);
         fragmentTransaction.commit();
+
+        FirebaseUtils.setSectionSliders(mSectionRefKey);
 
         nowTabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.constraintLayout, nowFragment);
+                fragmentTransaction.replace(R.id.constraintLayout, attendanceFragment);
                 fragmentTransaction.commit();
             }
         });
@@ -78,7 +94,6 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                 fragmentTransaction.commit();
             }
         });
-
 
     }
 
