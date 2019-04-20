@@ -471,6 +471,7 @@ public class FirebaseUtils {
     }
 
     public static String getMySection() {
+        Log.d("TEST", "getMySection: " + allUsers.get(getPsuedoUniqueID()));
         return allUsers.get(getPsuedoUniqueID());
     }
 

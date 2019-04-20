@@ -76,6 +76,8 @@ public class StudentClassActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
+        FirebaseUtils.setSectionSliders(FirebaseUtils.getMySection());
+
         meFragment = new MeFragment();
         // send data to Fragment
         Bundle bundle = new Bundle();
@@ -119,7 +121,6 @@ public class StudentClassActivity extends AppCompatActivity {
                 finish();
             }
         });
-        FirebaseUtils.setSliderListener(FirebaseUtils.getPsuedoUniqueID());
     }
 
     /*
