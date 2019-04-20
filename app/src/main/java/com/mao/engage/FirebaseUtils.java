@@ -308,6 +308,9 @@ public class FirebaseUtils {
     }
 
     public static int getSliderVal(String user_id) {
+        if (!sectionSliders.containsKey(user_id)) {
+            sectionSliders.put(user_id, 50);
+        }
         Log.d("TEST", "mySliderValue: " + sectionSliders.get(user_id));
         return sectionSliders.get(user_id);
     }

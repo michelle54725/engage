@@ -32,6 +32,11 @@ public class TimelineDataRetrieval {
         return total/FirebaseUtils.sectionSliders.size();
     }
 
+    //get individual slider val
+    public int mySliderValue(String user_id) {
+        return FirebaseUtils.getSliderVal(user_id);
+    }
+
     //create fixed data
     public ArrayList<Integer> createFixedData(int students) {
         ArrayList<Integer> studentSliderVals = new ArrayList<>();
