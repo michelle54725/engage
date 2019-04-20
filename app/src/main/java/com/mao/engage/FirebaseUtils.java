@@ -43,10 +43,9 @@ public class FirebaseUtils {
     static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: slider;
     static HashMap<String, String> existingSections = new HashMap<>(); //K: section_name; V: section_ref;
     static HashMap<String, HashMap> sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, and what else?
-    static HashMap<String, HashMap> userMap = new HashMap<>(); //K : section ref key V: hashmap of ( K: user id ) and (V: name).
 
     /*
-        Section listener called in StartActivity
+        setSectionListener called in StartActivity
         Retrieves section data from Firebase to update a HashMap<String section_ref_key, Hashmap<String x, String y>>
      */
     public static void setSectionListener() {
@@ -97,8 +96,10 @@ public class FirebaseUtils {
         });
     }
 
-
-    //returns arraylist of existing sections for a user
+    /*
+        Returns ArrayList of existing sections for a teacher
+        Called in SectionAdapter
+     */
     public static ArrayList<String> getExistingSections() {
         ArrayList<String> existingList = new ArrayList<>();
         for (String key : existingSections.keySet()) {
@@ -107,21 +108,36 @@ public class FirebaseUtils {
         return existingList;
     }
 
+    /*
+        Returns a hashmap of the existing sections of a teacher
+        K: section_name; V: section_ref;
+        Called in SectionAdapter
+     */
     public static HashMap<String, String> getExistingSectionsHashMap() {
         return existingSections;
     }
 
+    /*
+    gets Threshhold set my teacher to be used in TimelineFragment
+     */
     public static double getThreshold(String refKey) {
         Log.d("TEST: ", "getThreshold called" + Double.parseDouble(sectionMap.get(refKey).get("threshold").toString()));
         return Double.parseDouble(sectionMap.get(refKey).get("threshold").toString());
     }
 
+    /*
+    changes threshold value as set by teacher in TimelineFragment
+     */
     public static void changeThresholdVal(String refKey, double threshold) {
         //TODO:doesn't update the firebase, just updates local values -- ask if that is that ok?
         Log.d("TEST: ", "changeThresholdVal called");
         sectionMap.get(refKey).put("threshold", threshold);
     }
 
+    /*
+    Gets magicKey of a section
+    Called in SectionAdapter
+     */
     public static long getMagicKey(String refKey) {
         String s = sectionMap.get(refKey).get("magic_key").toString();
         Log.d("TEST", s);
