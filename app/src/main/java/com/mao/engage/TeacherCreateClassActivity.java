@@ -277,11 +277,12 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
                                                 String user_key = (String) userSnapshot.getValue();
                                                 DatabaseReference tempRef = FirebaseDatabase.getInstance().getReference("/UserSessions/" + user_key);
                                                 Log.d("BOBOBOBBOB", "onDataChange: BOBOBOBOBOBOBO USERS DELETE" + tempRef.getPath().toString());
-                                                if (FirebaseUtils.allUsers.get(user_key).equals(conflictingSectionId)) {
-                                                    tempRef.removeValue();
-                                                } else {
-                                                    Log.d("BOBOB", "onChildAdded: REEEE FIREBASE" + FirebaseUtils.allUsers.get(user_key));
-                                                }
+                                                //TODO:  ask michelle abt purpose of the following code?  currently crashes!
+//                                                if (FirebaseUtils.allUsers.get(user_key).equals(conflictingSectionId)) {
+//                                                    tempRef.removeValue();
+//                                                } else {
+                                                Log.d("BOBOB", "onChildAdded: REEEE FIREBASE" + FirebaseUtils.allUsers.get(user_key));
+                                               // }
                                             }
                                             conflictingSectionRef.removeValue();
                                             FirebaseDatabase.getInstance().getReference("/MagicKeys/" + magicKey).removeValue();

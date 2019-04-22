@@ -13,19 +13,15 @@
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart"
-            android:layout_width="329dp"
+            android:layout_width="280dp"
             android:layout_height="315dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="40dp"
             android:layout_marginBottom="176dp"
             android:paddingBottom="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.104" />
+            app:layout_constraintVertical_bias="0.108" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/mEngagedPieChart"
@@ -57,6 +53,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/mEngagedPieChart"
             app:layout_constraintVertical_bias="1.0" />
+
+        <SeekBar
+            android:id="@+id/mVerticalSeekBar"
+            android:layout_width="174dp"
+            android:layout_height="313dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginEnd="-50dp"
+            android:foregroundGravity="left"
+            android:max="10"
+            android:progress="5"
+            android:rotation="270"
+            app:layout_constraintBottom_toTopOf="@+id/chart"
+            app:layout_constraintEnd_toStartOf="@+id/chart"
+            app:layout_constraintHorizontal_bias="0.51"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

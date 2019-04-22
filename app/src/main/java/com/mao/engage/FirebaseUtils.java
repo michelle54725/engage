@@ -43,10 +43,9 @@ public class FirebaseUtils {
     static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: slider;
     static HashMap<String, String> existingSections = new HashMap<>(); //K: section_name; V: section_ref;
     static HashMap<String, HashMap> sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, and what else?
-    static HashMap<String, HashMap> userMap = new HashMap<>(); //K : section ref key V: hashmap of ( K: user id ) and (V: name).
 
     /*
-        Section listener called in StartActivity
+        setSectionListener called in StartActivity
         Retrieves section data from Firebase to update a HashMap<String section_ref_key, Hashmap<String x, String y>>
      */
     public static void setSectionListener() {
@@ -97,8 +96,10 @@ public class FirebaseUtils {
         });
     }
 
-
-    //returns arraylist of existing sections for a user
+    /*
+        Returns ArrayList of existing sections for a teacher
+        Called in SectionAdapter
+     */
     public static ArrayList<String> getExistingSections() {
         ArrayList<String> existingList = new ArrayList<>();
         for (String key : existingSections.keySet()) {
@@ -107,21 +108,36 @@ public class FirebaseUtils {
         return existingList;
     }
 
+    /*
+        Returns a hashmap of the existing sections of a teacher
+        K: section_name; V: section_ref;
+        Called in SectionAdapter
+     */
     public static HashMap<String, String> getExistingSectionsHashMap() {
         return existingSections;
     }
 
+    /*
+    gets Threshhold set my teacher to be used in TimelineFragment
+     */
     public static double getThreshold(String refKey) {
         Log.d("TEST: ", "getThreshold called" + Double.parseDouble(sectionMap.get(refKey).get("threshold").toString()));
         return Double.parseDouble(sectionMap.get(refKey).get("threshold").toString());
     }
 
+    /*
+    changes threshold value as set by teacher in TimelineFragment
+     */
     public static void changeThresholdVal(String refKey, double threshold) {
         //TODO:doesn't update the firebase, just updates local values -- ask if that is that ok?
         Log.d("TEST: ", "changeThresholdVal called");
         sectionMap.get(refKey).put("threshold", threshold);
     }
 
+    /*
+    Gets magicKey of a section
+    Called in SectionAdapter
+     */
     public static long getMagicKey(String refKey) {
         String s = sectionMap.get(refKey).get("magic_key").toString();
         Log.d("TEST", s);
@@ -179,10 +195,6 @@ public class FirebaseUtils {
             }
         });
     }
-
-//    public static ArrayList<Integer> getSliderVals(String refKey) {
-//
-//    }
 
     // Add a section child in SectionSesh
     public static void createSection(SectionSesh section) {
@@ -311,6 +323,14 @@ public class FirebaseUtils {
         });
     }
 
+    public static int getSliderVal(String user_id) {
+        if (!sectionSliders.containsKey(user_id)) {
+            sectionSliders.put(user_id, 50);
+        }
+        Log.d("TEST", "mySliderValue: " + sectionSliders.get(user_id));
+        return sectionSliders.get(user_id);
+    }
+
     public static void setSliderVal(final String user_id, final int value) {
         String key = allUsers.get(user_id);
         Log.d("TEST", "Attempting to write " + value + " to " + user_id + "...");
@@ -319,8 +339,8 @@ public class FirebaseUtils {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Log.d("TEST", "New slider wrote to DB: " + value);
-                    //sectionSliders.put(user_id, value);
-                    //Log.d("TEST", "new slider val in section sliders" + sectionSliders.get(user_id));
+                    sectionSliders.put(user_id, value);
+                    Log.d("TEST", "new slider val in section sliders" + sectionSliders.get(user_id));
                 }
             })
                     .addOnFailureListener(new OnFailureListener() {
@@ -467,6 +487,7 @@ public class FirebaseUtils {
     }
 
     public static String getMySection() {
+        Log.d("TEST", "getMySection: " + allUsers.get(getPsuedoUniqueID()));
         return allUsers.get(getPsuedoUniqueID());
     }
 
