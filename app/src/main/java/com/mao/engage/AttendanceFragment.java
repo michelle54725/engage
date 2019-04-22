@@ -88,14 +88,8 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
                 attendancePressed = !attendancePressed;
                 break;
             case R.id.see_whos_here:
-                whosHereButton.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), AttendeeListActivity.class);
-                        startActivity(intent);
-                    }
-                });
+                Intent intent = new Intent(getActivity(), AttendeeListActivity.class);
+                startActivity(intent);
 //                Intent intent = new Intent(getActivity(), AttendeeListActivity.class);
 //                startActivity(intent);
                break;
