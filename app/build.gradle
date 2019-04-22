@@ -40,5 +40,6 @@ dependencies {
     implementation 'android.arch.navigation:navigation-fragment:1.0.0-rc02'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation 'com.google.android.gms:play-services-nearby:16.0.0'
 }
 apply plugin: 'com.google.gms.google-services'
