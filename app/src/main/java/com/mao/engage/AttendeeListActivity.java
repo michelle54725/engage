@@ -21,23 +21,20 @@ public class AttendeeListActivity extends AppCompatActivity {
     private AttendeeListAdapter attendeeAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    public AttendeeListActivity() {
-        //Required empty public constructor
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //UI: Recycler view with Choose Your Section on top
-        setContentView(R.layout.activity_teacher_resume);
+        setContentView(R.layout.activity_attendees);
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
         //backbutton function
-        backBtn = findViewById(R.id.teacherBackBtn);
+        backBtn = findViewById(R.id.backBtn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,8 +43,8 @@ public class AttendeeListActivity extends AppCompatActivity {
         });
 
         //create Adapter that accesses firebase section data based teacher and display as buttons
-        ArrayList<String> existingSectionsList = FirebaseUtils.getExistingSections();
-        attendeeAdapter = new AttendeeListAdapter(existingSectionsList); //existingSectionList of String section_ids
+        ArrayList<String> attendeeList = FirebaseUtils.getAttendees();
+        attendeeAdapter = new AttendeeListAdapter(attendeeList); //existingSectionList of String section_ids
         recyclerView.setAdapter(attendeeAdapter);
     }
 
