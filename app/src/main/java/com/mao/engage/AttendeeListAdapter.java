@@ -1,9 +1,6 @@
 package com.mao.engage;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +9,10 @@ import android.widget.Button;
 import java.util.HashMap;
 import java.util.List;
 
-public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHolder> {
-    private List<String> sectionSeshList;
-    //private HashMap<String, String> sectionKeys;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapter.MyViewHolder> {
+    private List<String> attendeeList;
 
     /*
     section buttons referenced button design from section_list_row
@@ -48,8 +46,8 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
     constructs an adapter based on the section list passed in -- pass db
     through TeacherResumeActivity
      */
-    public SectionAdapter(List<String> lst) {
-        this.sectionSeshList = lst;
+    public AttendeeListAdapter(List<String> lst) {
+        this.attendeeList = lst;
     }
 
     @Override
@@ -64,12 +62,12 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
      */
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        String section_id = sectionSeshList.get(position);
+        String section_id = attendeeList.get(position);
         holder.section.setText(section_id);
     }
 
     @Override
     public int getItemCount() {
-        return sectionSeshList.size();
+        return attendeeList.size();
     }
 }

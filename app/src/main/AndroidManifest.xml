@@ -26,6 +26,7 @@
         <activity android:name=".TeacherCreateClassActivity" />
         <activity android:name=".TeacherClassActivity" />
         <activity android:name=".TeacherOptionsActivity" />
+        <activity android:name=".AttendeeListActivity" />
     </application>
 
 </manifest>

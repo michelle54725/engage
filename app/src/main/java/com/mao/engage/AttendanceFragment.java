@@ -1,10 +1,12 @@
 package com.mao.engage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -113,7 +115,9 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.see_whos_here:
                 Log.d("TEST", "SEE WHO IS HERE BUTTON GOOGLE NEARBY MESSAGES");
-                break;
+                Intent intent = new Intent(getActivity(), AttendeeListActivity.class);
+                startActivity(intent);
+               break;
             default:
                 Log.d("TEST:","Button not accounted for");
                 break;
