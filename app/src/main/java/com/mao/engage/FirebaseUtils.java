@@ -104,7 +104,7 @@ public class FirebaseUtils {
         Map<String, Map<String, String>> hashyMap = sectionMap.get(section_ref_key);
         String value = hashyMap.get("user_ids").get(userID);
         int index = value.indexOf(",");
-
+        Log.d("TEST", "getNameFromSectionMap" + value.substring(0, index));
         return value.substring(0, index);
     }
 
@@ -116,6 +116,7 @@ public class FirebaseUtils {
         String value = hashyMap.get("user_ids").get(userID);
         int index = value.indexOf(",");
         String status = value.substring(index);
+        Log.d("TEST", "isPresent" + value.substring(index));
         return status.equals("p");
     }
 
@@ -445,8 +446,9 @@ public class FirebaseUtils {
         List<String> listOfUsers = new ArrayList<>();
         Map<String, String> usersInSection = sectionMap.get(sectionId);
 
-        for (String name : usersInSection.values()) {
-            listOfUsers.add(name);
+        for (String key : usersInSection.keySet()) {
+            listOfUsers.add(getNameFromSectionMap(key, sectionId));
+            Log.d("TEST", "getUserNames" + getNameFromSectionMap(key, sectionId));
         }
 
         return listOfUsers;
