@@ -90,8 +90,6 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
             case R.id.see_whos_here:
                 Intent intent = new Intent(getActivity(), AttendeeListActivity.class);
                 startActivity(intent);
-//                Intent intent = new Intent(getActivity(), AttendeeListActivity.class);
-//                startActivity(intent);
                break;
             default:
                 Log.d("TEST:","Button not accounted for");

@@ -18,27 +18,27 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
     section buttons referenced button design from section_list_row
      */
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public Button section;
+        public Button user;
 
         public MyViewHolder(View view) {
             super(view);
-            section = (Button) view.findViewById(R.id.sectionBtn);
+            user = (Button) view.findViewById(R.id.sectionBtn);
 
-            section.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // open Section sesh with given magic word, section name, section ref key
-                    HashMap<String, String> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap();
-                    String mSectionRefKey = mySectionsHashMap.get(section.getText().toString());
-
-                    Intent intent = new Intent(section.getContext(), TeacherClassActivity.class);
-                    intent.putExtra("sectionRefKey", mSectionRefKey);
-                    intent.putExtra("section_name", section.getText().toString());
-                    intent.putExtra("magic_word", FirebaseUtils.getMagicKey(mSectionRefKey) + "");
-                    section.getContext().startActivity(intent);
-
-                }
-            });
+//            section.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    // open Section sesh with given magic word, section name, section ref key
+//                    HashMap<String, String> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap();
+//                    String mSectionRefKey = mySectionsHashMap.get(section.getText().toString());
+//
+//                    Intent intent = new Intent(section.getContext(), TeacherClassActivity.class);
+//                    intent.putExtra("sectionRefKey", mSectionRefKey);
+//                    intent.putExtra("section_name", section.getText().toString());
+//                    intent.putExtra("magic_word", FirebaseUtils.getMagicKey(mSectionRefKey) + "");
+//                    section.getContext().startActivity(intent);
+//
+//                }
+//            });
         }
     }
 
@@ -62,8 +62,8 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
      */
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        String section_id = attendeeList.get(position);
-        holder.section.setText(section_id);
+        String userName = attendeeList.get(position);
+        holder.user.setText(userName);
     }
 
     @Override
