@@ -45,7 +45,7 @@ public class AttendeeListActivity extends AppCompatActivity {
 
         //create Adapter that accesses firebase section data based teacher and display as buttons
         List<String> userNames = FirebaseUtils.getUserNames(FirebaseUtils.getMySection());
-        Log.d("TEST", "usernames" + Integer.toString(userNames.size()));
+        Log.d("TEST", "username size" + Integer.toString(userNames.size()));
         mAdapter = new AttendeeListAdapter(userNames); //existingSectionList of String section_ids
         recyclerView.setAdapter(mAdapter);
     }

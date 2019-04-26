@@ -1,6 +1,7 @@
 package com.mao.engage;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,8 +44,8 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
     }
 
     /*
-    constructs an adapter based on the section list passed in -- pass db
-    through TeacherResumeActivity
+    constructs an adapter based on the attendee list passed in -- pass db
+    through AttendeeListActivity
      */
     public AttendeeListAdapter(List<String> lst) {
         this.attendeeList = lst;
@@ -54,6 +55,7 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.section_list_row, parent, false);
+        Log.d("TEST", "AttendeeListAdapter");
         return new MyViewHolder(itemView);
     }
 
@@ -63,6 +65,7 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         String userName = attendeeList.get(position);
+        Log.d("TEST", "userName: " + userName);
         holder.user.setText(userName);
     }
 

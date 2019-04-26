@@ -62,7 +62,7 @@ public class FirebaseUtils {
                         Log.d("TEST", child.getKey() + " " + child.getValue());
                     } else {
                         DataSnapshot userChild = dataSnapshot.child("user_ids");
-                        HashMap<String, String> usersInSection = new HashMap<>(); //K: student ref key; V: student name
+                        Map<String, String> usersInSection = new HashMap<>(); //K: student ref key; V: student name
                         for(DataSnapshot user : userChild.getChildren()) {
                             Log.d("TEST", "USER IDS IN FOR LOOP key " + user.getKey() + " value " + user.getValue());
                             String value = user.getValue().toString() + ",a"; //name,absent
@@ -444,7 +444,8 @@ public class FirebaseUtils {
 
     public static List<String> getUserNames(String sectionId) {
         List<String> listOfUsers = new ArrayList<>();
-        Map<String, String> usersInSection = sectionMap.get(sectionId);
+        Map<String, Object> hashyMap = sectionMap.get(sectionId);
+        Map<String, String> usersInSection = (Map) hashyMap.get("user_ids");
 
         for (String key : usersInSection.keySet()) {
             listOfUsers.add(getNameFromSectionMap(key, sectionId));
