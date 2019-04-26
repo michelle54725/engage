@@ -9,6 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.nearby.messages.API_KEY"
+            android:value="AIzaSyCTqRsUSzK_rcrrk_vZ03H_dE-hIUwCbaY" />
         <activity android:name=".TeacherResumeActivity"/>
         <activity android:name=".TestingActivity" />
         <activity android:name=".StartActivity">
