@@ -65,9 +65,10 @@ public class FirebaseUtils {
                         HashMap<String, String> usersInSection = new HashMap<>(); //K: student ref key; V: student name
                         for(DataSnapshot user : userChild.getChildren()) {
                             Log.d("TEST", "USER IDS IN FOR LOOP key " + user.getKey() + " value " + user.getValue());
-                            usersInSection.put(user.getKey(), user.getValue().toString());
+                            String value = user.getValue().toString() + ",a"; //name,absent
+                            usersInSection.put(user.getKey(), value);
                         }
-                        hashyMap.put(userChild.getKey(), usersInSection);
+                        hashyMap.put(userChild.getKey(), usersInSection); //userChild.getKey() = "user_ids"
                     }
                 }
                 Log.d("TEST: ", "SECTION ITEMS added");
@@ -94,6 +95,28 @@ public class FirebaseUtils {
 
             }
         });
+    }
+
+    /*
+        Returns the name of a user in sectionMap
+     */
+    public static String getNameFromSectionMap(String userID, String section_ref_key) {
+        Map<String, Map<String, String>> hashyMap = sectionMap.get(section_ref_key);
+        String value = hashyMap.get("user_ids").get(userID);
+        int index = value.indexOf(",");
+
+        return value.substring(0, index);
+    }
+
+    /*
+        Returns the present status of a user in sectionMap
+     */
+    public static boolean isPresent(String userID, String section_ref_key) {
+        Map<String, Map<String, String>> hashyMap = sectionMap.get(section_ref_key);
+        String value = hashyMap.get("user_ids").get(userID);
+        int index = value.indexOf(",");
+        String status = value.substring(index);
+        return status.equals("p");
     }
 
     /*
@@ -418,7 +441,16 @@ public class FirebaseUtils {
         });
     }
 
+    public static List<String> getUserNames(String sectionId) {
+        List<String> listOfUsers = new ArrayList<>();
+        Map<String, String> usersInSection = sectionMap.get(sectionId);
 
+        for (String name : usersInSection.values()) {
+            listOfUsers.add(name);
+        }
+
+        return listOfUsers;
+    }
 
     public static void setUserListener() {
         mUsersRef.addChildEventListener(new ChildEventListener() {
