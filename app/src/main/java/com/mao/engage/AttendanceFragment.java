@@ -15,6 +15,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.Message;
+import com.google.android.gms.nearby.messages.MessageListener;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 
 public class AttendanceFragment extends Fragment implements View.OnClickListener {
 
@@ -26,6 +32,8 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
     private Button attendanceButton;
     private Button whosHereButton;
     boolean attendancePressed = false;
+    MessageListener mMessageListener;
+    Message mMessage;
 
 //    private OnFragmentInteractionListener mListener;
 
@@ -59,6 +67,20 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
         attendanceButton.setOnClickListener(this);
         whosHereButton.setOnClickListener(this);
 
+        mMessageListener = new MessageListener() {
+            @Override
+            public void onFound(Message message) {
+                Log.d(TAG, "Found message: " + new String(message.getContent()));
+            }
+
+            @Override
+            public void onLost(Message message) {
+                Log.d(TAG, "Lost sight of message: " + new String(message.getContent()));
+            }
+        };
+
+        mMessage = new Message("Hello World".getBytes());
+
         return view;
     }
 
@@ -69,6 +91,8 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onStop() {
+        Nearby.getMessagesClient(this.getActivity()).unpublish(mMessage);
+        Nearby.getMessagesClient(this.getActivity()).unsubscribe(mMessageListener);
         super.onStop();
     }
 
@@ -86,12 +110,13 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
                     students.setVisibility(View.VISIBLE);
                 }
                 attendancePressed = !attendancePressed;
+                Nearby.getMessagesClient(this.getActivity()).publish(mMessage);
+                Nearby.getMessagesClient(this.getActivity()).subscribe(mMessageListener);
                 break;
             case R.id.see_whos_here:
+                Log.d("TEST", "SEE WHO IS HERE BUTTON GOOGLE NEARBY MESSAGES");
                 Intent intent = new Intent(getActivity(), AttendeeListActivity.class);
                 startActivity(intent);
-//                Intent intent = new Intent(getActivity(), AttendeeListActivity.class);
-//                startActivity(intent);
                break;
             default:
                 Log.d("TEST:","Button not accounted for");

@@ -140,6 +140,7 @@ public class TimelineFragment extends Fragment {
         }
         thresholdVal = FirebaseUtils.getThreshold(sectionRefKey) * 10.0;
 
+        chart.bringToFront();
         mEngagedPieChart = view.findViewById(R.id.mEngagedPieChart);
         mDisengagedPieChart = view.findViewById(R.id.mDisengagedPieChart);
         //startTimeText = view.findViewById(R.id.startTimeText); endTimeText = view.findViewById(R.id.endTimeText);
