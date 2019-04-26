@@ -30,6 +30,7 @@
         android:layout_marginTop="64dp"
         android:layout_marginEnd="64dp"
         android:layout_marginBottom="24dp"
+        android:gravity="center_horizontal"
         android:text="Attendees: Select to confirm attendance."
         android:textColor="@android:color/white"
         android:textSize="24sp"
