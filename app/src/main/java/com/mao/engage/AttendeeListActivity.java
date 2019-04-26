@@ -27,7 +27,7 @@ public class AttendeeListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //UI: Recycler view with Choose Your Section on top
+        //UI: Recycler view with Attendee title on top
         setContentView(R.layout.activity_attendees);
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -43,10 +43,10 @@ public class AttendeeListActivity extends AppCompatActivity {
             }
         });
 
-        //create Adapter that accesses firebase section data based teacher and display as buttons
+        //create Adapter that accesses userdata in specific section
         List<String> userNames = FirebaseUtils.getUserNames(FirebaseUtils.getMySection());
-        Log.d("TEST", "username size" + Integer.toString(userNames.size()));
-        mAdapter = new AttendeeListAdapter(userNames); //existingSectionList of String section_ids
+        Log.d("TEST", "username size " + Integer.toString(userNames.size()));
+        mAdapter = new AttendeeListAdapter(userNames); //userNameList of String user_names
         recyclerView.setAdapter(mAdapter);
     }
 

@@ -25,21 +25,21 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
             super(view);
             user = (Button) view.findViewById(R.id.sectionBtn);
 
-//            section.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    // open Section sesh with given magic word, section name, section ref key
-//                    HashMap<String, String> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap();
-//                    String mSectionRefKey = mySectionsHashMap.get(section.getText().toString());
-//
-//                    Intent intent = new Intent(section.getContext(), TeacherClassActivity.class);
-//                    intent.putExtra("sectionRefKey", mSectionRefKey);
-//                    intent.putExtra("section_name", section.getText().toString());
-//                    intent.putExtra("magic_word", FirebaseUtils.getMagicKey(mSectionRefKey) + "");
-//                    section.getContext().startActivity(intent);
-//
-//                }
-//            });
+            user.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // open Section sesh with given magic word, section name, section ref key
+                    HashMap<String, String> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap();
+                    String mSectionRefKey = mySectionsHashMap.get(user.getText().toString());
+
+                    Intent intent = new Intent(user.getContext(), TeacherClassActivity.class);
+                    intent.putExtra("sectionRefKey", mSectionRefKey);
+                    intent.putExtra("section_name", user.getText().toString());
+                    intent.putExtra("magic_word", FirebaseUtils.getMagicKey(mSectionRefKey) + "");
+                    user.getContext().startActivity(intent);
+
+                }
+            });
         }
     }
 
@@ -64,7 +64,8 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
      */
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        String userName = attendeeList.get(position);
+        String userName = FirebaseUtils.getNameFromValue(attendeeList.get(position));
+        //String userName = (attendeeList.get(position));
         Log.d("TEST", "userName: " + userName);
         holder.user.setText(userName);
     }

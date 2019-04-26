@@ -65,8 +65,9 @@ public class FirebaseUtils {
                         Map<String, String> usersInSection = new HashMap<>(); //K: student ref key; V: student name
                         for(DataSnapshot user : userChild.getChildren()) {
                             Log.d("TEST", "USER IDS IN FOR LOOP key " + user.getKey() + " value " + user.getValue());
-                            String value = user.getValue().toString() + ",a"; //name,absent
+                            String value = user.getValue().toString(); //name,absent
                             usersInSection.put(user.getKey(), value);
+                            presentStatusListener(user.getKey());
                         }
                         hashyMap.put(userChild.getKey(), usersInSection); //userChild.getKey() = "user_ids"
                     }
@@ -98,6 +99,25 @@ public class FirebaseUtils {
     }
 
     /*
+        Listens to user's present status
+        called in setSectionListener
+     */
+    public static void presentStatusListener(String userId) {
+        mSectionRef.child("user_ids").child(userId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String value = (String) dataSnapshot.getValue();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    /*
         Returns the name of a user in sectionMap
      */
     public static String getNameFromSectionMap(String userID, String section_ref_key) {
@@ -109,16 +129,27 @@ public class FirebaseUtils {
     }
 
     /*
-        Returns the present status of a user in sectionMap
+       Returns the name of a value
+    */
+    public static String getNameFromValue(String value) {
+        int index = value.indexOf(",");
+        Log.d("TEST", "getNameFromValue" + value.substring(0, index));
+        return value.substring(0, index);
+    }
+
+    /*
+        Returns the present status of a user given the value
      */
-    public static boolean isPresent(String userID, String section_ref_key) {
-        Map<String, Map<String, String>> hashyMap = sectionMap.get(section_ref_key);
-        String value = hashyMap.get("user_ids").get(userID);
+    public static boolean isPresent(String value) {
         int index = value.indexOf(",");
         String status = value.substring(index);
         Log.d("TEST", "isPresent" + value.substring(index));
         return status.equals("p");
     }
+
+    /*
+        listens on list of users and
+     */
 
     /*
         Returns ArrayList of existing sections for a teacher
@@ -289,6 +320,7 @@ public class FirebaseUtils {
                             Map<String, Object> userUpdates = new HashMap<>();
                             userUpdates.put(user.getUser_id(), user.getUsername());
                             userIDref.updateChildren(userUpdates);
+                            userIDref.child(user.getUser_id()).setValue(user.getUsername() + ",a");
                         }
                     }
                 } else {
@@ -447,9 +479,9 @@ public class FirebaseUtils {
         Map<String, Object> hashyMap = sectionMap.get(sectionId);
         Map<String, String> usersInSection = (Map) hashyMap.get("user_ids");
 
-        for (String key : usersInSection.keySet()) {
-            listOfUsers.add(getNameFromSectionMap(key, sectionId));
-            Log.d("TEST", "getUserNames" + getNameFromSectionMap(key, sectionId));
+        for (String value : usersInSection.values()) {
+            listOfUsers.add(value);
+            Log.d("TEST", "getUserNames" + value);
         }
 
         return listOfUsers;
