@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -107,6 +108,9 @@ public class FirebaseUtils {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String value = (String) dataSnapshot.getValue();
+//                if (isPresent(value)) {
+//
+//                }
 
             }
 
@@ -118,13 +122,23 @@ public class FirebaseUtils {
     }
 
     /*
+        Set user as present in Firebase
+        Assumes user exists in section
+        Called in AttendeeListAdapter when button is clicked
+     */
+    public static void markPresent(String user_id, String section_ref_key) {
+        Log.d("TEST", "marking student present");
+        DatabaseReference userIdRef = mSectionRef.child(section_ref_key).child("user_ids");
+        userIdRef.child(user_id).setValue(getNameFromSectionMap(user_id, section_ref_key) + ",p");
+    }
+    /*
         Returns the name of a user in sectionMap
      */
     public static String getNameFromSectionMap(String userID, String section_ref_key) {
         Map<String, Map<String, String>> hashyMap = sectionMap.get(section_ref_key);
         String value = hashyMap.get("user_ids").get(userID);
         int index = value.indexOf(",");
-        Log.d("TEST", "getNameFromSectionMap" + value.substring(0, index));
+        Log.d("TEST", "getNameFromSectionMap " + value.substring(0, index));
         return value.substring(0, index);
     }
 
@@ -133,7 +147,7 @@ public class FirebaseUtils {
     */
     public static String getNameFromValue(String value) {
         int index = value.indexOf(",");
-        Log.d("TEST", "getNameFromValue" + value.substring(0, index));
+        Log.d("TEST", "getNameFromValue " + value.substring(0, index));
         return value.substring(0, index);
     }
 
@@ -143,13 +157,9 @@ public class FirebaseUtils {
     public static boolean isPresent(String value) {
         int index = value.indexOf(",");
         String status = value.substring(index);
-        Log.d("TEST", "isPresent" + value.substring(index));
+        Log.d("TEST", "isPresent " + value.substring(index));
         return status.equals("p");
     }
-
-    /*
-        listens on list of users and
-     */
 
     /*
         Returns ArrayList of existing sections for a teacher
@@ -474,14 +484,15 @@ public class FirebaseUtils {
         });
     }
 
-    public static List<String> getUserNames(String sectionId) {
-        List<String> listOfUsers = new ArrayList<>();
+    public static List<String[]> getUserNames(String sectionId) {
+        List<String[]> listOfUsers = new ArrayList<>();
         Map<String, Object> hashyMap = sectionMap.get(sectionId);
         Map<String, String> usersInSection = (Map) hashyMap.get("user_ids");
 
-        for (String value : usersInSection.values()) {
-            listOfUsers.add(value);
-            Log.d("TEST", "getUserNames" + value);
+        for (String key : usersInSection.keySet()) {
+            String[] nameAndId = new String[]{usersInSection.get(key), key};
+            listOfUsers.add(nameAndId);
+            Log.d("TEST", "getUserNames " + usersInSection.get(key) + " " + key);
         }
 
         return listOfUsers;

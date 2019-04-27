@@ -13,7 +13,7 @@ import java.util.List;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapter.MyViewHolder> {
-    private List<String> attendeeList;
+    private List<String[]> attendeeList;
 
     /*
     section buttons referenced button design from section_list_row
@@ -47,7 +47,7 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
     constructs an adapter based on the attendee list passed in -- pass db
     through AttendeeListActivity
      */
-    public AttendeeListAdapter(List<String> lst) {
+    public AttendeeListAdapter(List<String[]> lst) {
         this.attendeeList = lst;
     }
 
@@ -64,7 +64,7 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
      */
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        String userName = FirebaseUtils.getNameFromValue(attendeeList.get(position));
+        String userName = FirebaseUtils.getNameFromValue(attendeeList.get(position)[0]);
         //String userName = (attendeeList.get(position));
         Log.d("TEST", "userName: " + userName);
         holder.user.setText(userName);
