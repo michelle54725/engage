@@ -19,6 +19,15 @@ public class SectionSesh implements Serializable {
     double threshold = 5.0;
     boolean isTakingAttendance = false;
 
+    public double getThreshold() {
+        return threshold;
+    }
+
+    public boolean isTakingAttendance() {
+        return isTakingAttendance;
+    }
+
+
     public String getA_start() {
         return a_start;
     }

@@ -125,6 +125,7 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
             case R.id.see_whos_here:
                 Log.d("TEST", "SEE WHO IS HERE BUTTON GOOGLE NEARBY MESSAGES");
                 Intent intent = new Intent(getActivity(), AttendeeListActivity.class);
+                intent.putExtra("sectionRefKey", mSectionRefKey);
                 startActivity(intent);
                break;
             default:
