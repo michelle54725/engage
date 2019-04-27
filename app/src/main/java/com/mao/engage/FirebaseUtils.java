@@ -487,6 +487,13 @@ public class FirebaseUtils {
     public static List<String[]> getUserNames(String sectionId) {
         List<String[]> listOfUsers = new ArrayList<>();
         Map<String, Object> hashyMap = sectionMap.get(sectionId);
+        try {
+            Map<String, String> usersInSection = (Map) hashyMap.get("user_ids");
+        } catch (NullPointerException e) {
+            listOfUsers.add(new String[]{"No students,a"});
+            return listOfUsers;
+        }
+
         Map<String, String> usersInSection = (Map) hashyMap.get("user_ids");
 
         for (String key : usersInSection.keySet()) {

@@ -44,7 +44,8 @@ public class AttendeeListActivity extends AppCompatActivity {
         });
 
         //create Adapter that accesses userdata in specific section
-        List<String[]> userNames = FirebaseUtils.getUserNames(FirebaseUtils.getMySection());
+        //List<String[]> userNames = FirebaseUtils.getUserNames(FirebaseUtils.getMySection());
+        List<String[]> userNames = FirebaseUtils.getUserNames(getIntent().getStringExtra("sectionRefKey"));
         Log.d("TEST", "username size " + Integer.toString(userNames.size()));
         mAdapter = new AttendeeListAdapter(userNames); //userNameList of String user_names
         recyclerView.setAdapter(mAdapter);
