@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -18,7 +19,7 @@ public class AttendeeListActivity extends AppCompatActivity {
 
     private ImageButton backBtn;
     private RecyclerView recyclerView;
-    private SectionAdapter mAdapter;
+    private AttendeeListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
 
@@ -26,15 +27,15 @@ public class AttendeeListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //UI: Recycler view with Choose Your Section on top
-        setContentView(R.layout.activity_teacher_resume);
+        //UI: Recycler view with Attendee title on top
+        setContentView(R.layout.activity_attendees);
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
         //backbutton function
-        backBtn = findViewById(R.id.teacherBackBtn);
+        backBtn = findViewById(R.id.backBtn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,9 +43,11 @@ public class AttendeeListActivity extends AppCompatActivity {
             }
         });
 
-        //create Adapter that accesses firebase section data based teacher and display as buttons
-        ArrayList<String> existingSectionsList = FirebaseUtils.getExistingSections();
-        mAdapter = new SectionAdapter(existingSectionsList); //existingSectionList of String section_ids
+        //create Adapter that accesses userdata in specific section
+        //List<String[]> userNames = FirebaseUtils.getUserNames(FirebaseUtils.getMySection());
+        List<String[]> userNames = FirebaseUtils.getUserNames(getIntent().getStringExtra("sectionRefKey"));
+        Log.d("TEST", "username size " + Integer.toString(userNames.size()));
+        mAdapter = new AttendeeListAdapter(userNames); //userNameList of String user_names
         recyclerView.setAdapter(mAdapter);
     }
 

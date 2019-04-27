@@ -77,7 +77,7 @@ public class StudentLoginActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(StudentLoginActivity.this, StudentClassActivity.class);
                         intent.putExtra("uID", mUID);
-
+                        intent.putExtra("magic_key", getMagicWord());
                         Log.d("TEST", "put intent: " + mUID);
                         startActivity(intent);
                     } else {
