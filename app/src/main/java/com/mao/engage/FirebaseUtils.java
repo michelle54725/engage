@@ -44,11 +44,13 @@ public class FirebaseUtils {
     static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: slider;
     static HashMap<String, String> existingSections = new HashMap<>(); //K: section_name; V: section_ref;
     static HashMap<String, HashMap> sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, and what else?
+    static int counter = 0; //counter for attendance [not sure if necessary]
 
     /*
         setSectionListener called in StartActivity
         Retrieves section data from Firebase to update a HashMap<String section_ref_key, Hashmap<String x, String y>>
      */
+
     public static void setSectionListener() {
         mSectionRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -223,6 +225,18 @@ public class FirebaseUtils {
         String s = sectionMap.get(refKey).get("b_end").toString();
         Log.d("TEST", s);
         return s.substring(s.length() - 7);
+    }
+
+    public static String getUserName(String refKey, String user_id) {
+        Map<String, String> hashyMap = (Map<String, String>) (sectionMap.get(refKey).get("user_ids"));
+        if (hashyMap != null) {
+            String name = hashyMap.get(user_id);
+            Log.d("TEST: ", "get username from db" + name);
+            return name;
+        } else {
+            Log.d("TEST: ", "no name found!");
+            return "";
+        }
     }
 
     //adds existing section information to hashmap
@@ -416,6 +430,53 @@ public class FirebaseUtils {
                         }
                     });
         }
+    }
+    public static void checkIsTakingAttendance(String section_ref_key) {
+        Log.d("TEST", "calling checkIsTakingAttendance");
+        FirebaseDatabase.getInstance().getReference("/Sections").child(section_ref_key).child("isTakingAttendance").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    boolean attendanceClicked = Boolean.parseBoolean(dataSnapshot.getValue().toString()); //true if teacher is taking attendance!
+                    if(attendanceClicked) {
+                        MeFragment.startSendingMessages();
+                    } else {
+                        try {
+                            MeFragment.stopSendingMessages();
+                        } catch(Exception e) {
+                            Log.d("TEST: ", "context is not available");
+
+                        }
+                    }
+
+                } else {
+                    Log.d("TEST: ", "Is taking attendance NOT FOUND in checkIsTakingAttendance for students!");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public static void setIsTakingAttendance(String section_ref_key, boolean isAttendance) {
+        sectionMap.get(section_ref_key).put("isTakingAttendance", isAttendance);
+        try {
+            mSectionRef.child(section_ref_key).child("isTakingAttendance").setValue(isAttendance);
+        } catch(Exception e) {
+            Log.d("TEST: ", "isTakingAttendance DOES NOT EXIST in setIsTakingAttendance");
+        }
+    }
+
+    public static void updateUserAttendance(String section_ref_key, String user_id) {
+        String val = getUserName(section_ref_key, user_id);
+        String[] parts = val.split("\\,");
+        String name = parts[0];
+        Log.d("TEST: ", "updated user attendance" + name);
+        mSectionRef.child(section_ref_key).child("user_ids").child(user_id).setValue(name + ",p");
     }
 
     public static void setSliderListener(final String user_id) {

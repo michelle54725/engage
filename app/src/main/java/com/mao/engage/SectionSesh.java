@@ -17,6 +17,7 @@ public class SectionSesh implements Serializable {
     String ref_key;
     int magic_key;
     double threshold = 5.0;
+    boolean isTakingAttendance = false;
 
     public String getA_start() {
         return a_start;
