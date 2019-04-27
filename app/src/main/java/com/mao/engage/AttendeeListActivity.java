@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -50,9 +51,11 @@ public class AttendeeListActivity extends AppCompatActivity {
         });
 
         //create Adapter that accesses userdata in specific section
-        //List<String[]> userNames = FirebaseUtils.getUserNames(FirebaseUtils.getMySection());
-
         userNames = FirebaseUtils.getUserNames(getIntent().getStringExtra("sectionRefKey"));
+        //Remove p/a at end:
+        for (String id : userNames.keySet()) {
+            userNames.put(id, FirebaseUtils.getNameFromValue(Objects.requireNonNull(userNames.get(id))));
+        }
         Log.d("TEST[usernames]", "username size " + Integer.toString(userNames.size()));
         Log.d("TEST[usernames]", userNames.values().toString());
         mAdapter = new AttendeeListAdapter(new ArrayList<>(userNames.values())); //List of String user_names

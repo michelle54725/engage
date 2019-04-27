@@ -359,7 +359,7 @@ public class FirebaseUtils {
                             Map<String, Object> userUpdates = new HashMap<>();
                             userUpdates.put(user.getUser_id(), user.getUsername());
                             userIDref.updateChildren(userUpdates);
-                            userIDref.child(user.getUser_id()).setValue(user.getUsername() + ",a");
+                            userIDref.child(user.getUser_id()).setValue(user.getUsername());
                         }
                     }
                 } else {
@@ -393,7 +393,9 @@ public class FirebaseUtils {
                     Log.d("TEST[user_ids]", "putting... " + dataSnapshot.getKey() + ": " + dataSnapshot + ",a");
                     Map<String, String> user_ids = (Map<String, String>) sectionMap.get(ref_key).get("user_ids");
                     if (user_ids != null) {
-                        user_ids.put(dataSnapshot.getKey(), dataSnapshot.getValue() + ",a");
+                        if (((String)dataSnapshot.getValue()).contains(",")) {
+                            user_ids.put(dataSnapshot.getKey(), dataSnapshot.getValue() + ",a");
+                        }
                     }
 
                     Log.d("TEST", "LISTENER SAYS copying user to local sectionSliders: " + dataSnapshot.getKey());
