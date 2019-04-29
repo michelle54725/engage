@@ -548,6 +548,7 @@ public class FirebaseUtils {
                         hashyMap.get("user_ids").put(user_id, dataSnapshot.getValue().toString());
 
                         AttendeeListActivity.refreshList();
+                        //AttendanceFragment.refreshCount();
                     } else if (!isPresent(dataSnapshot.getValue().toString())) {
                     // update sectionAttendance AND set student's name to green if "Michelle, a"
                         Log.d("TEST[ATTENDANCE]", user_id + ": Absent");
@@ -559,6 +560,7 @@ public class FirebaseUtils {
                         hashyMap.get("user_ids").put(user_id, dataSnapshot.getValue().toString());
 
                         AttendeeListActivity.refreshList();
+                        //AttendanceFragment.refreshCount();
                     } else {
                         Log.d("TEST[ATTENDANCE]", user_id + ": Not P or A");
                     }

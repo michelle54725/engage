@@ -31,6 +31,7 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
     private TextView studentCount;
     private TextView students;
     private String mSectionRefKey;
+    private static Context context;
     private Button attendanceButton;
     private Button whosHereButton;
     boolean attendancePressed = false;
@@ -59,6 +60,7 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
         studentCount = view.findViewById(R.id.studentCount);
         students = view.findViewById(R.id.students_text);
         mMessages = new ArrayList<>();
+        context = getActivity();
 
         if (getArguments() != null) {
             sectionNameText.setText(getArguments().getString("section_name"));
@@ -114,6 +116,8 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
                 } else {
                     attendanceButton.setBackground(getResources().getDrawable(R.drawable.attendance_button2));
                     attendanceButton.setText(R.string.stop_attendance);
+                    Log.d("TEST", "studentcount");
+                    studentCount.setText(Integer.toString(FirebaseUtils.getUserNames(mSectionRefKey).size()));
                     studentCount.setVisibility(View.VISIBLE);
                     students.setVisibility(View.VISIBLE);
                 }
@@ -134,4 +138,11 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
         }
 
     }
+
+//    protected static void refreshCount() {
+//        if (context != null) {
+//            studentCount = (TextView) findViewById(R.id.studentCount);
+//            studentCount.setText(FirebaseUtils.getUserNames(mSectionRefKey).size());
+//        }
+//    }
 }

@@ -91,4 +91,5 @@ public class AttendeeListActivity extends AppCompatActivity {
             }
         });
     }
+
 }
