@@ -81,6 +81,7 @@ public class AttendeeListActivity extends AppCompatActivity {
     }
 
     protected static void refreshList() {
+        if (mActivity == null) return;
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
