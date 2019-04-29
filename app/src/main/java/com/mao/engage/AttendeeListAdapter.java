@@ -69,12 +69,12 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         String userName = attendeeList.get(position);
         //String userName = (attendeeList.get(position));
-        holder.user.setText(userName);
+        holder.user.setText(FirebaseUtils.getNameFromValue(userName));
 
         holder.user = (Button) holder.view1.findViewById(R.id.sectionBtn);
         Log.d("TEST", "before button check");
         Log.d("TEST", "text: " + holder.user.getText().toString());
-        if (FirebaseUtils.isPresent(holder.user.getText().toString())) {
+        if (FirebaseUtils.isPresent(userName)) {
             Log.d("TEST", "changed button color to light blue");
             holder.user.setBackgroundColor(Color.parseColor("#2FA6D8"));
         }

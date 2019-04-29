@@ -51,12 +51,8 @@ public class AttendeeListActivity extends AppCompatActivity {
         });
 
         //create Adapter that accesses userdata in specific section
-        userNames = FirebaseUtils.getUserNames(getIntent().getStringExtra("sectionRefKey"));
+        userNames = FirebaseUtils.getUserNames(getIntent().getStringExtra("sectionRefKey")); //Doesn't remove p/a at end:
 
-        //Remove p/a at end:
-        for (String id : userNames.keySet()) {
-            userNames.put(id, FirebaseUtils.getNameFromValue(Objects.requireNonNull(userNames.get(id))));
-        }
         Log.d("TEST[usernames]", "username size " + Integer.toString(userNames.size()));
         Log.d("TEST[usernames]", userNames.values().toString());
         mAdapter = new AttendeeListAdapter(new ArrayList<>(userNames.values())); //List of String user_names
@@ -68,6 +64,7 @@ public class AttendeeListActivity extends AppCompatActivity {
         if (userNames != null) {
             String userName = userNames.get(user_id);
             userNames.put(user_id, "P! " + userName); //TODO: make this green instead of change name
+            Log.d("TEST[MARKING]", "updated userNames: " + userNames);
             refreshList();
         }
     }

@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class FirebaseUtils {
@@ -535,17 +536,29 @@ public class FirebaseUtils {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d("TEST[ATTENDANCE]", "in onDataChange for " + user_id);
                 if (dataSnapshot.exists()) {
+                    Log.d("TEST[ATTENDANCE]", "snapshot: " + dataSnapshot);
                     Log.d("TEST[ATTENDANCE]", "status: " + getAttendanceFromSectionMap(user_id, section_ref_key));
-                    if (getAttendanceFromSectionMap(user_id, section_ref_key).equals("p")) {
+                    if (isPresent(Objects.requireNonNull(dataSnapshot.getValue()).toString())) {
                     // update sectionAttendance AND set student's name to green if "Michelle, p"
                         Log.d("TEST[ATTENDANCE]", user_id + ": Present");
                         sectionAttendance.put(user_id, true);
-                        AttendeeListActivity.markPresent(user_id);
-                    } else if (getAttendanceFromSectionMap(user_id, section_ref_key).equals("a")) {
+
+                        //update sectionMap
+                        Map<String, Map<String, String>> hashyMap = sectionMap.get(section_ref_key);
+                        hashyMap.get("user_ids").put(user_id, dataSnapshot.getValue().toString());
+
+                        AttendeeListActivity.refreshList();
+                    } else if (!isPresent(dataSnapshot.getValue().toString())) {
                     // update sectionAttendance AND set student's name to green if "Michelle, a"
                         Log.d("TEST[ATTENDANCE]", user_id + ": Absent");
                         sectionAttendance.put(user_id, false);
                         AttendeeListActivity.markAbsent(user_id);
+
+                        //update sectionMap
+                        Map<String, Map<String, String>> hashyMap = sectionMap.get(section_ref_key);
+                        hashyMap.get("user_ids").put(user_id, dataSnapshot.getValue().toString());
+
+                        AttendeeListActivity.refreshList();
                     } else {
                         Log.d("TEST[ATTENDANCE]", user_id + ": Not P or A");
                     }
@@ -636,7 +649,7 @@ public class FirebaseUtils {
         try {
             Map<String, String> usersInSection = (Map) hashyMap.get("user_ids");
         } catch (NullPointerException e) {
-            listOfUsers.put("null", "No Students");
+            listOfUsers.put("null", "No Students,a");
             return listOfUsers;
         }
 
