@@ -174,7 +174,7 @@ public class FirebaseUtils {
      */
     public static boolean isPresent(String value) {
         int index = value.indexOf(",");
-        String status = value.substring(index);
+        String status = value.substring(index + 1);
         Log.d("TEST", "isPresent " + value.substring(index));
         return status.equals("p");
     }

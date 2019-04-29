@@ -57,7 +57,8 @@ public class AttendeeListActivity extends AppCompatActivity {
 
         Log.d("TEST[usernames]", "username size " + Integer.toString(userNames.size()));
         Log.d("TEST[usernames]", userNames.values().toString());
-        mAdapter = new AttendeeListAdapter(new ArrayList<>(userNames.values()), mSectionRefKey); //List of String user_names
+        //mAdapter = new AttendeeListAdapter(new ArrayList<>(userNames.values()), mSectionRefKey); //List of String user_names
+        mAdapter = new AttendeeListAdapter(userNames, mSectionRefKey); //List of String user_names
         recyclerView.setAdapter(mAdapter);
     }
 

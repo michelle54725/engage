@@ -8,14 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapter.MyViewHolder> {
     private List<String> attendeeList;
     private String section_ref_key;
+    private Map<String, String> userMap;
 
     /*
     section buttons referenced button design from section_list_row
@@ -32,10 +35,18 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
             user.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("TEST", "change button color to light blue on click");
-                    user.setBackgroundColor(Color.parseColor("#2FA6D8"));
-                    Log.d("TEST", "change attendance status in Firebase");
-                    FirebaseUtils.updateUserAttendance(section_ref_key, FirebaseUtils.getPsuedoUniqueID());
+
+                    for (String id : userMap.keySet()) {
+                        String name = FirebaseUtils.getNameFromValue(userMap.get(id));
+                        Log.d("TEST", "name from userMap: " + name);
+                        if (name.equals(user.getText())) {
+                            Log.d("TEST", "change attendance status in Firebase");
+                            FirebaseUtils.updateUserAttendance(section_ref_key, id);
+
+                            Log.d("TEST", "change button color to presen: green on click");
+                            user.setBackgroundColor(Color.parseColor("#20B537"));
+                        }
+                    }
                 }
             });
         }
@@ -45,8 +56,9 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
     constructs an adapter based on the attendee list passed in -- pass db
     through AttendeeListActivity
      */
-    public AttendeeListAdapter(List<String> lst, String section_ref_key) {
-        this.attendeeList = lst;
+    public AttendeeListAdapter(Map<String, String> userNames, String section_ref_key) {
+        this.attendeeList = new ArrayList<>(userNames.values());
+        this.userMap = userNames;
         this.section_ref_key = section_ref_key;
     }
 
@@ -65,14 +77,14 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         String userName = attendeeList.get(position);
         //String userName = (attendeeList.get(position));
+        Log.d("TEST", "userName: " + userName);
         holder.user.setText(FirebaseUtils.getNameFromValue(userName));
 
         holder.user = (Button) holder.view1.findViewById(R.id.sectionBtn);
-        Log.d("TEST", "before button check");
-        Log.d("TEST", "text: " + holder.user.getText().toString());
+        Log.d("TEST", "status: " + FirebaseUtils.isPresent(userName));
         if (FirebaseUtils.isPresent(userName)) {
-            Log.d("TEST", "changed button color to light blue");
-            holder.user.setBackgroundColor(Color.parseColor("#2FA6D8"));
+            Log.d("TEST", "changed button color to present: green");
+            holder.user.setBackgroundColor(Color.parseColor("#20B537"));
         }
     }
 
