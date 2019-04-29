@@ -364,7 +364,10 @@ public class FirebaseUtils {
                             Map<String, Object> userUpdates = new HashMap<>();
                             userUpdates.put(user.getUser_id(), user.getUsername());
                             userIDref.updateChildren(userUpdates);
-                            userIDref.child(user.getUser_id()).setValue(user.getUsername()  + ",a");
+                            userIDref.child(user.getUser_id()).setValue(user.getUsername() + ",a");
+
+                            HashMap<String,String> user_id_map = (HashMap<String,String>) sectionMap.get(section.getRef_key()).get("user_ids");
+                            user_id_map.put(user.getUser_id(), user.getUsername() + ",a");
                         }
                     }
                 } else {
