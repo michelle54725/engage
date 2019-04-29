@@ -242,15 +242,20 @@ public class FirebaseUtils {
         return s.substring(s.length() - 7);
     }
 
-    public static String getUserName(String refKey, String user_id) {
-        Map<String, String> hashyMap = (Map<String, String>) (sectionMap.get(refKey).get("user_ids"));
-        if (hashyMap != null) {
-            String name = hashyMap.get(user_id);
-            Log.d("TEST: ", "get username from db" + name);
-            return name;
+    public static String getUsernameFromSectionMap(String section_ref_key, String user_id) {
+        Map<String, Map<String, String>> hashyMap = sectionMap.get(section_ref_key);
+        Map<String, String> user_ids = hashyMap.get("user_ids");
+        Log.d("TEST[GETUSERNAME]", "users: " + user_ids.values().toString());
+
+        String username = user_ids.get(user_id);
+        Log.d("TEST[GETUSERNAME]", "username: " + username);
+        if (username != null) {
+            int index = username.indexOf(",");
+            Log.d("TEST[GETUSERNAME]", "getAttendanceFromSectionMap of " + user_id + ": " + username.substring(0, index).replaceAll("\\s", ""));
+            return username.substring(0, index).replaceAll("\\s", "");
         } else {
-            Log.d("TEST: ", "no name found!");
-            return "";
+            //username DNE
+            return "DNE";
         }
     }
 
@@ -359,7 +364,7 @@ public class FirebaseUtils {
                             Map<String, Object> userUpdates = new HashMap<>();
                             userUpdates.put(user.getUser_id(), user.getUsername());
                             userIDref.updateChildren(userUpdates);
-                            userIDref.child(user.getUser_id()).setValue(user.getUsername());
+                            userIDref.child(user.getUser_id()).setValue(user.getUsername()  + ",a");
                         }
                     }
                 } else {
@@ -390,11 +395,11 @@ public class FirebaseUtils {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     //copied and pasted here
-                    Log.d("TEST[user_ids]", "putting... " + dataSnapshot.getKey() + ": " + dataSnapshot + ",a");
+                    Log.d("TEST[user_ids]", "putting... " + dataSnapshot.getKey() + ": " + dataSnapshot);
                     Map<String, String> user_ids = (Map<String, String>) sectionMap.get(ref_key).get("user_ids");
                     if (user_ids != null) {
                         if (((String)dataSnapshot.getValue()).contains(",")) {
-                            user_ids.put(dataSnapshot.getKey(), dataSnapshot.getValue() + ",a");
+                            user_ids.put(dataSnapshot.getKey(), dataSnapshot.getValue().toString());
                         }
                     }
 
@@ -505,11 +510,15 @@ public class FirebaseUtils {
     }
 
     public static void updateUserAttendance(String section_ref_key, String user_id) {
-        String val = getUserName(section_ref_key, user_id);
-        String[] parts = val.split("\\,");
-        String name = parts[0];
-        Log.d("TEST: ", "updated user attendance" + name);
-        mSectionRef.child(section_ref_key).child("user_ids").child(user_id).setValue(name + ",p");
+        String val = getUsernameFromSectionMap(section_ref_key, user_id);
+        if (val != null) {
+            String[] parts = val.split("\\,");
+            String name = parts[0];
+            Log.d("TEST: ", "updated user attendance" + name);
+            mSectionRef.child(section_ref_key).child("user_ids").child(user_id).setValue(name + ",p");
+        }
+        Log.d("TEST: ", "did NOT update user attendance, name = null");
+
     }
 
     // creates Listener for Section.user_ids.userid value (e.g. "Michelle, a") to update TA's attendance list
