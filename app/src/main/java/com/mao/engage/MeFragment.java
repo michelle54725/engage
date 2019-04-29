@@ -1,5 +1,6 @@
 package com.mao.engage;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
@@ -11,6 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+
+import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.Message;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,9 +41,11 @@ public class MeFragment extends Fragment {
     private String mParam2;
 
     private Boolean elastic;
-
+    private static Message message;
+    private static Context context;
     public MeFragment() {
         // Required empty public constructor
+        context = getActivity();
     }
 
     /**
@@ -63,6 +73,7 @@ public class MeFragment extends Fragment {
             uID = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        context = getActivity();
     }
 
     @Override
@@ -72,7 +83,7 @@ public class MeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_me, container, false);
         seekBar = view.findViewById(R.id.seekBar);
 
-        final Drawable original =  getResources().getDrawable(R.drawable.ic_slider_thumb);
+        final Drawable original = getResources().getDrawable(R.drawable.ic_slider_thumb);
         seekBar.post(new Runnable() {
             @Override
             public void run() {
@@ -114,6 +125,18 @@ public class MeFragment extends Fragment {
             return 50;
         }
         return (int) next;
+    }
+
+
+    public static void startSendingMessages() {
+        Log.d("TEST: ", "start sending messages! here is my message " + FirebaseUtils.getPsuedoUniqueID());
+        message = new Message(FirebaseUtils.getPsuedoUniqueID().getBytes());
+        Nearby.getMessagesClient(context).publish(message);
+    }
+
+    public static void stopSendingMessages() {
+        Log.d("TEST: ", "stop sending messages! " + context);
+        Nearby.getMessagesClient(context).unpublish(message);
     }
 
     void setSlider() {

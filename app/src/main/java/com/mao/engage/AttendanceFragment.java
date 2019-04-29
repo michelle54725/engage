@@ -19,6 +19,8 @@ import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
+import java.util.ArrayList;
+
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
@@ -34,6 +36,7 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
     boolean attendancePressed = false;
     MessageListener mMessageListener;
     Message mMessage;
+    ArrayList<String> mMessages;
 
 //    private OnFragmentInteractionListener mListener;
 
@@ -55,6 +58,7 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
         magicWordText = view.findViewById(R.id.magicWordText3);
         studentCount = view.findViewById(R.id.studentCount);
         students = view.findViewById(R.id.students_text);
+        mMessages = new ArrayList<>();
 
         if (getArguments() != null) {
             sectionNameText.setText(getArguments().getString("section_name"));
@@ -66,16 +70,20 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
         whosHereButton = view.findViewById(R.id.see_whos_here);
         attendanceButton.setOnClickListener(this);
         whosHereButton.setOnClickListener(this);
-
         mMessageListener = new MessageListener() {
             @Override
             public void onFound(Message message) {
-                Log.d(TAG, "Found message: " + new String(message.getContent()));
+                String user_id = new String(message.getContent());
+                Log.d("TEST: ", "Found message: " + user_id);
+                if(!mMessages.contains(user_id)) {
+                    FirebaseUtils.updateUserAttendance(mSectionRefKey, user_id);
+                }
+                mMessages.add(user_id);
             }
 
             @Override
             public void onLost(Message message) {
-                Log.d(TAG, "Lost sight of message: " + new String(message.getContent()));
+                Log.d("TEST: ", "Lost sight of message: " + new String(message.getContent()));
             }
         };
 
@@ -110,12 +118,14 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
                     students.setVisibility(View.VISIBLE);
                 }
                 attendancePressed = !attendancePressed;
+                FirebaseUtils.setIsTakingAttendance(mSectionRefKey, attendancePressed);
                 Nearby.getMessagesClient(this.getActivity()).publish(mMessage);
                 Nearby.getMessagesClient(this.getActivity()).subscribe(mMessageListener);
                 break;
             case R.id.see_whos_here:
                 Log.d("TEST", "SEE WHO IS HERE BUTTON GOOGLE NEARBY MESSAGES");
                 Intent intent = new Intent(getActivity(), AttendeeListActivity.class);
+                intent.putExtra("sectionRefKey", mSectionRefKey);
                 startActivity(intent);
                break;
             default:

@@ -121,6 +121,8 @@ public class StudentClassActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        FirebaseUtils.checkIsTakingAttendance(FirebaseUtils.getMySection());
     }
 
     /*

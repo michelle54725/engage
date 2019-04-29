@@ -1,5 +1,7 @@
 package com.mao.engage;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,7 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -17,15 +22,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class AttendeeListActivity extends AppCompatActivity {
 
+    private static AttendeeListActivity mActivity;
     private ImageButton backBtn;
     private RecyclerView recyclerView;
-    private AttendeeListAdapter mAdapter;
+    private static AttendeeListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-
+    private static HashMap<String, String> userNames; // k: user_id, v: name
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivity = AttendeeListActivity.this;
 
         //UI: Recycler view with Attendee title on top
         setContentView(R.layout.activity_attendees);
@@ -44,11 +51,41 @@ public class AttendeeListActivity extends AppCompatActivity {
         });
 
         //create Adapter that accesses userdata in specific section
-        //List<String[]> userNames = FirebaseUtils.getUserNames(FirebaseUtils.getMySection());
-        List<String[]> userNames = FirebaseUtils.getUserNames(getIntent().getStringExtra("sectionRefKey"));
-        Log.d("TEST", "username size " + Integer.toString(userNames.size()));
-        mAdapter = new AttendeeListAdapter(userNames); //userNameList of String user_names
+        userNames = FirebaseUtils.getUserNames(getIntent().getStringExtra("sectionRefKey"));
+        //Remove p/a at end:
+        for (String id : userNames.keySet()) {
+            userNames.put(id, FirebaseUtils.getNameFromValue(Objects.requireNonNull(userNames.get(id))));
+        }
+        Log.d("TEST[usernames]", "username size " + Integer.toString(userNames.size()));
+        Log.d("TEST[usernames]", userNames.values().toString());
+        mAdapter = new AttendeeListAdapter(new ArrayList<>(userNames.values())); //List of String user_names
         recyclerView.setAdapter(mAdapter);
     }
 
+    protected static void markPresent(String user_id) {
+        Log.d("TEST[MARKING]", "Present " + user_id);
+        if (userNames != null) {
+            String userName = userNames.get(user_id);
+            userNames.put(user_id, "P! " + userName); //TODO: make this green instead of change name
+            refreshList();
+        }
+    }
+
+    protected static void markAbsent(String user_id) {
+        Log.d("TEST[MARKING]", "Absent " + user_id);
+        if (userNames != null) {
+            String userName = userNames.get(user_id);
+            userNames.put(user_id, "A! " + userName); //TODO: make this green instead of change name
+            refreshList();
+        }
+    }
+
+    protected static void refreshList() {
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.refreshList(new ArrayList<>(userNames.values()));
+            }
+        });
+    }
 }
