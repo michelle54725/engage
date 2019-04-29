@@ -255,7 +255,7 @@ public class FirebaseUtils {
             return username.substring(0, index).replaceAll("\\s", "");
         } else {
             //username DNE
-            return "DNE";
+            return "";
         }
     }
 
@@ -362,9 +362,8 @@ public class FirebaseUtils {
                             mUsersRef.child(user.getUser_id()).setValue(user);
                             DatabaseReference userIDref = mSectionRef.child(section.getRef_key()).child("user_ids");
                             Map<String, Object> userUpdates = new HashMap<>();
-                            userUpdates.put(user.getUser_id(), user.getUsername());
+                            userUpdates.put(user.getUser_id(), user.getUsername()+ ",a");
                             userIDref.updateChildren(userUpdates);
-                            userIDref.child(user.getUser_id()).setValue(user.getUsername() + ",a");
 
                             HashMap<String,String> user_id_map = (HashMap<String,String>) sectionMap.get(section.getRef_key()).get("user_ids");
                             user_id_map.put(user.getUser_id(), user.getUsername() + ",a");
@@ -390,6 +389,8 @@ public class FirebaseUtils {
     }
 
     public static void setUserIdinSectionListener(final String ref_key) {
+        Log.d("TEST[user_ids]", "in setUserIdinSectionListener");
+
         DatabaseReference useridsRef = mSectionRef.child(ref_key).child("user_ids");
         if (useridsRef != null) {
             useridsRef.addChildEventListener(new ChildEventListener() {
@@ -398,6 +399,7 @@ public class FirebaseUtils {
                     //copied and pasted here
                     Log.d("TEST[user_ids]", "putting... " + dataSnapshot.getKey() + ": " + dataSnapshot);
                     Map<String, String> user_ids = (Map<String, String>) sectionMap.get(ref_key).get("user_ids");
+                    Log.d("TEST[user_ids]", "user_ids is currently: " + user_ids);
                     if (user_ids != null) {
                         if (((String)dataSnapshot.getValue()).contains(",")) {
                             // LOCAL SYNC: put user in sectionMap
@@ -405,7 +407,7 @@ public class FirebaseUtils {
                         }
                     }
 
-                    Log.d("TEST", "LISTENER SAYS copying user to local sectionSliders: " + dataSnapshot.getKey());
+                    Log.d("TEST[user_id]", "LISTENER SAYS copying user to local sectionSliders: " + dataSnapshot.getKey());
                     String user_id = dataSnapshot.getKey();
                     // LOCAL SYNC: put user in sectionSliders
                     sectionSliders.put(user_id, 50); // default slider = 50
@@ -441,7 +443,7 @@ public class FirebaseUtils {
                 }
             });
         } else {
-            Log.d("TEST", "USERID REF IS NULL");
+            Log.d("TEST[user_ids]", "USERID REF IS NULL");
         }
     }
 
