@@ -255,7 +255,7 @@ public class FirebaseUtils {
             return username.substring(0, index).replaceAll("\\s", "");
         } else {
             //username DNE
-            return "DNE";
+            return "";
         }
     }
 
@@ -404,7 +404,6 @@ public class FirebaseUtils {
                         if (((String)dataSnapshot.getValue()).contains(",")) {
                             // LOCAL SYNC: put user in sectionMap
                             user_ids.put(dataSnapshot.getKey(), dataSnapshot.getValue().toString());
-                            Log.d("TEST[user_ids]", "user_ids is currently: " + user_ids);
                         }
                     }
 
