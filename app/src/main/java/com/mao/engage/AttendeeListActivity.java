@@ -28,6 +28,7 @@ public class AttendeeListActivity extends AppCompatActivity {
     private static AttendeeListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private static HashMap<String, String> userNames; // k: user_id, v: name
+    private static String mSectionRefKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,8 @@ public class AttendeeListActivity extends AppCompatActivity {
         });
 
         //create Adapter that accesses userdata in specific section
-        userNames = FirebaseUtils.getUserNames(getIntent().getStringExtra("sectionRefKey")); //Doesn't remove p/a at end:
+        mSectionRefKey = getIntent().getStringExtra("sectionRefKey");
+        userNames = FirebaseUtils.getUserNames(mSectionRefKey);
 
         Log.d("TEST[usernames]", "username size " + Integer.toString(userNames.size()));
         Log.d("TEST[usernames]", userNames.values().toString());
@@ -82,6 +84,7 @@ public class AttendeeListActivity extends AppCompatActivity {
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                userNames = FirebaseUtils.getUserNames(mSectionRefKey);
                 mAdapter.refreshList(new ArrayList<>(userNames.values()));
             }
         });
