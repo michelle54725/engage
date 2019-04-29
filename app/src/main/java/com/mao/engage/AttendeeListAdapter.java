@@ -32,8 +32,9 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
             user.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("TEST", "changed button color to light blue on click");
+                    Log.d("TEST", "change button color to light blue on click");
                     user.setBackgroundColor(Color.parseColor("#2FA6D8"));
+                    Log.d("TEST", "change attendance status in Firebase");
                     FirebaseUtils.updateUserAttendance(section_ref_key, FirebaseUtils.getPsuedoUniqueID());
                 }
             });
