@@ -74,7 +74,7 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
         holder.user = (Button) holder.view1.findViewById(R.id.sectionBtn);
         Log.d("TEST", "before button check");
         Log.d("TEST", "text: " + holder.user.getText().toString());
-        if (holder.user.getText().toString().substring(0,1).toLowerCase().equals("p")) {
+        if (FirebaseUtils.isPresent(holder.user.getText().toString())) {
             Log.d("TEST", "changed button color to light blue");
             holder.user.setBackgroundColor(Color.parseColor("#2FA6D8"));
         }
