@@ -28,6 +28,7 @@ public class AttendeeListActivity extends AppCompatActivity {
     private static AttendeeListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private static HashMap<String, String> userNames; // k: user_id, v: name
+    private String mRefKey = getIntent().getStringExtra("sectionRefKey");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class AttendeeListActivity extends AppCompatActivity {
         }
         Log.d("TEST[usernames]", "username size " + Integer.toString(userNames.size()));
         Log.d("TEST[usernames]", userNames.values().toString());
-        mAdapter = new AttendeeListAdapter(new ArrayList<>(userNames.values())); //List of String user_names
+        mAdapter = new AttendeeListAdapter(new ArrayList<>(userNames.values()), mRefKey); //List of String user_names
         recyclerView.setAdapter(mAdapter);
     }
 
