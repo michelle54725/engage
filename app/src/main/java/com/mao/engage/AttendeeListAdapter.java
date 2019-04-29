@@ -1,6 +1,7 @@
 package com.mao.engage;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +21,11 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
      */
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public Button user;
+        public View view1;
 
         public MyViewHolder(View view) {
             super(view);
+            view1 = view;
             user = (Button) view.findViewById(R.id.sectionBtn);
 
             user.setOnClickListener(new View.OnClickListener() {
@@ -66,8 +69,15 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         String userName = attendeeList.get(position);
         //String userName = (attendeeList.get(position));
-        Log.d("TEST", "userName: " + userName);
         holder.user.setText(userName);
+
+        holder.user = (Button) holder.view1.findViewById(R.id.sectionBtn);
+        Log.d("TEST", "before button check");
+        Log.d("TEST", "text: " + holder.user.getText().toString());
+        if (holder.user.getText().toString().substring(0,1).toLowerCase().equals("p")) {
+            Log.d("TEST", "changed button color to light blue");
+            holder.user.setBackgroundColor(Color.parseColor("#2FA6D8"));
+        }
     }
 
     @Override

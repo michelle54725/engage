@@ -52,6 +52,7 @@ public class AttendeeListActivity extends AppCompatActivity {
 
         //create Adapter that accesses userdata in specific section
         userNames = FirebaseUtils.getUserNames(getIntent().getStringExtra("sectionRefKey"));
+
         //Remove p/a at end:
         for (String id : userNames.keySet()) {
             userNames.put(id, FirebaseUtils.getNameFromValue(Objects.requireNonNull(userNames.get(id))));
