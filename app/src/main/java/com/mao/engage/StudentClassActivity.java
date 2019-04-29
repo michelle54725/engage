@@ -76,7 +76,7 @@ public class StudentClassActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        FirebaseUtils.setSectionSliders(FirebaseUtils.getMySection());
+        //FirebaseUtils.setUserIdinSectionListener(FirebaseUtils.getMySection());
 
         meFragment = new MeFragment();
         // send data to Fragment

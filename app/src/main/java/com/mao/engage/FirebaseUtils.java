@@ -389,9 +389,7 @@ public class FirebaseUtils {
         mRef.child("existingSections").child(sectionRefKey).setValue(sectionID);
     }
 
-    // TODO: change name of this function. Also setting AttendanceListener here because listening to user_ids list
-    public static void setSectionSliders(final String ref_key) {
-        //TODO: how to typecast object --> hashmap
+    public static void setUserIdinSectionListener(final String ref_key) {
         DatabaseReference useridsRef = mSectionRef.child(ref_key).child("user_ids");
         if (useridsRef != null) {
             useridsRef.addChildEventListener(new ChildEventListener() {
@@ -402,15 +400,18 @@ public class FirebaseUtils {
                     Map<String, String> user_ids = (Map<String, String>) sectionMap.get(ref_key).get("user_ids");
                     if (user_ids != null) {
                         if (((String)dataSnapshot.getValue()).contains(",")) {
+                            // LOCAL SYNC: put user in sectionMap
                             user_ids.put(dataSnapshot.getKey(), dataSnapshot.getValue().toString());
                         }
                     }
 
                     Log.d("TEST", "LISTENER SAYS copying user to local sectionSliders: " + dataSnapshot.getKey());
                     String user_id = dataSnapshot.getKey();
+                    // LOCAL SYNC: put user in sectionSliders
                     sectionSliders.put(user_id, 50); // default slider = 50
                     setSliderListener(user_id);
 
+                    // LOCAL SYNC: put user in sectionAttendance
                     sectionAttendance.put(user_id, false);
                     setAttendanceListener(ref_key, user_id); //this is what above TO-DO is referring to, delete this comment once resolved
                 }
