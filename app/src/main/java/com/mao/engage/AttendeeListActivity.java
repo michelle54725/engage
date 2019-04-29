@@ -28,7 +28,7 @@ public class AttendeeListActivity extends AppCompatActivity {
     private static AttendeeListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private static HashMap<String, String> userNames; // k: user_id, v: name
-    private String mRefKey = getIntent().getStringExtra("sectionRefKey");
+    private static String mSectionRefKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +52,12 @@ public class AttendeeListActivity extends AppCompatActivity {
         });
 
         //create Adapter that accesses userdata in specific section
-        userNames = FirebaseUtils.getUserNames(getIntent().getStringExtra("sectionRefKey"));
+        mSectionRefKey = getIntent().getStringExtra("sectionRefKey");
+        userNames = FirebaseUtils.getUserNames(mSectionRefKey);
 
-        //Remove p/a at end:
-        for (String id : userNames.keySet()) {
-            userNames.put(id, FirebaseUtils.getNameFromValue(Objects.requireNonNull(userNames.get(id))));
-        }
         Log.d("TEST[usernames]", "username size " + Integer.toString(userNames.size()));
         Log.d("TEST[usernames]", userNames.values().toString());
-        mAdapter = new AttendeeListAdapter(new ArrayList<>(userNames.values()), mRefKey); //List of String user_names
+        mAdapter = new AttendeeListAdapter(new ArrayList<>(userNames.values()), mSectionRefKey); //List of String user_names
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -69,6 +66,7 @@ public class AttendeeListActivity extends AppCompatActivity {
         if (userNames != null) {
             String userName = userNames.get(user_id);
             userNames.put(user_id, "P! " + userName); //TODO: make this green instead of change name
+            Log.d("TEST[MARKING]", "updated userNames: " + userNames);
             refreshList();
         }
     }
@@ -83,9 +81,11 @@ public class AttendeeListActivity extends AppCompatActivity {
     }
 
     protected static void refreshList() {
+        if (mActivity == null) return;
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                userNames = FirebaseUtils.getUserNames(mSectionRefKey);
                 mAdapter.refreshList(new ArrayList<>(userNames.values()));
             }
         });
