@@ -2,11 +2,9 @@ package com.mao.engage;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,16 +19,17 @@ import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.util.ArrayList;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
-
 
 public class AttendanceFragment extends Fragment implements View.OnClickListener {
 
     private TextView sectionNameText;
     private TextView magicWordText;
-    private TextView studentCount;
+    private static AttendanceFragment mFragment;
+    private static TextView studentCount;
     private TextView students;
-    private String mSectionRefKey;
+    private static String mSectionRefKey;
+    private static int count;
+    private int prevCount;
     private static Context context;
     private Button attendanceButton;
     private Button whosHereButton;
@@ -59,6 +58,7 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
         magicWordText = view.findViewById(R.id.magicWordText3);
         studentCount = view.findViewById(R.id.studentCount);
         students = view.findViewById(R.id.students_text);
+        mFragment = AttendanceFragment.this;
         mMessages = new ArrayList<>();
         context = getActivity();
 
@@ -72,6 +72,7 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
         whosHereButton = view.findViewById(R.id.see_whos_here);
         attendanceButton.setOnClickListener(this);
         whosHereButton.setOnClickListener(this);
+
         mMessageListener = new MessageListener() {
             @Override
             public void onFound(Message message) {
@@ -116,8 +117,8 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
                 } else {
                     attendanceButton.setBackground(getResources().getDrawable(R.drawable.attendance_button2));
                     attendanceButton.setText(R.string.stop_attendance);
-                    Log.d("TEST", "studentcount");
-                    studentCount.setText(Integer.toString(FirebaseUtils.getUserNames(mSectionRefKey).size()));
+                    Log.d("TEST", "studentcount: " + Integer.toString(FirebaseUtils.getUserNames(mSectionRefKey).size()));
+                    //studentCount.setText(Integer.toString(FirebaseUtils.getUserNames(mSectionRefKey).size()));
                     studentCount.setVisibility(View.VISIBLE);
                     students.setVisibility(View.VISIBLE);
                 }
@@ -139,10 +140,13 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
 
     }
 
-//    protected static void refreshCount() {
-//        if (context != null) {
-//            studentCount = (TextView) findViewById(R.id.studentCount);
-//            studentCount.setText(FirebaseUtils.getUserNames(mSectionRefKey).size());
-//        }
-//    }
+
+    protected static void refreshCount() {
+        if (context != null) {
+            Log.d("TEST", "before refreshCount: " + count);
+            count = FirebaseUtils.getUserNames(mSectionRefKey).size();
+            studentCount.setText(Integer.toString(count));
+            Log.d("TEST", " after refreshCount: " + count);
+        }
+    }
 }
