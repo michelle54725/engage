@@ -7,17 +7,17 @@
 
     <activity
         android:id="@+id/startActivity"
-        android:name="com.mao.engage.StartActivity"
+        android:name="com.mao.engage.teacher.StartActivity"
         android:label="activity_start"
         tools:layout="@layout/activity_start" />
     <activity
         android:id="@+id/teacherCreateClassActivity"
-        android:name="com.mao.engage.TeacherCreateClassActivity"
+        android:name="com.mao.engage.teacher.TeacherCreateClassActivity"
         android:label="activity_teacher_create_class"
         tools:layout="@layout/activity_teacher_create_class" />
     <activity
         android:id="@+id/teacherOptionsActivity"
-        android:name="com.mao.engage.TeacherOptionsActivity"
+        android:name="com.mao.engage.teacher.TeacherOptionsActivity"
         android:label="activity_teacher_options"
         tools:layout="@layout/activity_teacher_options" />
     <activity
@@ -55,7 +55,7 @@
         tools:layout="@layout/activity_student_class" />
     <activity
         android:id="@+id/studentLoginActivity"
-        android:name="com.mao.engage.StudentLoginActivity"
+        android:name="com.mao.engage.teacher.StudentLoginActivity"
         android:label="activity_student_login"
         tools:layout="@layout/activity_student_login" />
     <fragment

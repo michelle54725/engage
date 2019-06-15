@@ -1,13 +1,16 @@
-package com.mao.engage;
+package com.mao.engage.teacher;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
+import com.mao.engage.TeacherClassActivity;
 
 import java.util.HashMap;
 import java.util.List;

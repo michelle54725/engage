@@ -12,20 +12,20 @@
         <meta-data
             android:name="com.google.android.nearby.messages.API_KEY"
             android:value="AIzaSyCTqRsUSzK_rcrrk_vZ03H_dE-hIUwCbaY" />
-        <activity android:name=".TeacherResumeActivity"/>
+        <activity android:name=".teacher.TeacherResumeActivity"/>
         <activity android:name=".TestingActivity" />
-        <activity android:name=".StartActivity">
+        <activity android:name=".teacher.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StudentLoginActivity" />
+        <activity android:name=".teacher.StudentLoginActivity" />
         <activity android:name=".StudentClassActivity" />
-        <activity android:name=".TeacherCreateClassActivity" />
+        <activity android:name=".teacher.TeacherCreateClassActivity" />
         <activity android:name=".TeacherClassActivity" />
-        <activity android:name=".TeacherOptionsActivity" />
+        <activity android:name=".teacher.TeacherOptionsActivity" />
         <activity android:name=".AttendeeListActivity" />
     </application>
 
