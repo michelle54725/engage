@@ -178,7 +178,7 @@ public class FirebaseUtils {
 
     /*
         Returns ArrayList of existing sections for a teacher
-        Called in SectionAdapter
+        Called in TeacherResumeActivity_Adapter
      */
     public static ArrayList<String> getExistingSections() {
         ArrayList<String> existingList = new ArrayList<>();
@@ -191,7 +191,7 @@ public class FirebaseUtils {
     /*
         Returns a hashmap of the existing sections of a teacher
         K: section_name; V: section_ref;
-        Called in SectionAdapter
+        Called in TeacherResumeActivity_Adapter
      */
     public static HashMap<String, String> getExistingSectionsHashMap() {
         return existingSections;
@@ -216,7 +216,7 @@ public class FirebaseUtils {
 
     /*
     Gets magicKey of a section
-    Called in SectionAdapter
+    Called in TeacherResumeActivity_Adapter
      */
     public static long getMagicKey(String refKey) {
         String s = sectionMap.get(refKey).get("magic_key").toString();

@@ -1,5 +1,10 @@
-package com.mao.engage.teacher;
+/*
+    The adapter used in TeacherResumeActivity.java
+    to display a list of the user's existing sections.
+ */
 
+package com.mao.engage.teacher;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -15,17 +20,14 @@ import com.mao.engage.TeacherClassActivity;
 import java.util.HashMap;
 import java.util.List;
 
-public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHolder> {
+public class TeacherResumeActivity_Adapter extends RecyclerView.Adapter<TeacherResumeActivity_Adapter.MyViewHolder> {
     private List<String> sectionSeshList;
-    //private HashMap<String, String> sectionKeys;
 
-    /*
-    section buttons referenced button design from section_list_row
-     */
     public class MyViewHolder extends RecyclerView.ViewHolder {
+        // section buttons reference button design from section_list_row.xml
         public Button section;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             section = (Button) view.findViewById(R.id.sectionBtn);
 
@@ -41,32 +43,27 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.MyViewHo
                     intent.putExtra("section_name", section.getText().toString());
                     intent.putExtra("magic_word", FirebaseUtils.getMagicKey(mSectionRefKey) + "");
                     section.getContext().startActivity(intent);
-
                 }
             });
         }
     }
 
-    /*
-    constructs an adapter based on the section list passed in -- pass db
-    through TeacherResumeActivity
-     */
-    public SectionAdapter(List<String> lst) {
+    // constructs an adapter based on the section list passed in from TeacherResumeActivity
+    // note: reads from DB through TeacherResumeActivity
+    TeacherResumeActivity_Adapter(List<String> lst) {
         this.sectionSeshList = lst;
     }
 
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @NonNull @Override
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.section_list_row, parent, false);
         return new MyViewHolder(itemView);
     }
 
-    /*
-    sets button to have the section_id of the section
-     */
+    // sets button to have the section_id of the section
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         String section_id = sectionSeshList.get(position);
         holder.section.setText(section_id);
     }

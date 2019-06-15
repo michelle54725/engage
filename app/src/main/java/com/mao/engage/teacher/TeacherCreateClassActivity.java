@@ -185,7 +185,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
                             START, END, TA_KEY, classNameEditText.getText().toString(), mSectionRefKey, magicKey, new ArrayList<String>());
                     final String mMagicWord = String.format(Locale.US, "%03d", magicKey);
                     FirebaseUtils.createSection(mSectionSesh);
-                    FirebaseUtils.updateTeacher(getIntent().getStringExtra("name"), mSectionRefKey, mSectionSesh.getSection_id()); // update Teachers in Firebase
+                    FirebaseUtils.updateTeacher(getIntent().getStringExtra("name"), mSectionRefKey, mSectionSesh.getSection_name()); // update Teachers in Firebase
                     AlertDialog.Builder builder = new AlertDialog.Builder(TeacherCreateClassActivity.this);
                     builder.setTitle("Success!");
 

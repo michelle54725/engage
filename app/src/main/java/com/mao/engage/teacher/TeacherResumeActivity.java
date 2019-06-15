@@ -1,3 +1,10 @@
+/*
+    Displays a list of the user's existing sections that when clicked opens the corresponding
+    TeacherClassActivity (implemented in TeacherResumeActivity_Adapter).
+
+    Triggered by: "Resume Section" button from TeacherOptionsActivity.
+ */
+
 package com.mao.engage.teacher;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,22 +24,27 @@ public class TeacherResumeActivity extends AppCompatActivity {
 
     private ImageButton backBtn;
     private RecyclerView recyclerView;
-    private SectionAdapter mAdapter;
+    private TeacherResumeActivity_Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //UI: Recycler view with Choose Your Section on top
+        // UI: Recycler view with "Choose from your existing sections:" on top
         setContentView(R.layout.activity_teacher_resume);
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        //backbutton function
+        // feeds a list of the user's existing sections to the adapter which handles
+        // onClick functionality and reviving the SectionSesh
+        ArrayList<String> existingSectionsList = FirebaseUtils.getExistingSections(); //list of section_name
+        mAdapter = new TeacherResumeActivity_Adapter(existingSectionsList);
+        recyclerView.setAdapter(mAdapter);
+
+        // back button
         backBtn = findViewById(R.id.teacherBackBtn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,10 +52,5 @@ public class TeacherResumeActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        //create Adapter that accesses firebase section data based teacher and display as buttons
-        ArrayList<String> existingSectionsList = FirebaseUtils.getExistingSections();
-        mAdapter = new SectionAdapter(existingSectionsList); //existingSectionList of String section_ids
-        recyclerView.setAdapter(mAdapter);
     }
 }
