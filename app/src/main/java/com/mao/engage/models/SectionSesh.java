@@ -1,108 +1,73 @@
-package com.mao.engage.models;
+/*
+    How Engage represents a unique section session.
+    Parameters are defined by the teacher before starting a new section except for
+    isTakingAttendance, user_ids, and saved_slider_vals, which are dynamic during the session.
 
+    Etymology: "Section" refers to a course discussion section.
+ */
+
+package com.mao.engage.models;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-//Serializable allows object -> string (Firebase will do smth). need getter and setters
+// Serializing allows us to pass our custom object (i.e. SectionSesh) in and out of Firebase
 public class SectionSesh implements Serializable {
-    public String a_start;
-    public String b_end;
-    public String ta_key;
-    public String section_id;
+
     public String ref_key;
     public int magic_key;
-    public double threshold = 5.0;
-    public boolean isTakingAttendance = false;
+    private String a_start;
+    private String b_end;
+    private String ta_key;
+    private String section_id;
 
-    public double getThreshold() {
-        return threshold;
-    }
+    private boolean isTakingAttendance = false;
+    private Map<String, String> user_ids;
+    private ArrayList<ArrayList<Integer>> saved_slider_vals;
 
-    public boolean isTakingAttendance() {
-        return isTakingAttendance;
-    }
-
-
-    public String getA_start() {
-        return a_start;
-    }
-
-    public String getB_end() {
-        return b_end;
-    }
-
-    public String getTa_key() {
-        return ta_key;
-    }
-
-    public String getSection_id() {
-        return section_id;
-    }
-
-    public String getRef_key() {
-        return ref_key;
-    }
-
-    public int getMagic_key() {
-        return magic_key;
-    }
-
-    public Map<String, String> getUser_ids() {
-        return user_ids;
-    }
-
-    public ArrayList<ArrayList<Integer>> getSaved_slider_vals() {
-        return saved_slider_vals;
-    }
-
-    Map<String, String> user_ids;
-    ArrayList<ArrayList<Integer>> saved_slider_vals;
-
-    public SectionSesh() {
-    }
-
-
-    public SectionSesh(String a_start, String b_end,
-                       String ta_key, String section_id,
-                       String ref_key, int magic_key,
-                       ArrayList<String> user_ids) {
+    public SectionSesh(String a_start, String b_end, String ta_key, String section_id,
+                       String ref_key, int magic_key, ArrayList<String> user_ids) {
         // fed by constructor
         this.a_start = a_start;
         this.b_end = b_end;
         this.ta_key = ta_key;
         this.section_id = section_id;
         this.ref_key = ref_key;
-
         this.magic_key = magic_key;
-        // manual init
+
+        // manual initialization
         this.user_ids = new HashMap<>();
-        for (int i = 0; i < user_ids.size(); i++)
-        {
+        for (int i = 0; i < user_ids.size(); i++) {
             this.user_ids.put("bob", user_ids.get(i));
         }
         this.saved_slider_vals = new ArrayList<>();
     }
 
-    public SectionSesh(String a_start, String b_end,
-                       String ta_key, String section_id,
-                       String ref_key, int magic_key,
-                       Map<String, String> user_ids) {
-        // fed by constructor
-        this.a_start = a_start;
-        this.b_end = b_end;
-        this.ta_key = ta_key;
-        this.section_id = section_id;
-        this.ref_key = ref_key;
-
-        this.magic_key = magic_key;
-        // manual init
-        this.user_ids = user_ids;
-        this.saved_slider_vals = new ArrayList<>();
+    //Serializable needs a void constructor
+    public SectionSesh() {
     }
 
+    // getters
+    public String getRef_key() { return ref_key; }
+    public int getMagic_key() { return magic_key; }
+    public String getA_start() { return a_start; }
+    public String getB_end() { return b_end; }
+    public String getTa_key() { return ta_key; }
+    public String getSection_id() { return section_id; }
+    public boolean getIsTakingAttendance() { return isTakingAttendance; }
+    public Map<String, String> getUser_ids() { return user_ids; }
+    public ArrayList<ArrayList<Integer>> getSaved_slider_vals() { return saved_slider_vals; }
+
+
+    // setters
+    public void setRef_key(String ref_key) { this.ref_key = ref_key; }
+    public void setMagic_key(int magic_key) { this.magic_key = magic_key; }
+    public void setA_start(String a_start) { this.a_start = a_start; }
+    public void setB_end(String b_end) { this.b_end = b_end; }
+    public void setTa_key(String ta_key) { this.ta_key = ta_key; }
+    public void setSection_id(String section_id) { this.section_id = section_id; }
+    public void setIsTakingAttendance(boolean takingAttendance) { isTakingAttendance = takingAttendance; }
+    public void setUser_ids(Map<String, String> user_ids) { this.user_ids = user_ids; }
+    public void setSaved_slider_vals(ArrayList<ArrayList<Integer>> saved_slider_vals) { this.saved_slider_vals = saved_slider_vals; }
 }
