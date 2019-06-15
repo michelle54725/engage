@@ -4,9 +4,7 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import android.provider.ContactsContract;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -16,12 +14,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mao.engage.models.SectionSesh;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -41,13 +38,13 @@ public class FirebaseUtils {
     private static DatabaseReference mTeachersRef = FirebaseDatabase.getInstance().getReference("/Teachers");
 
     //Local variables as copy of Database
-    static HashMap<String, String> allUsers = new HashMap<>(); // K: user_id (device key); V: section_ref_key
-    static HashSet<String> allTeachers = new HashSet<>(); // device keys (DB reference key)
-    static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: slider;
-    static HashMap<String, Boolean> sectionAttendance = new HashMap<>(); // K: user_id; v: True if present, False if absent;
+    public static HashMap<String, String> allUsers = new HashMap<>(); // K: user_id (device key); V: section_ref_key
+    public static HashSet<String> allTeachers = new HashSet<>(); // device keys (DB reference key)
+    public static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: slider;
+    public static HashMap<String, Boolean> sectionAttendance = new HashMap<>(); // K: user_id; v: True if present, False if absent;
 
-    static HashMap<String, String> existingSections = new HashMap<>(); //K: section_name; V: section_ref;
-    static HashMap<String, HashMap>  sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, and what else?
+    public static HashMap<String, String> existingSections = new HashMap<>(); //K: section_name; V: section_ref;
+    public static HashMap<String, HashMap>  sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, and what else?
     static int counter = 0; //counter for attendance [not sure if necessary]
 
     /*

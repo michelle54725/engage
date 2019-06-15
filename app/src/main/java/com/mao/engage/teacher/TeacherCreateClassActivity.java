@@ -1,4 +1,4 @@
-package com.mao.engage;
+package com.mao.engage.teacher;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -27,6 +27,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
+import com.mao.engage.models.SectionSesh;
+import com.mao.engage.TeacherClassActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

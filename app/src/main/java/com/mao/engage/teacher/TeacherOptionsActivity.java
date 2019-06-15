@@ -1,4 +1,4 @@
-package com.mao.engage;
+package com.mao.engage.teacher;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
 
 public class TeacherOptionsActivity extends AppCompatActivity {
 

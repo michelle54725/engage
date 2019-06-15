@@ -3,7 +3,7 @@
  *
  * User inputs name and selects "Student" or "Teacher".
  */
-package com.mao.engage;
+package com.mao.engage.teacher;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -15,6 +15,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
 
 public class StartActivity extends AppCompatActivity {
 

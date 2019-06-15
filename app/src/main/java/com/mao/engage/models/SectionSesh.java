@@ -1,4 +1,4 @@
-package com.mao.engage;
+package com.mao.engage.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -10,14 +10,14 @@ import java.util.Map;
 
 //Serializable allows object -> string (Firebase will do smth). need getter and setters
 public class SectionSesh implements Serializable {
-    String a_start;
-    String b_end;
-    String ta_key;
-    String section_id;
-    String ref_key;
-    int magic_key;
-    double threshold = 5.0;
-    boolean isTakingAttendance = false;
+    public String a_start;
+    public String b_end;
+    public String ta_key;
+    public String section_id;
+    public String ref_key;
+    public int magic_key;
+    public double threshold = 5.0;
+    public boolean isTakingAttendance = false;
 
     public double getThreshold() {
         return threshold;
