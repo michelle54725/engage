@@ -1,6 +1,6 @@
 /**
  * StudentClassActivity: primary student interface
- *  - Contains 2 fragments: MeFragment and ClassFragment
+ *  - Contains 2 fragments: MeFragment and StudentTimelineFragment
  *
  * Triggered by:
  *  "JOIN CLASS" button in StudentLoginActivity
