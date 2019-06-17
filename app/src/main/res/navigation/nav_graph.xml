@@ -25,6 +25,7 @@
         android:name="com.mao.engage.TeacherClassActivity"
         android:label="activity_teacher_class"
         tools:layout="@layout/activity_teacher_class" />
+    <!--TODO: Some way to get rid of classFragment without breaking the app-->
     <fragment
         android:id="@+id/meFragment"
         android:name="com.mao.engage.student.MeFragment"
@@ -58,6 +59,7 @@
         android:name="com.mao.engage.teacher.StudentLoginActivity"
         android:label="activity_student_login"
         tools:layout="@layout/activity_student_login" />
+    <!--TODO: Some way to get rid of classFragment without breaking the app-->
     <fragment
         android:id="@+id/classFragment3"
         android:name="com.mao.engage.student.ClassFragment"
