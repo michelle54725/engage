@@ -29,7 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
-import com.mao.engage.StudentClassActivity;
+import com.mao.engage.student.StudentClassActivity;
 import com.mao.engage.UserSesh;
 
 public class StudentLoginActivity extends AppCompatActivity {

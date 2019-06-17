@@ -7,7 +7,7 @@
 
     Etymology: A "Section" refers to a course discussion section.
  */
-package com.mao.engage;
+package com.mao.engage.student;
 
 import android.app.Activity;
 import android.content.Context;
@@ -35,11 +35,13 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
+import com.mao.engage.TimelineDataRetrieval;
+import com.mao.engage.student.StudentClassActivity;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 

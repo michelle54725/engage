@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".teacher.StudentLoginActivity" />
-        <activity android:name=".StudentClassActivity" />
+        <activity android:name=".student.StudentClassActivity" />
         <activity android:name=".teacher.TeacherCreateClassActivity" />
         <activity android:name=".TeacherClassActivity" />
         <activity android:name=".teacher.TeacherOptionsActivity" />

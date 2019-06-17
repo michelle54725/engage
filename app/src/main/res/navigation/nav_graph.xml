@@ -27,7 +27,7 @@
         tools:layout="@layout/activity_teacher_class" />
     <fragment
         android:id="@+id/meFragment"
-        android:name="com.mao.engage.MeFragment"
+        android:name="com.mao.engage.student.MeFragment"
         android:label="fragment_me"
         tools:layout="@layout/fragment_me" >
         <action
@@ -50,7 +50,7 @@
         tools:layout="@layout/fragment_timeline" />
     <activity
         android:id="@+id/studentClassActivity"
-        android:name="com.mao.engage.StudentClassActivity"
+        android:name="com.mao.engage.student.StudentClassActivity"
         android:label="activity_student_class"
         tools:layout="@layout/activity_student_class" />
     <activity
@@ -60,7 +60,7 @@
         tools:layout="@layout/activity_student_login" />
     <fragment
         android:id="@+id/classFragment3"
-        android:name="com.mao.engage.ClassFragment"
+        android:name="com.mao.engage.student.ClassFragment"
         android:label="fragment_class"
         tools:layout="@layout/fragment_class" />
 </navigation>

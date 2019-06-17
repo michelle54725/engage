@@ -8,7 +8,7 @@
  * Transitions to:
  *  (None)
  */
-package com.mao.engage;
+package com.mao.engage.student;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -27,6 +27,8 @@ import com.github.mikephil.charting.data.Entry;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
 
 import java.util.ArrayList;
 

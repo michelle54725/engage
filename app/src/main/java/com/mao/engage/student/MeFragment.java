@@ -1,4 +1,4 @@
-package com.mao.engage;
+package com.mao.engage.student;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -15,10 +15,8 @@ import android.widget.SeekBar;
 
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
