@@ -1,14 +1,17 @@
-/**
- * StartActivity: the home screen
- *
- * User inputs name and selects "Student" or "Teacher".
+/*
+    The home screen.
+    User inputs name and selects "Student" or "Teacher".
+
+    Triggered by: starting the Engage app
  */
+
 package com.mao.engage.teacher;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,7 +22,7 @@ import android.widget.Toast;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity implements View.OnClickListener{
 
     Button joinStudentBtn;
     Button joinTeacherBtn;
@@ -35,39 +38,16 @@ public class StartActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_start);
 
+        // bind views (UX components)
         joinStudentBtn = findViewById(R.id.joinStudentBtn);
         joinTeacherBtn = findViewById(R.id.joinTeacherBtn);
         nameEditText = findViewById(R.id.nameEditText);
 
-        joinStudentBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isValidName()) {
-                    Intent intent = new Intent(StartActivity.this, StudentLoginActivity.class);
-                    intent.putExtra("name", nameEditText.getText().toString());
-                    startActivity(intent);
-                } else {
-                    // TODO: replace Toasts with something cleaner
-                    Toast.makeText(StartActivity.this, "Choose a real name", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        // set button listeners
+        joinStudentBtn.setOnClickListener(this);
+        joinTeacherBtn.setOnClickListener(this);
 
-        joinTeacherBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (FirebaseUtils.teacherIsInDB()) {
-                    // Teacher already in DB
-                    Intent intent = new Intent(StartActivity.this, TeacherOptionsActivity.class);
-                    intent.putExtra("name", nameEditText.getText().toString());
-                    startActivity(intent);
-                } else {
-                    // Teacher not in DB yet (i.e. first time user)
-                    goToCreateClassActivity();
-                }
-            }
-        });
-
+        // set DB listeners
         FirebaseUtils.setUserListener();
         FirebaseUtils.setTeacherListener();
         FirebaseUtils.setSectionListener();
@@ -96,5 +76,36 @@ public class StartActivity extends AppCompatActivity {
             return false; //no commas in name else, will be confused with ",a" and ",p"
         }
         return !getName().isEmpty();
+    }
+
+    // Click handling
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.joinStudentBtn:
+                if (isValidName()) {
+                    Intent intent = new Intent(StartActivity.this, StudentLoginActivity.class);
+                    intent.putExtra("name", nameEditText.getText().toString());
+                    startActivity(intent);
+                } else {
+                    // TODO: replace Toasts with something cleaner
+                    Toast.makeText(StartActivity.this, "Choose a real name", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.joinTeacherBtn:
+                if (FirebaseUtils.teacherIsInDB()) {
+                    // Teacher already in DB
+                    Intent intent = new Intent(StartActivity.this, TeacherOptionsActivity.class);
+                    intent.putExtra("name", nameEditText.getText().toString());
+                    startActivity(intent);
+                } else {
+                    // Teacher not in DB yet (i.e. first time user)
+                    goToCreateClassActivity();
+                }
+                break;
+            default:
+                Log.d("TEST:","Button not accounted for");
+                break;
+        }
     }
 }

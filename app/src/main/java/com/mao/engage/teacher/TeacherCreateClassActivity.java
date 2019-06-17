@@ -1,3 +1,12 @@
+/*
+    TeacherCreateClassActivity: where students input the magic word to key into a section
+    - If magic word matches existing section, create a new UserSession in the DB
+
+    Triggered by: "JOIN AS STUDENT" button from StartActivity
+
+    Transitions to: StudentClassActivity
+ */
+
 package com.mao.engage.teacher;
 
 import android.app.AlertDialog;
