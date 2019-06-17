@@ -244,8 +244,8 @@ public class TimelineFragment extends Fragment {
         final int count = 10;
         final int range = 100;
 
-        Log.d("TEST", "calculateaveragedata timeline" + timeline.calculateAverageData());
-        timelineData.add((int) timeline.calculateAverageData());
+        Log.d("TEST", "calculateaveragedata timeline" + timeline.calculateAverageSectionData());
+        timelineData.add((int) timeline.calculateAverageSectionData());
 
         ArrayList<Integer> individualEngagements = new ArrayList<>();
         for (String user : FirebaseUtils.sectionSliders.keySet()) {
