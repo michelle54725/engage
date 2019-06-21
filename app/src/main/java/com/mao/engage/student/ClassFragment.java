@@ -1,3 +1,8 @@
+/*
+    Basic outline of how timeline fragment is made
+    Taken from origin of graph api
+ */
+
 package com.mao.engage.student;
 
 import android.content.Context;
