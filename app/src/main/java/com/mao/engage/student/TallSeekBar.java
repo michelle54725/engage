@@ -1,11 +1,11 @@
-package com.mao.engage;
+/*
+
+ */
+package com.mao.engage.student;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
-/**
- * TODO: document your custom view class.
- */
 public class TallSeekBar extends androidx.appcompat.widget.AppCompatSeekBar {
     public TallSeekBar(Context context) {
         super(context);

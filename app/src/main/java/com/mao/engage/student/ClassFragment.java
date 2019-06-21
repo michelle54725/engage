@@ -1,4 +1,4 @@
-package com.mao.engage;
+package com.mao.engage.student;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -23,6 +23,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.mao.engage.R;
 
 import java.util.ArrayList;
 import java.util.Locale;

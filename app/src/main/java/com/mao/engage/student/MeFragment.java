@@ -1,4 +1,9 @@
-package com.mao.engage;
+/*
+    Called in StudentClassActivity to allow students to send signals for attendance
+    Triggered by: checkIsTakingAttendance in FirebaseUtils to start sending messages
+ */
+
+package com.mao.engage.student;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -15,10 +20,8 @@ import android.widget.SeekBar;
 
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -31,12 +34,10 @@ public class MeFragment extends Fragment {
     SeekBar seekBar;
     int sliderValue;
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "uID";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String UID_STRING = "uID";
+    private static final String PARAM2_STRING = "param2";
 
-    // TODO: Rename and change types of parameters
     private String uID;
     private String mParam2;
 
@@ -60,8 +61,8 @@ public class MeFragment extends Fragment {
     public static MeFragment newInstance(String param1, String param2) {
         MeFragment fragment = new MeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(UID_STRING, param1);
+        args.putString(PARAM2_STRING, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,16 +71,16 @@ public class MeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            uID = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            uID = getArguments().getString(UID_STRING);
+            mParam2 = getArguments().getString(PARAM2_STRING);
         }
         context = getActivity();
     }
 
+    // Inflates the layout for this fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_me, container, false);
         seekBar = view.findViewById(R.id.seekBar);
 
@@ -128,12 +129,15 @@ public class MeFragment extends Fragment {
     }
 
 
+    //Google Nearby high frequency attendance function
+
+    //send high frequency messages from user's phone automatically when teacher calls attendance
     public static void startSendingMessages() {
         Log.d("TEST: ", "start sending messages! here is my message " + FirebaseUtils.getPsuedoUniqueID());
         message = new Message(FirebaseUtils.getPsuedoUniqueID().getBytes());
         Nearby.getMessagesClient(context).publish(message);
     }
-
+    //ends messages when teacther clicks their "Stop Taking Attendance" button
     public static void stopSendingMessages() {
         Log.d("TEST: ", "stop sending messages! " + context);
         Nearby.getMessagesClient(context).unpublish(message);

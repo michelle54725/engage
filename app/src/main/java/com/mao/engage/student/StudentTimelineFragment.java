@@ -1,4 +1,13 @@
-package com.mao.engage;
+/*
+    How the student's version of the timeline graph is rendered.
+    Graph contains:
+        Blue line: class average slider values
+        White line: student slider values
+        A count of number of students in the section
+
+    Etymology: A "Section" refers to a course discussion section.
+ */
+package com.mao.engage.student;
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,23 +35,31 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
+import com.mao.engage.TimelineDataRetrieval;
+import com.mao.engage.student.StudentClassActivity;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class StudentTimelineFragment extends Fragment {
 
+    //ArrayList of Entry type values for student timeline and line of class averages
     private ArrayList<Entry> meValues;
     private ArrayList<Entry> classValues;
+
+    //Arraylist of student slider values (y-axis of the graph)
     private ArrayList<Integer> meColors;
     private ArrayList<Integer> classColors;
     private StudentClassActivity activity;
+
+    //x-value of graph, increments each time retrieveData is called
     private int index;
 
+    //LineDataSets that take integer values from above ArrayLists to graph
     private LineDataSet meSet;
     private LineDataSet classSet;
     private String startTime;
@@ -61,7 +78,7 @@ public class StudentTimelineFragment extends Fragment {
     private TimelineDataRetrieval dataRetrieval;
 
     public StudentTimelineFragment() {
-        // Required empty public constructor
+        // required empty public constructor
     }
 
     @Override
@@ -80,14 +97,15 @@ public class StudentTimelineFragment extends Fragment {
         engagedCountText = view.findViewById(R.id.engagedCount);
         activity = (StudentClassActivity) getActivity();
 
-        //initiating lists of data
+        //initializes lists of slider values from activity
         meValues = activity.getMeValues();
         classValues = activity.getClassValues();
 
-        //initiating lines for graph
+        //initializes lines for graph
         meColors = new ArrayList<>();
         classColors = new ArrayList<>();
 
+        //retrieves updates slider values
         retrieveDataTask = new TimerTask() {
             int test_val = 0; //for testing
             @Override
@@ -99,6 +117,7 @@ public class StudentTimelineFragment extends Fragment {
                     // TODO: possible: infinite loop (implement some timeout thing)
                 }
 
+                //run on separate Ui thread to no conflict other threads
                 myActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -109,11 +128,11 @@ public class StudentTimelineFragment extends Fragment {
                 });
             }
         };
+        //retrieves data every 5000 ms (5s)
         new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 5000);
 
         startTime = activity.getStartTime();
         endTime = activity.getEndTime();
-
         startTimeText.setText(startTime);
         endTimeText.setText(endTime);
 
@@ -133,46 +152,62 @@ public class StudentTimelineFragment extends Fragment {
     }
 
     private void retrieveData() {
-        //initiating lines for graph
+        //initializes lines for graph
         meColors = new ArrayList<>();
         classColors = new ArrayList<>();
 
+        //initializes TimelineDataRetrieval class to get data
         dataRetrieval = new TimelineDataRetrieval();
 
-        int d = dataRetrieval.mySliderValue(FirebaseUtils.getPsuedoUniqueID());
-        meValues.add(new Entry(index, d));
-        Log.d("TEST", "Me value: " + d);
-        Log.d("TEST", "Me Value size: " + meValues.size());
+        //adds user slider value to ArrayList of entries
+        int mySliderValue = dataRetrieval.getMySliderValue(FirebaseUtils.getPsuedoUniqueID());
+        meValues.add(new Entry(index, mySliderValue));
+        Log.d("TEST", "Me value: " + mySliderValue);
 
-        int avg = Math.round(dataRetrieval.calculateAverageData());
-        classValues.add(new Entry(index, avg));
-        Log.d("TEST", "Class avg: " + avg);
-        Log.d("TEST", "ClassValues size:" + classValues.size());
+        //adding class average slider value to ArrayList of entries
+        int sectionAvg = Math.round(dataRetrieval.calculateAverageSectionData());
+        classValues.add(new Entry(index, sectionAvg));
+        Log.d("TEST", "Class avg: " + sectionAvg);
 
+        //colors for rendering data points on the timeline graph: all transparent except for latest point
         for (int i = 0; i < meValues.size(); i++) {
             meColors.add(Color.TRANSPARENT);
             classColors.add(Color.TRANSPARENT);
         }
-
-        Log.d("TEST", "meColor size: " + meColors.size());
         meColors.remove(meColors.size() - 1);
         meColors.add(Color.WHITE);
-
-        Log.d("TEST", "classColors size: " + classColors.size());
         classColors.remove(classColors.size() - 1);
         classColors.add(getResources().getColor(R.color.colorAccentBlue));
 
+        //initializes LineDataSets necessary for timeline graph
         meSet = new LineDataSet(meValues, "Me");
         classSet = new LineDataSet(classValues, "Class");
         Log.d("TEST", "initialized meSet and classSet");
         Log.d("TEST", "meSet:" + meSet.getEntryCount());
         Log.d("TEST", "classSet: " + classSet.getEntryCount());
 
+        //sets line colors and weights
         meSet.setLineWidth(2f);
         meSet.setColor(Color.WHITE);
         meSet.setCircleColors(meColors);
         meSet.setCircleRadius(3f);
         meSet.setDrawCircleHole(false);
+        meSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+
+        classSet.setLineWidth(2f);
+        classSet.setColor(getResources().getColor(R.color.colorAccentBlue));
+        classSet.setCircleColors(classColors);
+        classSet.setCircleRadius(3f);
+        classSet.setDrawCircleHole(false);
+        classSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+
+        //setting graph text and colors
+        meSet.setValueTextColor(Color.WHITE);
+        meSet.setValueTextSize(12f);
+        classSet.setValueTextColor(getResources().getColor(R.color.colorAccentBlue));
+        classSet.setValueTextSize(12f);
+
+        //labels the latest point its numerical value
         meSet.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
@@ -184,18 +219,6 @@ public class StudentTimelineFragment extends Fragment {
                 }
             }
         });
-        meSet.setValueTextColor(Color.WHITE);
-        meSet.setValueTextSize(12f);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            meSet.setValueTypeface(getResources().getFont(R.font.quicksand_bold));
-        }
-        meSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
-
-        classSet.setLineWidth(2f);
-        classSet.setColor(getResources().getColor(R.color.colorAccentBlue));
-        classSet.setCircleColors(classColors);
-        classSet.setCircleRadius(3f);
-        classSet.setDrawCircleHole(false);
         classSet.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
@@ -206,29 +229,36 @@ public class StudentTimelineFragment extends Fragment {
                 }
             }
         });
-        classSet.setValueTextColor(getResources().getColor(R.color.colorAccentBlue));
-        classSet.setValueTextSize(12f);
+
+        //sets font type
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            meSet.setValueTypeface(getResources().getFont(R.font.quicksand_bold));
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             classSet.setValueTypeface(getResources().getFont(R.font.quicksand_bold));
         }
-        classSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
 
+        //inputs sets into data form that can be graphed
         lineData = new LineData(meSet, classSet);
         chart.setData(lineData);
+
+        //notifies that data has changed
+        //tells the graph to update
         meSet.notifyDataSetChanged();
         classSet.notifyDataSetChanged();
         chart.getLineData().notifyDataChanged();
         chart.notifyDataSetChanged();
         Log.d("TEST", "data changed");
 
+        //turn off unnecessary elements of the graph package such as a legend
         chart.setTouchEnabled(false);
         Description description = new Description();
         description.setText("");
         chart.setDescription(description);
-
         Legend legend = chart.getLegend();
         legend.setEnabled(false);
 
+        //setting the axes of the graph
         YAxis yAxis = chart.getAxisLeft();
         yAxis.setDrawGridLines(false);
         yAxis.setDrawLabels(false);
@@ -258,24 +288,32 @@ public class StudentTimelineFragment extends Fragment {
         xAxis.setDrawLabels(false);
         xAxis.setDrawAxisLine(false);
         xAxis.setDrawGridLines(false);
+
+        //maximum length of axis set at index but within the layout size
+        //means that latest point will always be at the rightmost edge
         xAxis.setAxisMaximum(index);
-        //xAxis.setAxisMaximum(360);
         xAxis.setAxisMinimum(0);
         Log.d("TEST", "end of graphData");
-        chart.invalidate();
 
+        //redraws
+        chart.invalidate();
     }
 
+    //All adjustments for engaged count (number of students in a section)
     private void setEngagedCount() {
-        int engagedCount = new Random().nextInt(100);
-
         int countEngaged = 0;
+
+        //counts number of students in a section
         for (String user : FirebaseUtils.sectionSliders.keySet()) {
             countEngaged += 1;
             Log.d("TEST","added: " + user + ": " + FirebaseUtils.sectionSliders.get(user));
         }
 
+        //sets text of engaged count
         engagedCountText.setText(String.format(Locale.US, "%d", countEngaged));
+
+        //displays engaged counts
+        //TODO: Make layout adaptable beause 3-digit numbers currently do no display well
         if(countEngaged > 100) {
             circleWrapper.setVisibility(View.GONE);
         } else {
@@ -284,5 +322,4 @@ public class StudentTimelineFragment extends Fragment {
             Log.d("TEST", "displaying engaged");
         }
     }
-
 }

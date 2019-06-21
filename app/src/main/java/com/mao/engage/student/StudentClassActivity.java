@@ -1,6 +1,6 @@
 /**
  * StudentClassActivity: primary student interface
- *  - Contains 2 fragments: MeFragment and ClassFragment
+ *  - Contains 2 fragments: MeFragment and StudentTimelineFragment
  *
  * Triggered by:
  *  "JOIN CLASS" button in StudentLoginActivity
@@ -8,7 +8,7 @@
  * Transitions to:
  *  (None)
  */
-package com.mao.engage;
+package com.mao.engage.student;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -27,6 +27,8 @@ import com.github.mikephil.charting.data.Entry;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
 
 import java.util.ArrayList;
 
@@ -39,10 +41,10 @@ public class StudentClassActivity extends AppCompatActivity {
     RadioButton classTabBtn;
     ImageButton backBtn;
     MeFragment meFragment;
-    ClassFragment classFragment;
     StudentTimelineFragment studentTimelineFragment;
     FragmentManager fragmentManager;
 
+    //List of Entry type inputs used to graph timelines in StudentTimelineFragment
     ArrayList<Entry> meValues;
     ArrayList<Entry> classAverages;
 
@@ -50,6 +52,7 @@ public class StudentClassActivity extends AppCompatActivity {
     DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
     DatabaseReference mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions");
 
+    //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,35 +67,30 @@ public class StudentClassActivity extends AppCompatActivity {
         FirebaseUtils.setSliderListener(FirebaseUtils.getPsuedoUniqueID());
         setContentView(R.layout.activity_student_class);
 
+        //instantiating layout components
         segmentedBar = findViewById(R.id.segmentedBar);
         meTabBtn = findViewById(R.id.meTabBtn);
         classTabBtn = findViewById(R.id.classTabBtn);
         backBtn = findViewById(R.id.backBtn);
-
         segmentedBar.setTintColor(getResources().getColor(R.color.colorPrimary));
         meTabBtn.setTextColor(Color.WHITE);
         classTabBtn.setTextColor(Color.WHITE);
-
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        //FirebaseUtils.setUserIdinSectionListener(FirebaseUtils.getMySection());
 
+        //instantiation of fragments and arraylists for timeline data
         meFragment = new MeFragment();
-        // send data to Fragment
-        Bundle bundle = new Bundle();
-        bundle.putString("uID", getIntent().getStringExtra("uID"));
-        Log.d("TEST", "put bundle: " + getIntent().getStringExtra("uID"));
-
-        meFragment.setArguments(bundle);
-
-        classFragment = new ClassFragment();
-
-
         studentTimelineFragment = new StudentTimelineFragment();
         meValues = new ArrayList<>();
         classAverages = new ArrayList<>();
 
+
+        //send timeline data to StudentTimelineFragment
+        Bundle bundle = new Bundle();
+        bundle.putString("uID", getIntent().getStringExtra("uID"));
+        Log.d("TEST", "put bundle: " + getIntent().getStringExtra("uID"));
+        meFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.constraintLayout, meFragment);
         fragmentTransaction.commit();
 
@@ -125,21 +123,23 @@ public class StudentClassActivity extends AppCompatActivity {
         FirebaseUtils.checkIsTakingAttendance(FirebaseUtils.getMySection());
     }
 
-    /*
-        Methods to pass values between StudentTimelineFragement and activity
-     */
+    //Methods to pass values from StudentClassActivity to StudentTimelineFragment
+
+    //when called, passes an ArrayList of a user's slider values
+    //Called in StudentTimelineFragment to render graph
     public ArrayList<Entry> getMeValues() {
         return meValues;
     }
 
+    //when called, passes an ArrayList of a sections's slider value averages
+    //Called in StudentTimelineFragment to render graph
     public ArrayList<Entry> getClassValues() {
         return classAverages;
     }
 
-    public String getStartTime() {
-        return FirebaseUtils.getStartTime(FirebaseUtils.getMySection());
-    }
-
+    //Called in StudentTimelineFragment to get the section start time
+    public String getStartTime() { return FirebaseUtils.getStartTime(FirebaseUtils.getMySection());}
+    //Called in StudentTimelineFragment to get the section end time
     public String getEndTime() {
         return FirebaseUtils.getEndTime(FirebaseUtils.getMySection());
     }

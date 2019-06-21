@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StudentClassActivity">
+    tools:context=".student.StudentClassActivity">
 
     <info.hoang8f.android.segmented.SegmentedGroup
         android:id="@+id/segmentedBar"
