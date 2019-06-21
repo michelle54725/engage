@@ -1,10 +1,11 @@
 /*
-    TeacherCreateClassActivity: where students input the magic word to key into a section
-    - If magic word matches existing section, create a new UserSession in the DB
+    TeacherCreateClassActivity: where a Teacher sets up a class by entering metadata.
+        (metadata: Class Name, Data, Start time, End time)
 
-    Triggered by: "JOIN AS STUDENT" button from StartActivity
+    Triggered by: "Create New Section" from TeacherOptionsActivity OR
+                   "Join As Teacher" from StartActivity if user has no existing sections
 
-    Transitions to: StudentClassActivity
+    Transitions to: TeacherClassActivity
  */
 
 package com.mao.engage.teacher;
@@ -35,28 +36,23 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
 import com.mao.engage.models.SectionSesh;
 import com.mao.engage.TeacherClassActivity;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
 
-public class TeacherCreateClassActivity extends AppCompatActivity {
-    // Hardcoded instance variables (that should not be hardcoded)
-    private String START = "2018-12-31-2000";
-    private String END = "2018-12-31-2200";
-    private String TA_KEY = "hardcoded device key";
-    private String SECTION_ID = "CS70134A";
-    private int MAGICKEY = 422;
+public class TeacherCreateClassActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private String START;
+    private String END;
+    private String TA_KEY;
+    private String SECTION_ID;
 
     ImageButton backBtn;
     EditText classNameEditText;
@@ -65,23 +61,22 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
     EditText endTimeEditText;
     Button createClassBtn;
 
-    DatabaseReference mMagicKeyRef;
-    HashMap<Integer, String> activeMagicKeys;
-    private int magicKey;
-    private int counter = 0;
-
+    HashMap<Integer, String> activeMagicKeys; // populated with getActiveMagicKeys()
+    private int magicKey; // set in generateMagicKey()
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getActiveMagicKeys();
+
+        // UI: set to portrait, notification bar hidden
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         setContentView(R.layout.activity_teacher_create_class);
 
-
+        // bind views (UX components)
         backBtn = findViewById(R.id.backBtn);
         classNameEditText = findViewById(R.id.classNameEditText);
         dateEditText = findViewById(R.id.dateEditText);
@@ -89,115 +84,44 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
         endTimeEditText = findViewById(R.id.endTimeEditText);
         createClassBtn = findViewById(R.id.createClassBtn);
 
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        dateEditText.setFocusable(false);
+        // disable focus on calendar fields
+        dateEditText.setFocusable(false); // Keyboard input is entered into the field with focus
         startTimeEditText.setFocusable(false);
         endTimeEditText.setFocusable(false);
 
-        dateEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar c = Calendar.getInstance();
-                int year = c.get(Calendar.YEAR);
-                int month = c.get(Calendar.MONTH);
-                int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+        // set button listeners
+        dateEditText.setOnClickListener(this);
+        startTimeEditText.setOnClickListener(this);
+        endTimeEditText.setOnClickListener(this);
+        createClassBtn.setOnClickListener(this);
+        backBtn.setOnClickListener(this);
+    }
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(TeacherCreateClassActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        dateEditText.setText(String.format(Locale.US, "%02d/%02d/%02d", month, dayOfMonth, year));
-                    }
-                }, year, month, dayOfMonth);
-                datePickerDialog.show();
-            }
-        });
-        startTimeEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar c = Calendar.getInstance();
-                int hour = c.get(Calendar.HOUR_OF_DAY);
-                int minute = c.get(Calendar.MINUTE);
-
-                TimePickerDialog timePickerDialog = new TimePickerDialog(TeacherCreateClassActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String amPm;
-                        Log.d("BOBOBOB", "onTimeSet: " + hourOfDay + minute);
-                        if (hourOfDay == 0) {
-                            hourOfDay = 12;
-                            amPm = "AM";
-                        }
-                        else if (hourOfDay == 12) {
-                            amPm = "PM";
-                        }
-                        else if (hourOfDay > 12) {
-                            hourOfDay -= 12;
-                            amPm = "PM";
-                        } else {
-                            amPm = "AM";
-                        }
-                        startTimeEditText.setText(String.format(Locale.US, "%02d:%02d%s", hourOfDay % 13, minute, amPm));
-                    }
-                }, hour, minute, false);
-                timePickerDialog.show();
-            }
-        });
-
-        endTimeEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar c = Calendar.getInstance();
-                int hour = c.get(Calendar.HOUR_OF_DAY) + 1;
-                int minute = c.get(Calendar.MINUTE);
-
-                TimePickerDialog timePickerDialog = new TimePickerDialog(TeacherCreateClassActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String amPm;
-                        if (hourOfDay == 0) {
-                            hourOfDay = 12;
-                            amPm = "AM";
-                        }
-                        else if (hourOfDay == 12) {
-                            amPm = "PM";
-                        }
-                        else if (hourOfDay > 12) {
-                            hourOfDay -= 12;
-                            amPm = "PM";
-                        } else {
-                            amPm = "AM";
-                        }
-                        endTimeEditText.setText(String.format(Locale.US, "%02d:%02d%s", hourOfDay % 13, minute, amPm));
-                    }
-                }, hour, minute, false);
-                timePickerDialog.show();
-            }
-        });
-
-        createClassBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // check validity of fields
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            // Creating a SectionSesh and pushing to DB
+            case R.id.createClassBtn:
                 if (fieldsValid()) {
                     setFields();
 
-                    // create SectionSesh and push to Firebase
-                    DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
-                    final String mSectionRefKey = mSectionRef.push().getKey(); //create empty node to get key of it
+                    // create empty node to get key of it -> section's ref_key
+                    final String mSectionRefKey = FirebaseDatabase.getInstance().getReference("/Sections")
+                            .push().getKey();
+
+                    // create SectionSesh
                     final SectionSesh mSectionSesh = new SectionSesh(
-                            START, END, TA_KEY, classNameEditText.getText().toString(), mSectionRefKey, magicKey, new ArrayList<String>());
+                            START, END, TA_KEY, SECTION_ID, mSectionRefKey, magicKey, new ArrayList<String>());
                     final String mMagicWord = String.format(Locale.US, "%03d", magicKey);
+
+                    // add section to /Sections in DB
                     FirebaseUtils.createSection(mSectionSesh);
-                    FirebaseUtils.updateTeacher(getIntent().getStringExtra("name"), mSectionRefKey, mSectionSesh.getSection_name()); // update Teachers in Firebase
+                    // add section to /Teachers/{user_id}/existingSections in DB
+                    FirebaseUtils.updateTeacher(getIntent().getStringExtra("name"), mSectionRefKey, mSectionSesh.getSection_name());
+
+                    // UX: "Success!" pop-up
                     AlertDialog.Builder builder = new AlertDialog.Builder(TeacherCreateClassActivity.this);
                     builder.setTitle("Success!");
-
                     builder.setMessage("Magic word: " + mMagicWord + "\nShare this with the class");
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
@@ -211,7 +135,6 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
                             dialog.dismiss();
                             Intent intent = new Intent(TeacherCreateClassActivity.this, TeacherClassActivity.class);
                             intent.putExtra("sectionRefKey", mSectionRefKey);
-                            Log.d("TEST-MAGIC", mMagicWord);
                             intent.putExtra("magic_word", mMagicWord);
                             intent.putExtra("section_name", classNameEditText.getText().toString());
                             startActivity(intent);
@@ -221,17 +144,174 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(TeacherCreateClassActivity.this, "Invalid Fields", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+                break;
 
+            // Setting date and time metadata
+            case R.id.dateEditText:
+                final Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(TeacherCreateClassActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        dateEditText.setText(String.format(Locale.US, "%02d/%02d/%02d", month, dayOfMonth, year));
+                    }
+                }, year, month, dayOfMonth);
+                datePickerDialog.show();
+                break;
+            case R.id.startTimeEditText:
+                final Calendar c2 = Calendar.getInstance();
+                int hour = c2.get(Calendar.HOUR_OF_DAY);
+                int minute = c2.get(Calendar.MINUTE);
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(TeacherCreateClassActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String amPm;
+                        if (hourOfDay == 0) { hourOfDay = 12; amPm = "AM"; }
+                        else if (hourOfDay == 12) { amPm = "PM"; }
+                        else if (hourOfDay > 12) { hourOfDay -= 12;amPm = "PM";
+                        } else { amPm = "AM"; }
+                        startTimeEditText.setText(String.format(Locale.US, "%02d:%02d%s", hourOfDay % 13, minute, amPm));
+                    }
+                }, hour, minute, false);
+                timePickerDialog.show();
+                break;
+            case R.id.endTimeEditText:
+                final Calendar c3 = Calendar.getInstance();
+                int hour2 = c3.get(Calendar.HOUR_OF_DAY) + 1;
+                int minute2 = c3.get(Calendar.MINUTE);
+
+                TimePickerDialog timePickerDialog2 = new TimePickerDialog(TeacherCreateClassActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String amPm;
+                        if (hourOfDay == 0) { hourOfDay = 12; amPm = "AM"; }
+                        else if (hourOfDay == 12) { amPm = "PM"; }
+                        else if (hourOfDay > 12) { hourOfDay -= 12; amPm = "PM"; }
+                        else { amPm = "AM"; }
+                        endTimeEditText.setText(String.format(Locale.US, "%02d:%02d%s", hourOfDay % 13, minute, amPm));
+                    }
+                }, hour2, minute2, false);
+                timePickerDialog2.show();
+                break;
+
+            case R.id.backBtn:
+                finish();
+                break;
+            default:
+                Log.d("TEST:","Button not accounted for");
+                break;
+        }
+    }
+
+    // set magicKey to a random int between 0 and 1000. If it already exists in the DB, try again.
+    private void generateMagicKey() {
+        magicKey = new Random().nextInt(1000);
+        if (activeMagicKeys.containsKey(magicKey)) {
+            generateMagicKey();
+//Hide section of comments below for cleaner view
+// -------Jaiveer's attempt to delete a session that is over to recycle it's magicKey:----------
+//            final String conflictingSectionId = activeMagicKeys.get(magicKey);
+//            Log.d("BOBOBactive", "CONFLICT Time to resolve" + conflictingSectionId);
+//            final DatabaseReference conflictingSectionRef = FirebaseDatabase.getInstance().getReference("/Sections/").child(activeMagicKeys.get(magicKey));
+//            conflictingSectionRef.child("b_end").addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy-HH:mma", Locale.US);
+//                    try {
+//                        Date endTime = dateFormat.parse((String) dataSnapshot.getValue());
+//                        Date now = Calendar.getInstance().getTime();
+//                        if (now.after(endTime)) {
+//                            //late enough to remove
+//
+//                            Log.d("BOBOBB", "onDataChange: " + "CAN DELETE");
+//                            conflictingSectionRef.child("ta_key").addListenerForSingleValueEvent(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                    String ta_key = (String) dataSnapshot.getValue();
+//                                    DatabaseReference tempRef = FirebaseDatabase.getInstance().getReference("/Teachers/" + ta_key + "/existingSections");
+//                                    Log.d("BOBOBOBBOB", "onDataChange: BOBOBOBOBOBOBO TEACHER DELETE" + tempRef.getPath().toString());
+//                                    tempRef.child(conflictingSectionId).removeValue();
+//                                    conflictingSectionRef.child("user_ids").addValueEventListener(new ValueEventListener() {
+//                                        @Override
+//                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                            for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+//                                                String user_key = (String) userSnapshot.getValue();
+//                                                DatabaseReference tempRef = FirebaseDatabase.getInstance().getReference("/UserSessions/" + user_key);
+//                                                Log.d("BOBOBOBBOB", "onDataChange: BOBOBOBOBOBOBO USERS DELETE" + tempRef.getPath().toString());
+//                                                //TODO:  ask michelle abt purpose of the following code?  currently crashes!
+//                                                //TODO: This was an attempt at removing a session from FB once it's END_TIME passed. Commenting out for now -michelle
+//                                                 if (FirebaseUtils.allUsers.get(user_key).equals(conflictingSectionId)) {
+//                                                    tempRef.removeValue();
+//                                                } else {
+//                                                Log.d("BOBOB", "onChildAdded: REEEE FIREBASE" + FirebaseUtils.allUsers.get(user_key));
+//                                                }
+//                                            }
+//                                            conflictingSectionRef.removeValue();
+//                                            FirebaseDatabase.getInstance().getReference("/MagicKeys/" + magicKey).removeValue();
+//                                        }
+//
+//                                        @Override
+//                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                        }
+//                                    });
+//
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                }
+//                            });
+//                            //TODO: REMOVE FROM TEACHERS' REFERENCE TOO
+//
+//                        } else {
+//                            generateMagicKey();
+//                        }
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//                }
+//            });
+        }
+    }
+
+    /** Helper methods **/
+    private void setFields() {
+        START = getField(dateEditText).replace("/", "-") +"-"+ getField(startTimeEditText);
+        END = getField(dateEditText).replace("/", "-") +"-"+ getField(endTimeEditText);
+        TA_KEY = FirebaseUtils.getPsuedoUniqueID();
+        SECTION_ID = getField(classNameEditText);
+    }
+
+    private boolean fieldsValid() {
+        return !getField(classNameEditText).isEmpty()
+                & !getField(dateEditText).isEmpty()
+                & !getField(startTimeEditText).isEmpty()
+                & !getField(endTimeEditText).isEmpty();
+    }
+
+    private String getField(EditText field) {
+        return field.getText().toString();
+    }
+
+    // populate activeMagicKeys with data in /MagicKeys in DB
+    private void getActiveMagicKeys() {
         activeMagicKeys = new HashMap<>();
-        mMagicKeyRef = FirebaseDatabase.getInstance().getReference("/MagicKeys");
-        mMagicKeyRef.addChildEventListener(new ChildEventListener() {
+        FirebaseDatabase.getInstance().getReference("/MagicKeys").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Log.d("BOBCHILD", "onChildAdded: " + dataSnapshot.getKey() + dataSnapshot.getValue());
                 activeMagicKeys.put(Integer.valueOf(dataSnapshot.getKey()), dataSnapshot.getValue(String.class));
-                generateMagicWord();
+                generateMagicKey();
             }
 
             @Override
@@ -258,95 +338,4 @@ public class TeacherCreateClassActivity extends AppCompatActivity {
         });
     }
 
-    private void generateMagicWord() {
-        magicKey = new Random().nextInt(1000);
-        Log.d("LOOOOOP", "generateMagicWord: LOOOOOOOOP");
-        if (activeMagicKeys.containsKey(magicKey)) { //TODO: @Jaiveer activeMagicKeys is null = crash
-            final String conflictingSectionId = activeMagicKeys.get(magicKey);
-            Log.d("BOBOBactive", "CONFLICT Time to resolve" + conflictingSectionId);
-            final DatabaseReference conflictingSectionRef = FirebaseDatabase.getInstance().getReference("/Sections/").child(activeMagicKeys.get(magicKey));
-            conflictingSectionRef.child("b_end").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy-HH:mma", Locale.US);
-                    try {
-                        Date endTime = dateFormat.parse((String) dataSnapshot.getValue());
-                        Date now = Calendar.getInstance().getTime();
-                        if (now.after(endTime)) {
-                            //late enough to remove
-
-                            Log.d("BOBOBB", "onDataChange: " + "CAN DELETE");
-                            conflictingSectionRef.child("ta_key").addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    String ta_key = (String) dataSnapshot.getValue();
-                                    DatabaseReference tempRef = FirebaseDatabase.getInstance().getReference("/Teachers/" + ta_key + "/existingSections");
-                                    Log.d("BOBOBOBBOB", "onDataChange: BOBOBOBOBOBOBO TEACHER DELETE" + tempRef.getPath().toString());
-                                    tempRef.child(conflictingSectionId).removeValue();
-                                    conflictingSectionRef.child("user_ids").addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                                                String user_key = (String) userSnapshot.getValue();
-                                                DatabaseReference tempRef = FirebaseDatabase.getInstance().getReference("/UserSessions/" + user_key);
-                                                Log.d("BOBOBOBBOB", "onDataChange: BOBOBOBOBOBOBO USERS DELETE" + tempRef.getPath().toString());
-                                                //TODO:  ask michelle abt purpose of the following code?  currently crashes!
-                                                 if (FirebaseUtils.allUsers.get(user_key).equals(conflictingSectionId)) {
-                                                    tempRef.removeValue();
-                                                } else {
-                                                Log.d("BOBOB", "onChildAdded: REEEE FIREBASE" + FirebaseUtils.allUsers.get(user_key));
-                                                }
-                                            }
-                                            conflictingSectionRef.removeValue();
-                                            FirebaseDatabase.getInstance().getReference("/MagicKeys/" + magicKey).removeValue();
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                        }
-                                    });
-
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-                            //TODO: REMOVE FROM TEACHERS' REFERENCE TOO
-
-                        } else {
-                            generateMagicWord();
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
-
-    private void setFields() {
-        START = getField(dateEditText).replace("/", "-") +"-"+ getField(startTimeEditText);
-        END = getField(dateEditText).replace("/", "-") +"-"+ getField(endTimeEditText);
-        TA_KEY = FirebaseUtils.getPsuedoUniqueID();
-        SECTION_ID = getField(classNameEditText);
-    }
-
-    private boolean fieldsValid() {
-        return !getField(classNameEditText).isEmpty()
-                & !getField(dateEditText).isEmpty()
-                & !getField(startTimeEditText).isEmpty()
-                & !getField(endTimeEditText).isEmpty();
-    }
-
-    private String getField(EditText field) {
-        return field.getText().toString();
-    }
 }

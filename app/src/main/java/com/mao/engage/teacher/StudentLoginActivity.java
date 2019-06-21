@@ -64,7 +64,6 @@ public class StudentLoginActivity extends AppCompatActivity implements View.OnCl
         backBtn.setOnClickListener(this);
     }
 
-    // Click handling
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -101,8 +100,7 @@ public class StudentLoginActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    // TODO: Firebase verify (make sure MagicWord exists)
-    // TODO: further upgrade: check MagicWord corresponds to a section CURRENTLY in session
+    // TODO: Firebase verify (make sure MagicWord exists); further upgrade: check MagicWord corresponds to a section CURRENTLY in session
     private boolean authenticateMagicWord() {
         // not correctly implemented so students can key into non-existent sections
         return getMagicWord().length() == 3;
@@ -110,8 +108,7 @@ public class StudentLoginActivity extends AppCompatActivity implements View.OnCl
 
     boolean findSection(final UserSesh user) {
         FirebaseUtils.createUser(user);
-        //TODO: problem: this code runs faster than EventListeners do their work. Use runnable?
-        //TODO: or use local magic key/section ref key
+        //TODO: problem: this code runs faster than EventListeners do their work. Use runnable? or use local magic key/section ref key
 //        user.setSection_ref_key(FirebaseUtils.allUsers.get(user.getUser_id()));
 //        Log.d("TEST", "User's Ref Key is now: " + user.getSection_ref_key());
 //        return user.getSection_ref_key() != null;
