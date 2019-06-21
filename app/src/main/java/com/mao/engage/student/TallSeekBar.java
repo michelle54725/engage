@@ -1,5 +1,7 @@
 /*
+    Tall bars used for graph
 
+    No longer used in app
  */
 package com.mao.engage.student;
 
