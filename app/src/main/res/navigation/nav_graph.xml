@@ -22,7 +22,7 @@
         tools:layout="@layout/activity_teacher_options" />
     <activity
         android:id="@+id/teacherClassActivity"
-        android:name="com.mao.engage.TeacherClassActivity"
+        android:name="com.mao.engage.teacherclassactivity.TeacherClassActivity"
         android:label="activity_teacher_class"
         tools:layout="@layout/activity_teacher_class" />
     <!--TODO: Some way to get rid of classFragment without breaking the app-->
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/nowFragment"
-        android:name="com.mao.engage.NowFragment"
+        android:name="com.mao.engage.teacherclassactivity.NowFragment"
         android:label="fragment_now"
         tools:layout="@layout/fragment_now" >
         <action
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/timelineFragment"
-        android:name="com.mao.engage.TimelineFragment"
+        android:name="com.mao.engage.teacherclassactivity.TimelineFragment"
         android:label="fragment_timeline"
         tools:layout="@layout/fragment_timeline" />
     <activity

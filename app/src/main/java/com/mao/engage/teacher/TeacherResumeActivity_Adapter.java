@@ -15,7 +15,7 @@ import android.widget.Button;
 
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
-import com.mao.engage.TeacherClassActivity;
+import com.mao.engage.teacherclassactivity.TeacherClassActivity;
 
 import java.util.HashMap;
 import java.util.List;

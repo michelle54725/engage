@@ -1,6 +1,8 @@
-package com.mao.engage;
+/*
+ * Used by AttendeeListActivity's recycler view functionality to display names of students in a current section.
+ */
+package com.mao.engage.teacherclassactivity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,11 +11,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
 
 public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapter.MyViewHolder> {
     private List<String> attendeeList;
@@ -31,7 +35,7 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
             super(view);
             view1 = view;
             user = (Button) view.findViewById(R.id.sectionBtn);
-
+            //allows teacher to manually add students (set student to present) if google nearby doesn't function properly
             user.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -93,6 +97,7 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
         return attendeeList.size();
     }
 
+    // called by AttendeeListActivity whenever changes are made to firebase. Allows the user list to refresh.
     public void refreshList(List<String> newAttendeeList) {
         this.attendeeList.clear();
         this.attendeeList.addAll(newAttendeeList);
