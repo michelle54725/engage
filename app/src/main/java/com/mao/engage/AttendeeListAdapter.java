@@ -21,7 +21,7 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
     private Map<String, String> userMap;
 
     /*
-    section buttons referenced button design from section_list_row
+    section buttons referenced button design from activity_teacher_resume_item.xml
      */
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public Button user;
@@ -65,7 +65,7 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.section_list_row, parent, false);
+                .inflate(R.layout.activity_teacher_resume_item, parent, false);
         Log.d("TEST", "AttendeeListAdapter");
         return new MyViewHolder(itemView);
     }

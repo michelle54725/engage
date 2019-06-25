@@ -12,7 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
 import com.mao.engage.TeacherClassActivity;
@@ -23,13 +26,19 @@ import java.util.List;
 public class TeacherResumeActivity_Adapter extends RecyclerView.Adapter<TeacherResumeActivity_Adapter.MyViewHolder> {
     private List<String> sectionSeshList;
 
+    private static DatabaseReference mTeachersRef = FirebaseDatabase.getInstance().getReference("/Teachers");
+    private static DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
+    private static DatabaseReference mMagicKeysRef = FirebaseDatabase.getInstance().getReference("/MagicKeys");
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        // section buttons reference button design from section_list_row.xml
+        // section buttons reference button design from activity_teacher_resume_item.xml
         public Button section;
+        public ImageButton delete;
 
         MyViewHolder(View view) {
             super(view);
             section = (Button) view.findViewById(R.id.sectionBtn);
+            delete = (ImageButton) view.findViewById(R.id.deleteBtn);
 
             section.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -45,6 +54,33 @@ public class TeacherResumeActivity_Adapter extends RecyclerView.Adapter<TeacherR
                     section.getContext().startActivity(intent);
                 }
             });
+
+            // TODO: move to FirebaseUtils when quality checked by teammates
+            // Remove all instances of this section in the DB
+            // -note: this does not remove users from the section (i.e. a User's section_ref_key may still be this one)
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    HashMap<String, String> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap();
+                    String mSectionRefKey = mySectionsHashMap.get(section.getText().toString());
+                    if (mSectionRefKey != null) {
+                        String mKey = Long.toString(FirebaseUtils.getMagicKey(mSectionRefKey));
+
+                        // remove section from /Teachers(existingSection), /Sections, /MagicKeys
+                        mTeachersRef.child(FirebaseUtils.getPsuedoUniqueID())
+                                .child("existingSections").child(mSectionRefKey).removeValue();
+                        mSectionRef.child(mSectionRefKey).removeValue();
+                        mMagicKeysRef.child(mKey).removeValue();
+                    }
+                    // UI update
+                    removeAt(getAdapterPosition());
+                }
+            });
+        }
+        public void removeAt(int position) {
+            sectionSeshList.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, sectionSeshList.size());
         }
     }
 
@@ -57,7 +93,7 @@ public class TeacherResumeActivity_Adapter extends RecyclerView.Adapter<TeacherR
     @NonNull @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.section_list_row, parent, false);
+                .inflate(R.layout.activity_teacher_resume_item, parent, false);
         return new MyViewHolder(itemView);
     }
 
