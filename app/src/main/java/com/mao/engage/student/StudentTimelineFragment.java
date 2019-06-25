@@ -1,10 +1,12 @@
 /*
     How the student's version of the timeline graph is rendered.
+
     Graph contains:
         Blue line: class average slider values
         White line: student slider values
         A count of number of students in the section
 
+    Used by StudentClassActivity
     Etymology: A "Section" refers to a course discussion section.
  */
 package com.mao.engage.student;
@@ -37,8 +39,7 @@ import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
-import com.mao.engage.TimelineDataRetrieval;
-import com.mao.engage.student.StudentClassActivity;
+import com.mao.engage.teacherclassactivity.TimelineDataRetrieval;
 
 import java.util.ArrayList;
 import java.util.Locale;

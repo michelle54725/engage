@@ -1,4 +1,9 @@
-package com.mao.engage;
+/*
+    Activity that manages and contains the fragments (timeline and attendance) associated with the teacher view
+    Triggered by: intent call from section adapter.
+ */
+
+package com.mao.engage.teacherclassactivity;
 
 import android.graphics.Color;
 import android.net.Uri;
@@ -12,20 +17,28 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RadioButton;
 
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
+
 import java.util.ArrayList;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
 public class TeacherClassActivity extends AppCompatActivity implements TimelineFragment.OnFragmentInteractionListener{
+
+    // will store information passed on from SectionAdapter to this activity
+    String mSectionRefKey;
+
+    // items related to UI design
     SegmentedGroup segmentedBar;
     RadioButton nowTabBtn;
     RadioButton timelineTabBtn;
-    FragmentManager fragmentManager;
-//    NowFragment nowFragment;
-    AttendanceFragment attendanceFragment;
 
+    FragmentManager fragmentManager;
+    AttendanceFragment attendanceFragment;
     TimelineFragment timelineFragment;
-    String mSectionRefKey;
+
+    //NowFragment nowFragment; //now fragment is not used anymore
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +60,12 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-//        nowFragment = new NowFragment();
-//        timelineFragment = new TimelineFragment();
-//        Bundle bundle = new Bundle();
-//        bundle.putString("magic_word", getIntent().getStringExtra("magic_word"));
-//        Log.d("TEST-MAGIC", "in TeacherClassActivity CORRECT: " + getIntent().getStringExtra("magic_word"));
-//        ArrayList<Integer> timelineData = new ArrayList();
-//        bundle.putString("section_name", getIntent().getStringExtra("section_name"));
-//        mSectionRefKey = getIntent().getStringExtra("sectionRefKey");
-//        bundle.putString("sectionRefKey", getIntent().getStringExtra("sectionRefKey"));
-//        bundle.putIntegerArrayList("timelinedata", timelineData);
-//        nowFragment.setArguments(bundle);
-//        timelineFragment.setArguments(bundle);
+        //nowFragment = new NowFragment(); // not used anymore
 
+        /*
+            sends information (magic word, section name, section ref key, and timeline data)
+            to attendance and timeline fragment in a bundle
+        */
         attendanceFragment = new AttendanceFragment();
         timelineFragment = new TimelineFragment();
         Bundle bundle = new Bundle();
@@ -77,6 +83,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
 
         FirebaseUtils.setUserIdinSectionListener(mSectionRefKey);
 
+        //sets triggers for the two buttons on our screen that link to each individual fragment
         nowTabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,6 +1,8 @@
 /*
     Called in StudentClassActivity to allow students to send signals for attendance
-    Triggered by: checkIsTakingAttendance in FirebaseUtils to start sending messages
+
+    Triggered by:
+    checkIsTakingAttendance in FirebaseUtils to start sending messages
  */
 
 package com.mao.engage.student;

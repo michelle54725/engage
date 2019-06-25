@@ -1,4 +1,4 @@
-package com.mao.engage;
+package com.mao.engage.teacherclassactivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -27,6 +27,8 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
 
 import java.util.ArrayList;
 import java.util.List;
