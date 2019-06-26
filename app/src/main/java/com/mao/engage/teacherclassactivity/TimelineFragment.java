@@ -1,4 +1,8 @@
-package com.mao.engage;
+/*
+ * This fragment is contained under the TeacherClassActivity.
+ * It displays the threshold graph, class average graph, and both the pie charts for those engaged and disengaged.
+ */
+package com.mao.engage.teacherclassactivity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,7 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
@@ -16,7 +19,6 @@ import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
@@ -39,8 +41,9 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -62,30 +65,22 @@ public class TimelineFragment extends Fragment {
     private LineDataSet mThreshold;
     private LineDataSet classSet;
 
-
     private PieChart mEngagedPieChart;
     private PieChart mDisengagedPieChart;
 
     private LineData lineData;
-
     private LineChart chart;
+    //TODO: implement start time and end time into graphs.
     private TextView startTimeText;
     private TextView endTimeText;
+
     private String sectionRefKey;
     private double thresholdVal;
+
     TimerTask retrieveDataTask;
     private ArrayList<Integer> timelineData;
 
     private SeekBar threshBar;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    //private static final String ARG_PARAM1 = "param1";
-    //private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    //private String mParam1;
-    //private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -101,7 +96,7 @@ public class TimelineFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment TimelineFragment.
      */
-    // TODO: Rename and change types and number of parameters
+    //currently not used
     public static TimelineFragment newInstance(String param1, String param2) {
         TimelineFragment fragment = new TimelineFragment();
         Bundle args = new Bundle();
@@ -114,19 +109,10 @@ public class TimelineFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /**if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }**/
     }
 
-    /**
-     * TODO: Psuedocode for onCreateView:
-     * Send threshold value from previous Now fragment via Intent.putExtra("threshold")
-     * Need to grab threshold value from previous Now fragment via Intent.getExtra() and set to global variable
-     * Create various additional variables for our graph (startTimeText, endTimeText, set these times to appropriate times from our db)
-     * Implement a Timer here that calls the retrieveData function every 10s to get new updated values
-     * make sure timer terminates after allotted time
+    /*
+     * Sets a listener on the threshold Bar and creates a new timer to call retrieveData at a fixed rate of 5 seconds.
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -146,6 +132,11 @@ public class TimelineFragment extends Fragment {
         //startTimeText = view.findViewById(R.id.startTimeText); endTimeText = view.findViewById(R.id.endTimeText);
         //startTimeText.setText("3:00PM"); endTimeText.setText("4:00PM");
         threshBar = view.findViewById(R.id.mVerticalSeekBar);
+
+        /*
+         * Listener on threshold bar. ChangeThresholdVal stores the new change into the database.
+         * Need to recall retrieveData to reset pie charts and the graph.
+         */
         threshBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -165,6 +156,7 @@ public class TimelineFragment extends Fragment {
             }
         });
 
+        //Runs the retrieveData method specified below at a fixed rate of five seconds
         retrieveDataTask = new TimerTask() {
             int test_val = 0; //for testing
             @Override
@@ -212,32 +204,18 @@ public class TimelineFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * TODO: Psuedocode for retrieveData: (will be called every 10 seconds from onCreateView)
-     * Grab threshold value from global variable mThreshold mentioned in onCreateView
-     *  - extend entire value across the graph
-     * Create classValues arrayList (MAKE SURE TO += our current values so we don't overwrite our previous ones
-     * For now, set data being added from TimelineDataRetrieval class by calling createRandomStudentData
-     * Later, replace the previous code and grab data from Firebase (UserSessions > all User Id's slider val with the associated magic key)
-     * Average the current data via our TimeLineDataRetrieval class by passing in an arraylist into calculateAverageData
-     * add this averaged data point to classValues
-     * (BAD IMPLEMENTATION; ASK ABOUT FASTER METHOD) -- this is for the two numbers at the bottom
-     *  - create new TreeMap every 10 seconds that stores all slider values
-     *      - (compare slider values for order) K: sliderval V: repetitions
-     *  - If there is a duplicate, add it to the value of the sliderVal
-     *  - Find the closest sliderVal to the threshold in our Map
-     *  - add all the values to the right of that to get the positive (blue) values
-     *  - subtract classValues.size() by blue values to get the leftValues (redVal)
-     *  - Implement pie chart from MPAndroidChart for both values and display at the bottom
-     * Make sure that the last point of the graph has a little circle indicator.
-     * Add the graphics for the threshold mark and insert threshold value as text on the graph.
-     * TODO: Ask about realtime data ... can we maybe implement a different api since this one doesn't support real time?
+    /*
+     * This method updates the graphs and piecharts from firebase data displayed on the screen.
+     * It is called in the onCreate method of this class at a fixed rate (every five seconds).
      */
     private void retrieveData() {
+        //these variables will store an arraylist of all the values of this class session
+        //has to be recreated at every call of retrieveData based on the way that the Android graph api works
         threshold = new ArrayList<>();
         classValues = new ArrayList<>();
         Log.d("TEST", "in  retrieve data function in TIMELINE");
 
+        //stores color for every data point created in the set
         ArrayList<Integer> thresholdColor = new ArrayList<>();
         ArrayList<Integer> classColors = new ArrayList<>();
         TimelineDataRetrieval timeline = new TimelineDataRetrieval();
@@ -245,6 +223,7 @@ public class TimelineFragment extends Fragment {
         final int range = 100;
 
         Log.d("TEST", "calculateaveragedata timeline" + timeline.calculateAverageSectionData());
+        //calculates the average of all the student's section sliders at an instance of time
         timelineData.add((int) timeline.calculateAverageSectionData());
 
         ArrayList<Integer> individualEngagements = new ArrayList<>();
@@ -253,28 +232,34 @@ public class TimelineFragment extends Fragment {
             Log.d("TEST", individualEngagements.size() + ") added: " + user + ": " + FirebaseUtils.sectionSliders.get(user));
         }
 
-        //ArrayList<Float> mTimelineArray = TimelineDataRetrieval.getTimelineArray();
+        // need to add each data point as an entry to our array lists
+        // threshold and thresholdColor will be used as the data set by the graph api
         for (int i = 0; i < timelineData.size(); i++) {
             threshold.add(new Entry(i, (float) thresholdVal));
             thresholdColor.add(Color.TRANSPARENT);
         }
+        // need to remove and add a new last color to specify the last point on the graph
         thresholdColor.remove(thresholdColor.size() - 1);
         thresholdColor.add(Color.WHITE);
 
+        // need to add each data point as an entry to our array lists
+        // classValues and classColors will be used as the data set by the graph api
         for (int i = 0; i < timelineData.size(); i++) {
-            //float val = (float) (Math.random() * range);
             classValues.add(new Entry(i, (float) timelineData.get(i)));
-            //Log.d("TEST", "values in averaged data" + classValues.get(i));
             classColors.add(Color.TRANSPARENT);
         }
         classColors.remove(classColors.size() - 1);
         classColors.add(getResources().getColor(R.color.colorAccentBlue));
 
+        // countsArray scales down and stores the engagement levels of students on a scale of 0 to 10.
+        // for example, if there are ten students with an engagement of 60,
+        // countsArray will store 10 (amount of students) at index 6 (engagement level).
         int[] countsArray = new int[10];
         for(int engagement : individualEngagements) {
             countsArray[engagement / 10] += 1;
         }
 
+        //the countsArray information is converted into type BarEntry to be used by the Pie Chart Graph API
         List<BarEntry> entries = new ArrayList<>();
         for(int i = 0; i < countsArray.length; i++) {
             entries.add(new BarEntry(i, countsArray[i]));
@@ -298,9 +283,10 @@ public class TimelineFragment extends Fragment {
         engagementEntries.add(new PieEntry(disengagedStudents));
         engagementEntries.add(new PieEntry(engagedStudents));
 
+        //line data sets are used by the graph API with the arraylists created earlier
         mThreshold = new LineDataSet(threshold, "Threshold");
         classSet = new LineDataSet(classValues, "Class");
-
+        //below are settings of the graph for UI purposes
         mThreshold.setLineWidth(2f);
         mThreshold.setColor(Color.WHITE);
         mThreshold.setCircleColors(thresholdColor);
@@ -385,8 +371,6 @@ public class TimelineFragment extends Fragment {
         xAxis.setDrawLabels(false);
         xAxis.setDrawAxisLine(false);
         xAxis.setDrawGridLines(false);
-        //xAxis.setAxisMaximum(250);
-        //xAxis.setAxisMinimum(0);
 
         mThreshold.notifyDataSetChanged();
         classSet.notifyDataSetChanged();

@@ -16,6 +16,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mao.engage.models.SectionSesh;
 import com.mao.engage.student.MeFragment;
+import com.mao.engage.teacherclassactivity.AttendanceFragment;
+import com.mao.engage.teacherclassactivity.AttendeeListActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +39,7 @@ public class FirebaseUtils {
     private static DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
     private static DatabaseReference mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions");
     private static DatabaseReference mTeachersRef = FirebaseDatabase.getInstance().getReference("/Teachers");
+    private static DatabaseReference mMagicKeysRef = FirebaseDatabase.getInstance().getReference("/MagicKeys");
 
     //Local variables as copy of Database
     public static HashMap<String, String> allUsers = new HashMap<>(); // K: user_id (device key); V: section_ref_key
@@ -275,11 +278,17 @@ public class FirebaseUtils {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String section_id = dataSnapshot.getKey();
+                String section_ref = dataSnapshot.getValue(String.class);
+                existingSections.put(section_ref, section_id);
+                Log.d("TEST: ", "EXISTING SECTIONS changed");
 
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                existingSections.remove(dataSnapshot.getValue(String.class));
+                Log.d("TEST: ", "EXISTING SECTIONS removed");
 
             }
 

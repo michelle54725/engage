@@ -1,4 +1,9 @@
-package com.mao.engage;
+/*
+    Fragment associated with attendance page that teacher views.
+    This page is opened from TeacherClassActivity and is called by FirebaseUtils to update students in the class.
+ */
+
+package com.mao.engage.teacherclassactivity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,29 +21,30 @@ import android.widget.TextView;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
 
 import java.util.ArrayList;
 
 
 public class AttendanceFragment extends Fragment implements View.OnClickListener {
 
-    private TextView sectionNameText;
-    private TextView magicWordText;
     private static AttendanceFragment mFragment;
-    private static TextView studentCount;
-    private TextView students;
     private static String mSectionRefKey;
-    private static int count;
-    private int prevCount;
     private static Context context;
-    private Button attendanceButton;
-    private Button whosHereButton;
     boolean attendancePressed = false;
     MessageListener mMessageListener;
     Message mMessage;
     ArrayList<String> mMessages;
 
-//    private OnFragmentInteractionListener mListener;
+    //ui design
+    private TextView sectionNameText;
+    private TextView magicWordText;
+    private static TextView studentCount;
+    private TextView students;
+    private static int count;
+    private Button whosHereButton;
+    private Button attendanceButton;
 
     public AttendanceFragment() {
         // Required empty public constructor
@@ -58,21 +64,27 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
         magicWordText = view.findViewById(R.id.magicWordText3);
         studentCount = view.findViewById(R.id.studentCount);
         students = view.findViewById(R.id.students_text);
+        attendanceButton = view.findViewById(R.id.attendanceButton);
+        whosHereButton = view.findViewById(R.id.see_whos_here);
+
         mFragment = AttendanceFragment.this;
         mMessages = new ArrayList<>();
         context = getActivity();
 
+        //need to check if arguments are null to avoid errors when spamming the app
         if (getArguments() != null) {
             sectionNameText.setText(getArguments().getString("section_name"));
             magicWordText.setText(String.format("Magic word: %s", getArguments().getString("magic_word")));
             mSectionRefKey = getArguments().getString("sectionRefKey");
         }
 
-        attendanceButton = view.findViewById(R.id.attendanceButton);
-        whosHereButton = view.findViewById(R.id.see_whos_here);
         attendanceButton.setOnClickListener(this);
         whosHereButton.setOnClickListener(this);
 
+        /*
+        The teacher listens to messages sent by students. The message contains the user id of the student.
+        Each user id is appended to a list called mMessages.
+        */
         mMessageListener = new MessageListener() {
             @Override
             public void onFound(Message message) {
@@ -89,9 +101,7 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
                 Log.d("TEST: ", "Lost sight of message: " + new String(message.getContent()));
             }
         };
-
         mMessage = new Message("Hello World".getBytes());
-
         return view;
     }
 
@@ -100,6 +110,9 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
         super.onDestroyView();
     }
 
+    /*
+        It is necessary to unpublish and unsubscribe messages once you exit this current activity to reduce battery loss
+     */
     @Override
     public void onStop() {
         Nearby.getMessagesClient(this.getActivity()).unpublish(mMessage);
@@ -107,9 +120,14 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
         super.onStop();
     }
 
+    /*
+        onClick is triggered when either the attendance button or see_whos_here button is clicked
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            //when attendance button is pressed, the student count is displayed
+            //and we start taking attendance by publishing and subscribing messages via google nearby
             case R.id.attendanceButton:
                 if (attendancePressed) {
                     attendanceButton.setBackground(getResources().getDrawable(R.drawable.attendance_button));
@@ -127,6 +145,7 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
                 Nearby.getMessagesClient(this.getActivity()).publish(mMessage);
                 Nearby.getMessagesClient(this.getActivity()).subscribe(mMessageListener);
                 break;
+            //the see_whos_here button takes the user to a new page, AttendeeListActivity.
             case R.id.see_whos_here:
                 Log.d("TEST", "SEE WHO IS HERE BUTTON GOOGLE NEARBY MESSAGES");
                 Intent intent = new Intent(getActivity(), AttendeeListActivity.class);
@@ -141,7 +160,11 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
     }
 
 
-    protected static void refreshCount() {
+    /*
+        Purpose of this method is to refresh the number of students in the class.
+        This does not currently work as intended, but is called in FirebaseUtils whenever a student is added to the class.
+     */
+    public static void refreshCount() {
         if (context != null) {
             Log.d("TEST", "before refreshCount: " + count);
             count = FirebaseUtils.getUserNames(mSectionRefKey).size();

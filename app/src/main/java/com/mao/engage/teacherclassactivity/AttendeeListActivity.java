@@ -1,24 +1,24 @@
-package com.mao.engage;
+/*
+ * Displays all the users in the class (who have entered the magic key).
+ * Changes students names from red to green (absent to present) if Google Nearby authenticates them.
+ * Can manually change students from absent to present by clicking on their names.
+ */
+package com.mao.engage.teacherclassactivity;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.mao.engage.FirebaseUtils;
+import com.mao.engage.R;
 
 public class AttendeeListActivity extends AppCompatActivity {
 
@@ -42,7 +42,7 @@ public class AttendeeListActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        //backbutton function
+        //back button function
         backBtn = findViewById(R.id.backBtn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +53,7 @@ public class AttendeeListActivity extends AppCompatActivity {
 
         //create Adapter that accesses userdata in specific section
         mSectionRefKey = getIntent().getStringExtra("sectionRefKey");
+        //userNames stores all the usernames in this section
         userNames = FirebaseUtils.getUserNames(mSectionRefKey);
 
         Log.d("TEST[usernames]", "username size " + Integer.toString(userNames.size()));
@@ -62,6 +63,7 @@ public class AttendeeListActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
+    // marks a user present based on database information (intended call in firebase)
     protected static void markPresent(String user_id) {
         Log.d("TEST[MARKING]", "Present " + user_id);
         if (userNames != null) {
@@ -72,7 +74,8 @@ public class AttendeeListActivity extends AppCompatActivity {
         }
     }
 
-    protected static void markAbsent(String user_id) {
+    // marks a user absent based on database information (called in firebase)
+    public static void markAbsent(String user_id) {
         Log.d("TEST[MARKING]", "Absent " + user_id);
         if (userNames != null) {
             String userName = userNames.get(user_id);
@@ -81,7 +84,9 @@ public class AttendeeListActivity extends AppCompatActivity {
         }
     }
 
-    protected static void refreshList() {
+    // list of users needs to be refreshed based on Firebase's onDataChange.
+    // new list of users is restored in userNames and the page is refreshed
+    public static void refreshList() {
         if (mActivity == null) return;
         mActivity.runOnUiThread(new Runnable() {
             @Override
