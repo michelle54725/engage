@@ -44,11 +44,11 @@ public class FirebaseUtils {
     //Local variables as copy of Database
     public static HashMap<String, String> allUsers = new HashMap<>(); // K: user_id (device key); V: section_ref_key
     public static HashSet<String> allTeachers = new HashSet<>(); // device keys (DB reference key)
-    public static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: slider;
+    public static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: sliderVal;
     public static HashMap<String, Boolean> sectionAttendance = new HashMap<>(); // K: user_id; v: True if present, False if absent;
 
     public static HashMap<String, String> existingSections = new HashMap<>(); //K: section_name; V: section_ref;
-    public static HashMap<String, HashMap>  sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, and what else?
+    public static HashMap<String, HashMap>  sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, sectionSliders2.0
     static int counter = 0; //counter for attendance [not sure if necessary]
 
     /*
@@ -205,6 +205,9 @@ public class FirebaseUtils {
     gets Threshhold set my teacher to be used in TimelineFragment
      */
     public static double getThreshold(String refKey) {
+        if (sectionMap.get(refKey).get("threshold") == null) {
+            sectionMap.get(refKey).put("threshold", 0);
+        }
         Log.d("TEST: ", "getThreshold called" + Double.parseDouble(sectionMap.get(refKey).get("threshold").toString()));
         return Double.parseDouble(sectionMap.get(refKey).get("threshold").toString());
     }
@@ -515,9 +518,9 @@ public class FirebaseUtils {
     }
 
     public static void setIsTakingAttendance(String section_ref_key, boolean isAttendance) {
-        sectionMap.get(section_ref_key).put("isTakingAttendance", isAttendance);
         try {
             mSectionRef.child(section_ref_key).child("isTakingAttendance").setValue(isAttendance);
+            sectionMap.get(section_ref_key).put("isTakingAttendance", isAttendance);
         } catch(Exception e) {
             Log.d("TEST: ", "isTakingAttendance DOES NOT EXIST in setIsTakingAttendance");
         }

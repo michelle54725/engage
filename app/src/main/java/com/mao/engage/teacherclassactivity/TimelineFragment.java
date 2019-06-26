@@ -122,6 +122,7 @@ public class TimelineFragment extends Fragment {
         chart = view.findViewById(R.id.chart);
         if (getArguments() != null) {
             sectionRefKey = getArguments().getString("sectionRefKey");
+            Log.d("TEST", "sectionRefKey in Timeline: " + sectionRefKey);
             timelineData = getArguments().getIntegerArrayList("timelinedata");
         }
         thresholdVal = FirebaseUtils.getThreshold(sectionRefKey) * 10.0;
