@@ -54,8 +54,8 @@ public class FirebaseUtils {
     /*
         Removes self (user) from local databases
      */
-    public static void removeStudent() {
-
+    public static void removeUser(String ref_key, String userId) {
+        FirebaseDatabase.getInstance().getReference("/Sections").child(ref_key).child("user_ids").child(userId).removeValue();
     }
     /*
         setSectionListener called in StartActivity

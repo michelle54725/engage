@@ -116,6 +116,8 @@ public class StudentClassActivity extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseUtils.removeUser(FirebaseUtils.getMySection(), FirebaseUtils.getPsuedoUniqueID());
+                Log.d("TEST", "clicked back button");
                 finish();
             }
         });
