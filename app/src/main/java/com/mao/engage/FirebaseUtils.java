@@ -52,6 +52,12 @@ public class FirebaseUtils {
     static int counter = 0; //counter for attendance [not sure if necessary]
 
     /*
+        Removes self (user) from local databases
+     */
+    public static void removeStudent() {
+
+    }
+    /*
         setSectionListener called in StartActivity
         Retrieves section data from Firebase to update a HashMap<String section_ref_key, Hashmap<String x, String y>>
      */
@@ -79,12 +85,10 @@ public class FirebaseUtils {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
             }
 
             @Override
@@ -437,10 +441,13 @@ public class FirebaseUtils {
 
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                    Log.d("TEST", "removing user from local sectionSliders: " + dataSnapshot.getKey());
-                    sectionSliders.remove(dataSnapshot.getKey());
+                    Log.d("TEST", "removing user from local hashmaps: " + dataSnapshot.getKey());
                     String user_id = dataSnapshot.getKey();
-                    // TODO: stop Listener?
+                    sectionSliders.remove(user_id);
+                    Map<String, String> userMap = (Map) sectionMap.get(ref_key).get("user_ids");
+                    userMap.remove(user_id);
+                    boolean removed = userMap.containsKey(user_id);
+                    Log.d("TEST", "proper local removal: " + !removed);
                 }
 
                 @Override
