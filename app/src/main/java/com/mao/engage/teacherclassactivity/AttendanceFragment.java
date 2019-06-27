@@ -80,7 +80,8 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
 
         attendanceButton.setOnClickListener(this);
         whosHereButton.setOnClickListener(this);
-
+        count = FirebaseUtils.getUserNames(mSectionRefKey).size();
+        studentCount.setText(Integer.toString(count));
         /*
         The teacher listens to messages sent by students. The message contains the user id of the student.
         Each user id is appended to a list called mMessages.
