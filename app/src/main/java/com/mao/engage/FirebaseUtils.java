@@ -55,7 +55,10 @@ public class FirebaseUtils {
         Removes self (user) from local databases
      */
     public static void removeUser(String ref_key, String userId) {
+        Log.d("TEST", "remove USER method in firebase; ref key: " + ref_key + "  user id   " + userId);
         FirebaseDatabase.getInstance().getReference("/Sections").child(ref_key).child("user_ids").child(userId).removeValue();
+        //FirebaseDatabase.getInstance().getReference("/UserSessions").child(userId).removeValue();
+
     }
     /*
         setSectionListener called in StartActivity
@@ -694,7 +697,10 @@ public class FirebaseUtils {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-
+                //if a student leaves a class and joins a different one, we need to update allUsers locally.
+                UserSesh changedUser = dataSnapshot.getValue(UserSesh.class);
+                Log.d("TEST", "[changed User Child] \n" + changedUser.getUser_id() + "\n" + changedUser.getSection_ref_key());
+                allUsers.put(changedUser.getUser_id(), changedUser.getSection_ref_key());
             }
 
             @Override

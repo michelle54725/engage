@@ -28,7 +28,6 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
 
     // will store information passed on from SectionAdapter to this activity
     String mSectionRefKey;
-
     // items related to UI design
     SegmentedGroup segmentedBar;
     RadioButton nowTabBtn;
@@ -75,6 +74,8 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         mSectionRefKey = getIntent().getStringExtra("sectionRefKey");
         bundle.putString("sectionRefKey", getIntent().getStringExtra("sectionRefKey"));
         bundle.putIntegerArrayList("timelinedata", timelineData);
+        bundle.putString("start_time", getIntent().getStringExtra("start_time"));
+        bundle.putString("end_time", getIntent().getStringExtra("end_time"));
         attendanceFragment.setArguments(bundle);
         timelineFragment.setArguments(bundle);
 

@@ -72,7 +72,36 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
-        
+        <TextView
+            android:id="@+id/startTimeText"
+            android:layout_width="121dp"
+            android:layout_height="17dp"
+            android:layout_marginStart="91dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="368dp"
+            android:text=""
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/endTimeText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chart"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/endTimeText"
+            android:layout_width="88dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="54dp"
+            android:layout_marginBottom="12dp"
+            android:text=""
+            app:layout_constraintBottom_toTopOf="@+id/mEngagedPieChart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/startTimeText"
+            app:layout_constraintTop_toBottomOf="@+id/chart"
+            app:layout_constraintVertical_bias="0.0" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

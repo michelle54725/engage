@@ -136,6 +136,9 @@ public class TeacherCreateClassActivity extends AppCompatActivity implements Vie
                             intent.putExtra("sectionRefKey", mSectionRefKey);
                             intent.putExtra("magic_word", mMagicWord);
                             intent.putExtra("section_name", classNameEditText.getText().toString());
+                            intent.putExtra("start_time", startTimeEditText.getText().toString());
+                            intent.putExtra("end_time", endTimeEditText.getText().toString());
+
                             startActivity(intent);
                         }
                     });

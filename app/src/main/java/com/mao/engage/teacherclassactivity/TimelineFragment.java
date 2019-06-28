@@ -120,8 +120,12 @@ public class TimelineFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_timeline, container, false);
         chart = view.findViewById(R.id.chart);
+        startTimeText = view.findViewById(R.id.startTimeText);
+        endTimeText = view.findViewById(R.id.endTimeText);
         if (getArguments() != null) {
             sectionRefKey = getArguments().getString("sectionRefKey");
+            startTimeText.setText(getArguments().getString("start_time"));
+            endTimeText.setText(getArguments().getString("end_time"));
             Log.d("TEST", "sectionRefKey in Timeline: " + sectionRefKey);
             timelineData = getArguments().getIntegerArrayList("timelinedata");
         }
@@ -130,8 +134,6 @@ public class TimelineFragment extends Fragment {
         chart.bringToFront();
         mEngagedPieChart = view.findViewById(R.id.mEngagedPieChart);
         mDisengagedPieChart = view.findViewById(R.id.mDisengagedPieChart);
-        //startTimeText = view.findViewById(R.id.startTimeText); endTimeText = view.findViewById(R.id.endTimeText);
-        //startTimeText.setText("3:00PM"); endTimeText.setText("4:00PM");
         threshBar = view.findViewById(R.id.mVerticalSeekBar);
 
         /*
