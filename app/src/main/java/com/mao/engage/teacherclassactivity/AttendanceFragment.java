@@ -133,6 +133,7 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
                 if (attendancePressed) {
                     attendanceButton.setBackground(getResources().getDrawable(R.drawable.attendance_button));
                     attendanceButton.setText(R.string.take_attendance);
+                    count = FirebaseUtils.getUserNames(mSectionRefKey).size();
                 } else {
                     attendanceButton.setBackground(getResources().getDrawable(R.drawable.attendance_button2));
                     attendanceButton.setText(R.string.stop_attendance);
