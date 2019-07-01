@@ -43,6 +43,7 @@ import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.utils.SectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,7 +130,7 @@ public class TimelineFragment extends Fragment {
             Log.d("TEST", "sectionRefKey in Timeline: " + sectionRefKey);
             timelineData = getArguments().getIntegerArrayList("timelinedata");
         }
-        thresholdVal = FirebaseUtils.getThreshold(sectionRefKey) * 10.0;
+        thresholdVal = SectionUtils.getThreshold(sectionRefKey) * 10.0;
 
         chart.bringToFront();
         mEngagedPieChart = view.findViewById(R.id.mEngagedPieChart);
@@ -143,7 +144,7 @@ public class TimelineFragment extends Fragment {
         threshBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                FirebaseUtils.changeThresholdVal(sectionRefKey, progress);
+                SectionUtils.changeThresholdVal(sectionRefKey, progress);
                 Log.d("TEST", "threshold value changed!" + progress);
                 retrieveData();
             }
@@ -424,7 +425,7 @@ public class TimelineFragment extends Fragment {
         mDisengagedPieChart.invalidate();
 
         chart.invalidate();
-        thresholdVal = FirebaseUtils.getThreshold(sectionRefKey) * 10.0;
+        thresholdVal = SectionUtils.getThreshold(sectionRefKey) * 10.0;
         Log.d("TEST", "my current threshold " + thresholdVal);
         Log.d("TEST", "my actual threshold " + threshBar.getProgress());
     }

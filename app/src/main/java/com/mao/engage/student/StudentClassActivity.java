@@ -29,6 +29,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.utils.AttendanceUtils;
+import com.mao.engage.utils.SectionUtils;
+import com.mao.engage.utils.SliderUtils;
 
 import java.util.ArrayList;
 
@@ -64,7 +67,7 @@ public class StudentClassActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
         }
-        FirebaseUtils.setSliderListener(FirebaseUtils.getPsuedoUniqueID());
+        SliderUtils.setSliderListener(FirebaseUtils.getPsuedoUniqueID());
         setContentView(R.layout.activity_student_class);
 
         //instantiating layout components
@@ -122,7 +125,7 @@ public class StudentClassActivity extends AppCompatActivity {
             }
         });
 
-        FirebaseUtils.checkIsTakingAttendance(FirebaseUtils.getMySection());
+        AttendanceUtils.checkIsTakingAttendance(FirebaseUtils.getMySection());
     }
 
     //Methods to pass values from StudentClassActivity to StudentTimelineFragment
@@ -140,10 +143,10 @@ public class StudentClassActivity extends AppCompatActivity {
     }
 
     //Called in StudentTimelineFragment to get the section start time
-    public String getStartTime() { return FirebaseUtils.getStartTime(FirebaseUtils.getMySection());}
+    public String getStartTime() { return SectionUtils.getStartTime(FirebaseUtils.getMySection());}
     //Called in StudentTimelineFragment to get the section end time
     public String getEndTime() {
-        return FirebaseUtils.getEndTime(FirebaseUtils.getMySection());
+        return SectionUtils.getEndTime(FirebaseUtils.getMySection());
     }
 
 }

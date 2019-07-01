@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.utils.AttendanceUtils;
+import com.mao.engage.utils.SectionUtils;
 
 public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapter.MyViewHolder> {
     private List<String> attendeeList;
@@ -41,11 +43,11 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
                 public void onClick(View v) {
 
                     for (String id : userMap.keySet()) {
-                        String name = FirebaseUtils.getNameFromValue(userMap.get(id));
+                        String name = SectionUtils.getNameFromValue(userMap.get(id));
                         Log.d("TEST", "name from userMap: " + name);
                         if (name.equals(user.getText())) {
                             Log.d("TEST", "change attendance status in Firebase");
-                            FirebaseUtils.updateUserAttendance(section_ref_key, id);
+                            AttendanceUtils.updateUserAttendance(section_ref_key, id);
 
                             Log.d("TEST", "change button color to presen: green on click");
                             user.setBackgroundColor(Color.parseColor("#20B537"));
@@ -82,11 +84,11 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
         String userName = attendeeList.get(position);
         //String userName = (attendeeList.get(position));
         Log.d("TEST", "userName: " + userName);
-        holder.user.setText(FirebaseUtils.getNameFromValue(userName));
+        holder.user.setText(SectionUtils.getNameFromValue(userName));
 
         holder.user = (Button) holder.view1.findViewById(R.id.sectionBtn);
-        Log.d("TEST", "status: " + FirebaseUtils.isPresent(userName));
-        if (FirebaseUtils.isPresent(userName)) {
+        Log.d("TEST", "status: " + SectionUtils.isPresent(userName));
+        if (SectionUtils.isPresent(userName)) {
             Log.d("TEST", "changed button color to present: green");
             holder.user.setBackgroundColor(Color.parseColor("#20B537"));
         }

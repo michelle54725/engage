@@ -7,6 +7,7 @@ package com.mao.engage.teacherclassactivity;
 import android.util.Log;
 
 import com.mao.engage.FirebaseUtils;
+import com.mao.engage.utils.SliderUtils;
 
 import java.util.ArrayList;
 
@@ -31,7 +32,7 @@ public class TimelineDataRetrieval {
     }
 
     //get individual slider val
-    public int getMySliderValue(String user_id) { return FirebaseUtils.getSliderVal(user_id); }
+    public int getMySliderValue(String user_id) { return SliderUtils.getSliderVal(user_id); }
 
     //not used
     public static void addData(float dataPoint) {

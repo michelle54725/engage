@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.utils.SectionUtils;
 
 import java.util.ArrayList;
 
@@ -40,7 +41,7 @@ public class TeacherResumeActivity extends AppCompatActivity {
 
         // feeds a list of the user's existing sections to the adapter which handles
         // onClick functionality and reviving the SectionSesh
-        ArrayList<String> existingSectionsList = FirebaseUtils.getExistingSections(); //list of section_name
+        ArrayList<String> existingSectionsList = SectionUtils.getExistingSections(); //list of section_name
         mAdapter = new TeacherResumeActivity_Adapter(existingSectionsList);
         recyclerView.setAdapter(mAdapter);
 

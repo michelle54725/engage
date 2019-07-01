@@ -39,6 +39,7 @@ import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
 import com.mao.engage.models.SectionSesh;
 import com.mao.engage.teacherclassactivity.TeacherClassActivity;
+import com.mao.engage.utils.SectionUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -114,7 +115,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity implements Vie
                     final String mMagicWord = String.format(Locale.US, "%03d", magicKey);
 
                     // add section to /Sections in DB
-                    FirebaseUtils.createSection(mSectionSesh);
+                    SectionUtils.createSection(mSectionSesh);
                     // add section to /Teachers/{user_id}/existingSections in DB
                     FirebaseUtils.updateTeacher(getIntent().getStringExtra("name"), mSectionRefKey, mSectionSesh.getSection_name());
 

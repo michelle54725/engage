@@ -29,6 +29,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.utils.SectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -238,7 +239,7 @@ public class NowFragment extends Fragment {
         disengagedPieChart.getDescription().setEnabled(false);
         disengagedPieChart.invalidate();
 
-        FirebaseUtils.changeThresholdVal(mSectionRefKey, thresholdBar.getProgress());
+        SectionUtils.changeThresholdVal(mSectionRefKey, thresholdBar.getProgress());
 
         Log.d("TEST", "...end retrieveData");
     }

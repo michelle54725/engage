@@ -23,6 +23,7 @@ import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.utils.AttendanceUtils;
 
 import java.util.ArrayList;
 
@@ -92,7 +93,7 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
                 String user_id = new String(message.getContent());
                 Log.d("TEST: ", "Found message: " + user_id);
                 if(!mMessages.contains(user_id)) {
-                    FirebaseUtils.updateUserAttendance(mSectionRefKey, user_id);
+                    AttendanceUtils.updateUserAttendance(mSectionRefKey, user_id);
                 }
                 mMessages.add(user_id);
             }
@@ -143,7 +144,7 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
                     students.setVisibility(View.VISIBLE);
                 }
                 attendancePressed = !attendancePressed;
-                FirebaseUtils.setIsTakingAttendance(mSectionRefKey, attendancePressed);
+                AttendanceUtils.setIsTakingAttendance(mSectionRefKey, attendancePressed);
                 Nearby.getMessagesClient(this.getActivity()).publish(mMessage);
                 Nearby.getMessagesClient(this.getActivity()).subscribe(mMessageListener);
                 break;

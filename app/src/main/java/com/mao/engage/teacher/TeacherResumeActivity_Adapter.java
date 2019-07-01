@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
 import com.mao.engage.teacherclassactivity.TeacherClassActivity;
+import com.mao.engage.utils.SectionUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,13 +45,13 @@ public class TeacherResumeActivity_Adapter extends RecyclerView.Adapter<TeacherR
                 @Override
                 public void onClick(View v) {
                     // open Section sesh with given magic word, section name, section ref key
-                    HashMap<String, String> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap();
+                    HashMap<String, String> mySectionsHashMap = SectionUtils.getExistingSectionsHashMap();
                     String mSectionRefKey = mySectionsHashMap.get(section.getText().toString());
 
                     Intent intent = new Intent(section.getContext(), TeacherClassActivity.class);
                     intent.putExtra("sectionRefKey", mSectionRefKey);
                     intent.putExtra("section_name", section.getText().toString());
-                    intent.putExtra("magic_word", FirebaseUtils.getMagicKey(mSectionRefKey) + "");
+                    intent.putExtra("magic_word", SectionUtils.getMagicKey(mSectionRefKey) + "");
                     section.getContext().startActivity(intent);
                 }
             });
@@ -61,10 +62,10 @@ public class TeacherResumeActivity_Adapter extends RecyclerView.Adapter<TeacherR
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    HashMap<String, String> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap();
+                    HashMap<String, String> mySectionsHashMap = SectionUtils.getExistingSectionsHashMap();
                     String mSectionRefKey = mySectionsHashMap.get(section.getText().toString());
                     if (mSectionRefKey != null) {
-                        String mKey = Long.toString(FirebaseUtils.getMagicKey(mSectionRefKey));
+                        String mKey = Long.toString(SectionUtils.getMagicKey(mSectionRefKey));
 
                         // remove section from /Teachers(existingSection), /Sections, /MagicKeys
                         mTeachersRef.child(FirebaseUtils.getPsuedoUniqueID())

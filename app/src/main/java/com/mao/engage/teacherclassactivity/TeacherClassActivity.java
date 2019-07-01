@@ -19,6 +19,7 @@ import android.widget.RadioButton;
 
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.utils.SliderUtils;
 
 import java.util.ArrayList;
 
@@ -82,7 +83,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         fragmentTransaction.replace(R.id.constraintLayout, attendanceFragment);
         fragmentTransaction.commit();
 
-        FirebaseUtils.setUserIdinSectionListener(mSectionRefKey);
+        SliderUtils.setUserIdinSectionListener(mSectionRefKey);
 
         //sets triggers for the two buttons on our screen that link to each individual fragment
         nowTabBtn.setOnClickListener(new View.OnClickListener() {

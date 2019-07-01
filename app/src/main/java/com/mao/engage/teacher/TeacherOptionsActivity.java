@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.utils.SectionUtils;
 
 public class TeacherOptionsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -55,7 +56,7 @@ public class TeacherOptionsActivity extends AppCompatActivity implements View.On
         resumeButton.setOnClickListener(this);
 
         // set DB listeners
-        FirebaseUtils.setExistingSectionsListener(FirebaseUtils.getPsuedoUniqueID());
+        SectionUtils.setExistingSectionsListener(FirebaseUtils.getPsuedoUniqueID());
     }
 
     @Override

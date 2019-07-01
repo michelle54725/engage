@@ -24,6 +24,7 @@ import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.utils.SliderUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -159,7 +160,7 @@ public class MeFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                FirebaseUtils.setSliderVal(uID, seekBar.getProgress());
+                SliderUtils.setSliderVal(uID, seekBar.getProgress());
             }
         });
     }
