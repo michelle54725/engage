@@ -12,7 +12,10 @@
 package com.mao.engage.student;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,6 +42,8 @@ import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.teacher.TeacherCreateClassActivity;
+import com.mao.engage.teacherclassactivity.TeacherClassActivity;
 import com.mao.engage.teacherclassactivity.TimelineDataRetrieval;
 
 import java.util.ArrayList;
@@ -139,6 +144,24 @@ public class StudentTimelineFragment extends Fragment {
         if (FirebaseUtils.compareTime(activity.getEndTime())) {
             Log.d("TEST", "compare: stop retrieve data upon reach time");
             t.cancel();
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setTitle("Section has ended!");
+            builder.setMessage("Would you like to save your graph?");
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    Log.d("TEST", "selected no save");
+                }
+            });
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    Log.d("TEST", "selected save graph");
+                }
+            });
+            builder.show();
         }
 
         startTime = activity.getStartTime();
