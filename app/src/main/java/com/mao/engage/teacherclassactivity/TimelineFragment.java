@@ -5,7 +5,9 @@
 package com.mao.engage.teacherclassactivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -169,7 +171,12 @@ public class TimelineFragment extends Fragment {
                 while (activity == null) {
                     activity = getActivity();
                 }
-                getActivity().runOnUiThread(new Runnable() {
+                if (FirebaseUtils.compareTime(getArguments().getString("end_time"))) {
+                    Log.d("TEST", "compare: stop retrieve data upon reach time");
+                    retrieveDataTask.cancel();
+                    return;
+                }
+                activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         retrieveData();
@@ -177,7 +184,30 @@ public class TimelineFragment extends Fragment {
                 });
             }
         };
-        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 5000);
+        Timer t = new Timer();
+        t.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
+        if (FirebaseUtils.compareTime(getArguments().getString("end_time"))) {
+            Log.d("TEST", "compare: stop retrieve data upon reach time");
+            t.cancel();
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Section has ended!");
+            builder.setMessage("Would you like to save your graph?");
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    Log.d("TEST", "selected no save");
+                }
+            });
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    Log.d("TEST", "selected save graph");
+                }
+            });
+            builder.show();
+        }
 
         return view;
     }

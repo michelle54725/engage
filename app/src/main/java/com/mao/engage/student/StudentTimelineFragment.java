@@ -120,7 +120,6 @@ public class StudentTimelineFragment extends Fragment {
                 Activity myActivity = getActivity();
                 while (myActivity == null) { //to prevent null object reference for runOnUiThread
                     myActivity = getActivity();
-                    // TODO: possible: infinite loop (implement some timeout thing)
                 }
                 if (FirebaseUtils.compareTime(activity.getEndTime())) {
                     Log.d("TEST", "compare: stop retrieve data upon reach time");
@@ -130,11 +129,7 @@ public class StudentTimelineFragment extends Fragment {
                 //run on separate Ui thread to no conflict other threads
                 myActivity.runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        retrieveData();
-                        index++;
-                        Log.d("TEST", "INDEX: " + index);
-                    }
+                    public void run() { retrieveData();}
                 });
             }
         };
