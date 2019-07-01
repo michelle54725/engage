@@ -1,10 +1,12 @@
 package com.mao.engage;
 
+import android.app.TimePickerDialog;
 import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import android.util.Log;
+import android.widget.TimePicker;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -16,12 +18,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mao.engage.models.SectionSesh;
 import com.mao.engage.student.MeFragment;
+import com.mao.engage.teacher.TeacherCreateClassActivity;
 import com.mao.engage.teacherclassactivity.AttendanceFragment;
 import com.mao.engage.teacherclassactivity.AttendeeListActivity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -252,6 +257,20 @@ public class FirebaseUtils {
         String s = sectionMap.get(refKey).get("b_end").toString();
         Log.d("TEST", s);
         return s.substring(s.length() - 7);
+    }
+
+    public static boolean compareTime(String endTime) {
+        final Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY) + 1;
+        int minute = c.get(Calendar.MINUTE);
+        String amPm;
+        if (hour == 0) { hour = 12; amPm = "AM"; }
+        else if (hour == 12) { amPm = "PM"; }
+        else if (hour > 12) { hour -= 13; amPm = "PM"; }
+        else { amPm = "AM"; }
+        String currentTime = String.format(Locale.US, "%02d:%02d%s", hour % 13, minute, amPm);
+        Log.d("TEST", "compare: " + "endtime: " + endTime + " currentTime: " + currentTime);
+        return endTime.compareTo(currentTime) <= 0;
     }
 
     public static String getUsernameFromSectionMap(String section_ref_key, String user_id) {

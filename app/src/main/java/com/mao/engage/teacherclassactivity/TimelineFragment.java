@@ -179,7 +179,6 @@ public class TimelineFragment extends Fragment {
         };
         new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 5000);
 
-
         return view;
     }
 

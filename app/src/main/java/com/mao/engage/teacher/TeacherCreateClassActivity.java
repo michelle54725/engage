@@ -152,13 +152,13 @@ public class TeacherCreateClassActivity extends AppCompatActivity implements Vie
             case R.id.dateEditText:
                 final Calendar c = Calendar.getInstance();
                 int year = c.get(Calendar.YEAR);
-                int month = c.get(Calendar.MONTH) + 1;
+                int month = c.get(Calendar.MONTH);
                 int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(TeacherCreateClassActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        dateEditText.setText(String.format(Locale.US, "%02d/%02d/%02d", month, dayOfMonth, year));
+                        dateEditText.setText(String.format(Locale.US, "%02d/%02d/%02d", month + 1, dayOfMonth, year));
                     }
                 }, year, month, dayOfMonth);
                 datePickerDialog.show();

@@ -117,7 +117,11 @@ public class StudentTimelineFragment extends Fragment {
                     myActivity = getActivity();
                     // TODO: possible: infinite loop (implement some timeout thing)
                 }
-
+                if (FirebaseUtils.compareTime(activity.getEndTime())) {
+                    Log.d("TEST", "compare: stop retrieve data upon reach time");
+                    retrieveDataTask.cancel();
+                    return;
+                }
                 //run on separate Ui thread to no conflict other threads
                 myActivity.runOnUiThread(new Runnable() {
                     @Override
@@ -130,7 +134,12 @@ public class StudentTimelineFragment extends Fragment {
             }
         };
         //retrieves data every 5000 ms (5s)
-        new Timer().scheduleAtFixedRate(retrieveDataTask, 0, 5000);
+        Timer t = new Timer();
+        t.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
+        if (FirebaseUtils.compareTime(activity.getEndTime())) {
+            Log.d("TEST", "compare: stop retrieve data upon reach time");
+            t.cancel();
+        }
 
         startTime = activity.getStartTime();
         endTime = activity.getEndTime();
