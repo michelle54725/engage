@@ -75,6 +75,7 @@ public class TimelineFragment extends Fragment {
     //TODO: implement start time and end time into graphs.
     private TextView startTimeText;
     private TextView endTimeText;
+    private String endTime;
 
     private String sectionRefKey;
     private double thresholdVal;
@@ -128,6 +129,7 @@ public class TimelineFragment extends Fragment {
             sectionRefKey = getArguments().getString("sectionRefKey");
             startTimeText.setText(getArguments().getString("start_time"));
             endTimeText.setText(getArguments().getString("end_time"));
+            endTime = getArguments().getString("end_time");
             Log.d("TEST", "sectionRefKey in Timeline: " + sectionRefKey);
             timelineData = getArguments().getIntegerArrayList("timelinedata");
         }
@@ -147,7 +149,28 @@ public class TimelineFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 FirebaseUtils.changeThresholdVal(sectionRefKey, progress);
                 Log.d("TEST", "threshold value changed!" + progress);
-                retrieveData();
+                if (FirebaseUtils.compareTime(endTime) == false) {
+                    retrieveData();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Section has ended!");
+                    builder.setMessage("Would you like to save your graph?");
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            Log.d("TEST", "selected no save");
+                        }
+                    });
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Log.d("TEST", "selected save graph");
+                        }
+                    });
+                    builder.show();
+                }
             }
 
             @Override
@@ -171,7 +194,7 @@ public class TimelineFragment extends Fragment {
                 while (activity == null) {
                     activity = getActivity();
                 }
-                if (FirebaseUtils.compareTime(getArguments().getString("end_time"))) {
+                if (FirebaseUtils.compareTime(endTime)) {
                     Log.d("TEST", "compare: stop retrieve data upon reach time");
                     retrieveDataTask.cancel();
                     return;
