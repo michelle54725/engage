@@ -5,6 +5,8 @@
 
 package com.mao.engage.teacherclassactivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.net.Uri;
 import androidx.fragment.app.FragmentManager;
@@ -45,8 +47,8 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         setContentView(R.layout.activity_teacher_class);
+
 
         segmentedBar = findViewById(R.id.segmentedBar);
         nowTabBtn = findViewById(R.id.nowTabBtn);

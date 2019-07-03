@@ -261,7 +261,7 @@ public class FirebaseUtils {
 
     public static boolean compareTime(String endTime) {
         final Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR_OF_DAY) + 1;
+        int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
         String amPm;
         if (hour == 0) { hour = 12; amPm = "AM"; }

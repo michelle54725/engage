@@ -7,7 +7,10 @@ package com.mao.engage.teacher;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +54,33 @@ public class TeacherResumeActivity_Adapter extends RecyclerView.Adapter<TeacherR
                     intent.putExtra("sectionRefKey", mSectionRefKey);
                     intent.putExtra("section_name", section.getText().toString());
                     intent.putExtra("magic_word", FirebaseUtils.getMagicKey(mSectionRefKey) + "");
-                    section.getContext().startActivity(intent);
+                    if (FirebaseUtils.compareTime(FirebaseUtils.getEndTime(mSectionRefKey))) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                                builder.setMessage(section.getText().toString() + " is expired! It will now be removed.");
+                                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Log.d("TEST", "exiting old section");
+                                        HashMap<String, String> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap();
+                                        String mSectionRefKey = mySectionsHashMap.get(section.getText().toString());
+                                        if (mSectionRefKey != null) {
+                                            String mKey = Long.toString(FirebaseUtils.getMagicKey(mSectionRefKey));
+
+                                            // remove section from /Teachers(existingSection), /Sections, /MagicKeys
+                                            mTeachersRef.child(FirebaseUtils.getPsuedoUniqueID())
+                                                    .child("existingSections").child(mSectionRefKey).removeValue();
+                                            mSectionRef.child(mSectionRefKey).removeValue();
+                                            mMagicKeysRef.child(mKey).removeValue();
+                                        }
+                                        // UI update
+                                        removeAt(getAdapterPosition());
+                                        dialog.dismiss();
+                                    }
+                                });
+                                builder.show();
+                    } else {
+                        section.getContext().startActivity(intent);
+                    }
                 }
             });
 
