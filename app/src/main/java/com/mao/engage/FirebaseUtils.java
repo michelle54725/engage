@@ -65,6 +65,14 @@ public class FirebaseUtils {
         //FirebaseDatabase.getInstance().getReference("/UserSessions").child(userId).removeValue();
 
     }
+
+    /*
+        Remove section
+     */
+    public static void removeSection(String ref_key) {
+        Log.d("TEST", "remove section in firebase");
+        FirebaseDatabase.getInstance().getReference("/Sections").child(ref_key).removeValue();
+    }
     /*
         setSectionListener called in StartActivity
         Retrieves section data from Firebase to update a HashMap<String section_ref_key, Hashmap<String x, String y>>
@@ -97,6 +105,8 @@ public class FirebaseUtils {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                String section_ref_key = dataSnapshot.getKey();
+                sectionMap.remove(section_ref_key);
             }
 
             @Override
