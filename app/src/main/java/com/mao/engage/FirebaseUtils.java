@@ -269,7 +269,7 @@ public class FirebaseUtils {
         else if (hour == 12) { amPm = "PM"; }
         else if (hour > 12) { hour -= 13; amPm = "PM"; }
         else { amPm = "AM"; }
-        String currentTime = String.format(Locale.US, "%02d:%02d%s", hour % 13, minute, amPm);
+        String currentTime = String.format(Locale.US, "%02d:%02d%s", hour % 12, minute, amPm);
         Log.d("TEST", "compare: " + "endtime: " + endTime + " currentTime: " + currentTime);
         return endTime.compareTo(currentTime) <= 0;
     }

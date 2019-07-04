@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -213,6 +215,8 @@ public class TimelineFragment extends Fragment {
         if (FirebaseUtils.compareTime(endTime)) {
             Log.d("TEST", "compare: stop retrieve data upon reach time");
             t.cancel();
+            //code to take screenshot
+            //final Bitmap b = Screenshot.takescreenshotOfRootView(this.getView());
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Section has ended!");
             builder.setMessage("Would you like to save your graph?");
@@ -227,7 +231,15 @@ public class TimelineFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    Log.d("TEST", "selected save graph");
+                    //code to export data
+                    //Intent myIntent = new Intent(Intent.ACTION_SEND);
+                    //myIntent.setType("img/png img/jpeg");
+                    //int shareBody = 5;
+                    //String shareSub = "subject";
+                    //myIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
+                    //myIntent.putExtra(Intent.EXTRA_TEXT, "temp");
+                    //startActivity(Intent.createChooser(myIntent, "Share graph using..."));
+                    //Log.d("TEST", "selected save graph");
                 }
             });
             builder.show();
