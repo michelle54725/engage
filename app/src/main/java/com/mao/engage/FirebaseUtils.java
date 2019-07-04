@@ -249,17 +249,18 @@ public class FirebaseUtils {
      */
     public static String getStartTime(String refKey) {
         String s = sectionMap.get(refKey).get("a_start").toString();
-        Log.d("TEST", s);
+        Log.d("TEST", "START TIME: " + s);
         return s.substring(s.length() - 7);
     }
 
     public static String getEndTime(String refKey) {
         String s = sectionMap.get(refKey).get("b_end").toString();
-        Log.d("TEST", s);
+        Log.d("TEST", "END TIME: " + s);
         return s.substring(s.length() - 7);
     }
 
     public static boolean compareTime(String endTime) {
+        if (endTime == null || endTime.equals("")) {return false;}
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY) + 1;
         int minute = c.get(Calendar.MINUTE);
@@ -427,6 +428,7 @@ public class FirebaseUtils {
 
     public static void setUserIdinSectionListener(final String ref_key) {
         Log.d("TEST[user_ids]", "in setUserIdinSectionListener");
+        sectionSliders = new HashMap<>(); // clear out sectionSliders from previous section
 
         DatabaseReference useridsRef = mSectionRef.child(ref_key).child("user_ids");
         if (useridsRef != null) {
@@ -446,6 +448,7 @@ public class FirebaseUtils {
 
                     Log.d("TEST[user_id]", "LISTENER SAYS copying user to local sectionSliders: " + dataSnapshot.getKey());
                     String user_id = dataSnapshot.getKey();
+
                     // LOCAL SYNC: put user in sectionSliders
                     sectionSliders.put(user_id, 50); // default slider = 50
                     setSliderListener(user_id);
