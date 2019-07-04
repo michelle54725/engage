@@ -18,6 +18,7 @@ import android.os.Bundle;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
@@ -48,7 +49,10 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -168,6 +172,7 @@ public class TimelineFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
+                            takeScreenshot();
                             Log.d("TEST", "selected save graph");
                         }
                     });
@@ -216,6 +221,7 @@ public class TimelineFragment extends Fragment {
             t.cancel();
             //code to take screenshot
             //final Bitmap b = Screenshot.takescreenshotOfRootView(this.getView());
+
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Section has ended!");
             builder.setMessage("Would you like to save your graph?");
@@ -229,10 +235,12 @@ public class TimelineFragment extends Fragment {
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    Log.d("TEST", "selected save graph1");
+                    takeScreenshot();
                     dialog.dismiss();
                     //code to export data
                     //Intent myIntent = new Intent(Intent.ACTION_SEND);
-                    //myIntent.setType("img/png img/jpeg");
+                    //myIntent.setType("text/plain");
                     //int shareBody = 5;
                     //String shareSub = "subject";
                     //myIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
@@ -247,6 +255,47 @@ public class TimelineFragment extends Fragment {
         return view;
     }
 
+    private void takeScreenshot() {
+        Log.d("TEST", "reached takeScreenshot");
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+
+        try {
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+            // create bitmap screen capture
+            View v1 = getActivity().getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+            File imageFile = new File(mPath);
+            Log.d("TEST", "takeScreenshot1");
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            Log.d("TEST", "takeScreenshot2");
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            Log.d("TEST", "takeScreenshot3");
+            outputStream.flush();
+            Log.d("TEST", "takeScreenshot4");
+            outputStream.close();
+            Log.d("TEST", "takeScreenshot5");
+
+            openScreenshot(imageFile);
+        } catch (Throwable e) {
+            // Several error may come out with file handling or DOM
+            Log.d("TEST", "error test");
+            e.printStackTrace();
+        }
+    }
+
+    private void openScreenshot(File imageFile) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        Uri uri = Uri.fromFile(imageFile);
+        intent.setDataAndType(uri, "image/*");
+        Log.d("TEST", "openScreenshot");
+        startActivity(intent);
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
