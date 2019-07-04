@@ -165,7 +165,9 @@ public class TimelineFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
-                            Log.d("TEST", "selected no save");
+                            Log.d("TEST", "selected no save: threshold");
+                            FirebaseUtils.removeSection(FirebaseUtils.getMySection());
+
                         }
                     });
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -173,7 +175,8 @@ public class TimelineFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             takeScreenshot();
-                            Log.d("TEST", "selected save graph");
+                            Log.d("TEST", "selected save graph: threshold");
+                            FirebaseUtils.removeSection(FirebaseUtils.getMySection());
                         }
                     });
                     builder.show();
@@ -196,7 +199,6 @@ public class TimelineFragment extends Fragment {
             int test_val = 0; //for testing
             @Override
             public void run() {
-                Log.d("TEST", "TIMER WORKING... timeline" + test_val++);
                 Activity activity = getActivity();
                 while (activity == null) {
                     activity = getActivity();
@@ -221,7 +223,6 @@ public class TimelineFragment extends Fragment {
             Log.d("TEST", "compare: stop retrieve data upon reach time");
             t.cancel();
             //code to take screenshot
-            //final Bitmap b = Screenshot.takescreenshotOfRootView(this.getView());
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Section has ended!");
@@ -239,6 +240,7 @@ public class TimelineFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
                     Log.d("TEST", "selected save graph1");
                     takeScreenshot();
+                    Log.d("TEST", "dismiss toast");
                     dialog.dismiss();
                     //code to export data
                     //Intent myIntent = new Intent(Intent.ACTION_SEND);
@@ -263,16 +265,22 @@ public class TimelineFragment extends Fragment {
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
+        // image naming and path  to include sd card  appending name you choose for file
+        String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+        // create bitmap screen capture
+        View v1 = getActivity().getWindow().getDecorView().getRootView();
+        v1.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+        v1.setDrawingCacheEnabled(false);
+        File imageFile = new File(mPath);
+        if (imageFile.exists()) {
+            imageFile.delete();
+        }
         try {
-            // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
-            // create bitmap screen capture
-            View v1 = getActivity().getWindow().getDecorView().getRootView();
-            v1.setDrawingCacheEnabled(true);
-            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-            v1.setDrawingCacheEnabled(false);
-            File imageFile = new File(mPath);
+
             Log.d("TEST", "takeScreenshot1");
+            boolean file = imageFile==null;
+            Log.d("TEST", "file?: " + file);
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             Log.d("TEST", "takeScreenshot2");
             int quality = 100;
@@ -288,6 +296,8 @@ public class TimelineFragment extends Fragment {
             // Several error may come out with file handling or DOM
             Log.d("TEST", "error test");
             e.printStackTrace();
+            Log.d("TEST", "error test2");
+
         }
     }
 
