@@ -125,7 +125,7 @@ public class TimelineFragment extends Fragment {
         chart = view.findViewById(R.id.chart);
         startTimeText = view.findViewById(R.id.startTimeText);
         endTimeText = view.findViewById(R.id.endTimeText);
-        if (getArguments() != null) {
+        if (this.getArguments() != null) {
             sectionRefKey = getArguments().getString("sectionRefKey");
             startTimeText.setText(getArguments().getString("start_time"));
             endTimeText.setText(getArguments().getString("end_time"));
@@ -209,7 +209,8 @@ public class TimelineFragment extends Fragment {
         };
         Timer t = new Timer();
         t.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
-        if (FirebaseUtils.compareTime(getArguments().getString("end_time"))) {
+
+        if (FirebaseUtils.compareTime(endTime)) {
             Log.d("TEST", "compare: stop retrieve data upon reach time");
             t.cancel();
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
