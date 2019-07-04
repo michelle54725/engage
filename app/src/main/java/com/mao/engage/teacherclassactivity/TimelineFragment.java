@@ -231,6 +231,7 @@ public class TimelineFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                     Log.d("TEST", "selected no save");
+                    FirebaseUtils.removeSection(FirebaseUtils.getMySection());
                 }
             });
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -248,6 +249,7 @@ public class TimelineFragment extends Fragment {
                     //myIntent.putExtra(Intent.EXTRA_TEXT, "temp");
                     //startActivity(Intent.createChooser(myIntent, "Share graph using..."));
                     //Log.d("TEST", "selected save graph");
+                    FirebaseUtils.removeSection(FirebaseUtils.getMySection());
                 }
             });
             builder.show();

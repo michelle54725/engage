@@ -153,14 +153,16 @@ public class StudentTimelineFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                     Log.d("TEST", "selected no save");
+                    FirebaseUtils.removeSection(FirebaseUtils.getMySection());
                 }
             });
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    //takeScreenshot();
+                    takeScreenshot();
                     Log.d("TEST", "selected save graph");
+                    FirebaseUtils.removeSection(FirebaseUtils.getMySection());
                 }
             });
             builder.show();
