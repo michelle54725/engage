@@ -261,14 +261,14 @@ public class FirebaseUtils {
 
     public static boolean compareTime(String endTime) {
         final Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int hour = c.get(Calendar.HOUR_OF_DAY) + 1;
         int minute = c.get(Calendar.MINUTE);
         String amPm;
         if (hour == 0) { hour = 12; amPm = "AM"; }
         else if (hour == 12) { amPm = "PM"; }
         else if (hour > 12) { hour -= 13; amPm = "PM"; }
         else { amPm = "AM"; }
-        String currentTime = String.format(Locale.US, "%02d:%02d%s", hour % 12, minute, amPm);
+        String currentTime = String.format(Locale.US, "%02d:%02d%s", hour % 13, minute, amPm);
         Log.d("TEST", "compare: " + "endtime: " + endTime + " currentTime: " + currentTime);
         return endTime.compareTo(currentTime) <= 0;
     }
