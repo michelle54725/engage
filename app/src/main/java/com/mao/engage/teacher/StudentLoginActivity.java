@@ -74,6 +74,11 @@ public class StudentLoginActivity extends AppCompatActivity implements View.OnCl
                     mUID = FirebaseUtils.getPsuedoUniqueID();
                     mUser = new UserSesh(mUID, mUsername,
                             Integer.valueOf(getMagicWord()), null);
+                    UserSesh.getInstance().setUser_id(mUID);
+                    UserSesh.getInstance().setUsername(mUsername);
+                    UserSesh.getInstance().setMagic_key(Integer.valueOf(getMagicWord()));
+                    UserSesh.getInstance().setSection_ref_key(mUser.getSection_ref_key());
+                    UserSesh.getInstance().setIsStudent(true);
 
                     // verify the current UserSession has a section_ref_key
                     if (findSection(mUser)) {

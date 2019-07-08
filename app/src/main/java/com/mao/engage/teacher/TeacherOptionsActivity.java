@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.UserSesh;
 
 public class TeacherOptionsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,6 +54,8 @@ public class TeacherOptionsActivity extends AppCompatActivity implements View.On
         backBtn.setOnClickListener(this);
         createButton.setOnClickListener(this);
         resumeButton.setOnClickListener(this);
+
+        UserSesh.getInstance().setIsStudent(false);
 
         // set DB listeners
         FirebaseUtils.setExistingSectionsListener(FirebaseUtils.getPsuedoUniqueID());
