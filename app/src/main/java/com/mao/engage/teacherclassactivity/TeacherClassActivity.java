@@ -5,6 +5,7 @@
 
 package com.mao.engage.teacherclassactivity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -23,6 +24,8 @@ import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
@@ -38,6 +41,8 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
     FragmentManager fragmentManager;
     AttendanceFragment attendanceFragment;
     TimelineFragment timelineFragment;
+    String endTime;
+    Activity me;
 
     //NowFragment nowFragment; //now fragment is not used anymore
 

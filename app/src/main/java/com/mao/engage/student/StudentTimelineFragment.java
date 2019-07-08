@@ -12,20 +12,13 @@
 package com.mao.engage.student;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,14 +38,9 @@ import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
-import com.mao.engage.teacher.TeacherCreateClassActivity;
-import com.mao.engage.teacherclassactivity.TeacherClassActivity;
 import com.mao.engage.teacherclassactivity.TimelineDataRetrieval;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -145,27 +133,6 @@ public class StudentTimelineFragment extends Fragment {
         if (FirebaseUtils.compareTime(activity.getEndTime())) {
             Log.d("TEST", "compare: stop retrieve data upon reach time");
             t.cancel();
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setTitle("Section has ended!");
-            builder.setMessage("Would you like to save your graph?");
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                    Log.d("TEST", "selected no save");
-                    FirebaseUtils.removeSection(FirebaseUtils.getMySection());
-                }
-            });
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    takeScreenshot();
-                    Log.d("TEST", "selected save graph");
-                    FirebaseUtils.removeSection(FirebaseUtils.getMySection());
-                }
-            });
-            builder.show();
         }
 
         startTime = activity.getStartTime();
@@ -178,43 +145,6 @@ public class StudentTimelineFragment extends Fragment {
         return view;
     }
 
-    private void takeScreenshot() {
-        Date now = new Date();
-        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
-
-        try {
-            // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
-
-            // create bitmap screen capture
-            View v1 = getActivity().getWindow().getDecorView().getRootView();
-            v1.setDrawingCacheEnabled(true);
-            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-            v1.setDrawingCacheEnabled(false);
-            Log.d("TEST", "takeScreenshot");
-            File imageFile = new File(mPath);
-
-            FileOutputStream outputStream = new FileOutputStream(imageFile);
-            int quality = 100;
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-            outputStream.flush();
-            outputStream.close();
-
-            openScreenshot(imageFile);
-        } catch (Throwable e) {
-            // Several error may come out with file handling or DOM
-            e.printStackTrace();
-        }
-    }
-
-    private void openScreenshot(File imageFile) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        Uri uri = Uri.fromFile(imageFile);
-        intent.setDataAndType(uri, "image/*");
-        Log.d("TEST", "openScreenshot");
-        startActivity(intent);
-    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
