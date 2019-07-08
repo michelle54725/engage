@@ -54,6 +54,8 @@ public class TeacherResumeActivity_Adapter extends RecyclerView.Adapter<TeacherR
                     intent.putExtra("sectionRefKey", mSectionRefKey);
                     intent.putExtra("section_name", section.getText().toString());
                     intent.putExtra("magic_word", FirebaseUtils.getMagicKey(mSectionRefKey) + "");
+                    intent.putExtra("end_time", FirebaseUtils.getEndTime(mSectionRefKey));
+                    intent.putExtra("start_time", FirebaseUtils.getStartTime(mSectionRefKey));
                     if (FirebaseUtils.compareTime(FirebaseUtils.getEndTime(mSectionRefKey))) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                                 builder.setMessage(section.getText().toString() + " is expired! It will now be removed.");
