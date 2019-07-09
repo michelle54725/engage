@@ -269,12 +269,6 @@ public class FirebaseUtils {
         return s.substring(s.length() - 7);
     }
 
-    public static long getCurrentTime() {
-        Calendar calendar = Calendar.getInstance();
-        long currentTimestamp = calendar.getTimeInMillis();
-        return currentTimestamp;
-    }
-
     public static boolean compareTime(String endTime) {
         if (endTime == null || endTime.equals("")) {return false;}
         final Calendar c = Calendar.getInstance();
