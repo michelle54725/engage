@@ -129,6 +129,7 @@ public class StudentClassActivity extends AppCompatActivity {
     public void onBackPressed() {
         FirebaseUtils.removeUser(FirebaseUtils.getMySection(), FirebaseUtils.getPsuedoUniqueID());
         Log.d("TEST", "clicked Android back button");
+        finish();
     }
 
     //Methods to pass values from StudentClassActivity to StudentTimelineFragment
