@@ -19,6 +19,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
+import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
@@ -51,7 +52,10 @@ import com.mao.engage.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -92,6 +96,9 @@ public class TimelineFragment extends Fragment {
     private SeekBar threshBar;
 
     private OnFragmentInteractionListener mListener;
+
+    private Calendar calendar;
+    private long currentTimestamp;
 
     public TimelineFragment() {
         // Required empty public constructor
@@ -232,6 +239,8 @@ public class TimelineFragment extends Fragment {
         });
 
         final Timer t = new Timer();
+        calendar = Calendar.getInstance();
+        currentTimestamp = calendar.getTimeInMillis();
 
         //Runs the retrieveData method specified below at a fixed rate of five seconds
         retrieveDataTask = new TimerTask() {
@@ -247,7 +256,7 @@ public class TimelineFragment extends Fragment {
                     //retrieveDataTask.cancel();
                     t.cancel();
                     t.purge();
-                    Log.d("TEST", "cancelled 1");
+//                    currentTimestamp = calendar.getTimeInMillis();
                     return;
                 } else {
                     activity.runOnUiThread(new Runnable() {
@@ -263,33 +272,53 @@ public class TimelineFragment extends Fragment {
 //        Timer t = new Timer();
         t.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
 
+//        Calendar calendar = Calendar.getInstance();
+//        long currentTimestamp = calendar.getTimeInMillis();
+        int desiredHour = Integer.parseInt(endTime.substring(0,2));
+        Log.d("TEST", "desired hour: " + desiredHour);
+        int desiredMinute = Integer.parseInt(endTime.substring(3,5));
+        Log.d("TEST", "desired minute: " + desiredMinute);
+        calendar.set(Calendar.HOUR_OF_DAY, desiredHour);
+        calendar.set(Calendar.MINUTE, desiredMinute);
+        calendar.set(Calendar.SECOND, 0);
+        long diffTimestamp = currentTimestamp - calendar.getTimeInMillis();
+        Log.d("TEST", "current: " + currentTimestamp + " end: " + calendar.getTimeInMillis() + " Diff: " + diffTimestamp);
+        //long myDelay = (diffTimestamp < 0 ? 0 : diffTimestamp);
+        Log.d("TEST", "myDelay: " + diffTimestamp);
+        new Handler().postDelayed(toastTask, diffTimestamp);
+        Log.d("TEST", "cancelled 1");
+
         return view;
     }
 
-    private void toast() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Section has ended!");
-        builder.setMessage("Would you like to save your graph?");
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                Log.d("TEST", "selected no save: toast");
-                //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
+    private Runnable toastTask = new Runnable() {
+        public void run() {
+            Log.d("TEST", "toastTask");
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Section has ended!");
+            builder.setMessage("Would you like to save your graph?");
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    Log.d("TEST", "selected no save: toast");
+                    //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
 
-            }
-        });
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                takeScreenshot();
-                Log.d("TEST", "selected save graph: toast");
-                //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
-            }
-        });
-        builder.show();
-    }
+                }
+            });
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    takeScreenshot();
+                    Log.d("TEST", "selected save graph: toast");
+                    //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
+                }
+            });
+            builder.show();
+        };
+    };
+
     private void takeScreenshot() {
         Log.d("TEST", "reached takeScreenshot");
         Date now = new Date();
