@@ -146,84 +146,10 @@ public class TimelineFragment extends Fragment {
         mDisengagedPieChart = view.findViewById(R.id.mDisengagedPieChart);
         threshBar = view.findViewById(R.id.mVerticalSeekBar);
 
-        /*
-         * Listener on threshold bar. ChangeThresholdVal stores the new change into the database.
-         * Need to recall retrieveData to reset pie charts and the graph.
-         */
-        threshBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                FirebaseUtils.changeThresholdVal(sectionRefKey, progress);
-                Log.d("TEST", "threshold value changed!" + progress);
-                if (FirebaseUtils.compareTime(endTime) == false) {
-                    retrieveData();
-                } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("Section has ended!");
-                    builder.setMessage("Would you like to save your graph?");
-                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            Log.d("TEST", "selected no save: threshold");
-                            FirebaseUtils.removeSection(FirebaseUtils.getMySection());
-
-                        }
-                    });
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            takeScreenshot();
-                            Log.d("TEST", "selected save graph: threshold");
-                            FirebaseUtils.removeSection(FirebaseUtils.getMySection());
-                        }
-                    });
-                    builder.show();
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        //Runs the retrieveData method specified below at a fixed rate of five seconds
-        retrieveDataTask = new TimerTask() {
-            int test_val = 0; //for testing
-            @Override
-            public void run() {
-                Activity activity = getActivity();
-                while (activity == null) {
-                    activity = getActivity();
-                }
-                if (FirebaseUtils.compareTime(endTime)) {
-                    Log.d("TEST", "compare: stop retrieve data upon reach time");
-                    retrieveDataTask.cancel();
-                    return;
-                }
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        retrieveData();
-                    }
-                });
-            }
-        };
-        Timer t = new Timer();
-        t.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
-
         if (FirebaseUtils.compareTime(endTime)) {
-            Log.d("TEST", "compare: stop retrieve data upon reach time");
-            t.cancel();
-            //code to take screenshot
+            Log.d("TEST", "compare: stop retrieve data upon reach time 2");
 
+            //code to take screenshot
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Section has ended!");
             builder.setMessage("Would you like to save your graph?");
@@ -257,9 +183,113 @@ public class TimelineFragment extends Fragment {
             builder.show();
         }
 
+        /*
+         * Listener on threshold bar. ChangeThresholdVal stores the new change into the database.
+         * Need to recall retrieveData to reset pie charts and the graph.
+         */
+        threshBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                FirebaseUtils.changeThresholdVal(sectionRefKey, progress);
+                Log.d("TEST", "threshold value changed!" + progress);
+                if (FirebaseUtils.compareTime(endTime) == false) {
+                    retrieveData();
+                }
+                else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Section has ended!");
+                    builder.setMessage("Would you like to save your graph?");
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            Log.d("TEST", "selected no save: threshold");
+                            //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
+                        }
+                    });
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            takeScreenshot();
+                            Log.d("TEST", "selected save graph: threshold");
+                            //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
+                        }
+                    });
+                    builder.show();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        final Timer t = new Timer();
+
+        //Runs the retrieveData method specified below at a fixed rate of five seconds
+        retrieveDataTask = new TimerTask() {
+            int test_val = 0; //for testing
+            @Override
+            public void run() {
+                Activity activity = getActivity();
+                while (activity == null) {
+                    activity = getActivity();
+                }
+                if (FirebaseUtils.compareTime(endTime)) {
+                    Log.d("TEST", "compare: stop retrieve data upon reach time 1");
+                    //retrieveDataTask.cancel();
+                    t.cancel();
+                    t.purge();
+                    Log.d("TEST", "cancelled 1");
+                    return;
+                } else {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            retrieveData();
+                        }
+                    });
+                }
+            }
+        };
+
+//        Timer t = new Timer();
+        t.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
+
         return view;
     }
 
+    private void toast() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Section has ended!");
+        builder.setMessage("Would you like to save your graph?");
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                Log.d("TEST", "selected no save: toast");
+                //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
+
+            }
+        });
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                takeScreenshot();
+                Log.d("TEST", "selected save graph: toast");
+                //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
+            }
+        });
+        builder.show();
+    }
     private void takeScreenshot() {
         Log.d("TEST", "reached takeScreenshot");
         Date now = new Date();
