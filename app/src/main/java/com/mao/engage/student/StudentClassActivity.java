@@ -125,6 +125,12 @@ public class StudentClassActivity extends AppCompatActivity {
         FirebaseUtils.checkIsTakingAttendance(FirebaseUtils.getMySection());
     }
 
+    @Override
+    public void onBackPressed() {
+        FirebaseUtils.removeUser(FirebaseUtils.getMySection(), FirebaseUtils.getPsuedoUniqueID());
+        Log.d("TEST", "clicked Android back button");
+    }
+
     //Methods to pass values from StudentClassActivity to StudentTimelineFragment
 
     //when called, passes an ArrayList of a user's slider values
