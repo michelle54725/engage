@@ -67,6 +67,13 @@ public class FirebaseUtils {
     }
 
     /*
+        Remove all users from a section
+     */
+    public static void removeAllUsers(String ref_key) {
+        Log.d("TEST", "remove ALL USERS method in firebase; ref key: " + ref_key);
+        FirebaseDatabase.getInstance().getReference("/Sections").child(ref_key).child("user_ids").removeValue();
+    }
+    /*
         Remove section
      */
     public static void removeSection(String ref_key) {

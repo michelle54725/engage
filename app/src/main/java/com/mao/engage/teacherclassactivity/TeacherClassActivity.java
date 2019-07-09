@@ -154,6 +154,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                     Log.d("TEST", "selected no save: toast");
+                    FirebaseUtils.removeAllUsers(mSectionRefKey);
                     //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
 
                 }
@@ -164,6 +165,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                     dialog.dismiss();
                     //takeScreenshot();
                     Log.d("TEST", "selected save graph: toast");
+                    FirebaseUtils.removeAllUsers(mSectionRefKey);
                     //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
                 }
             });
