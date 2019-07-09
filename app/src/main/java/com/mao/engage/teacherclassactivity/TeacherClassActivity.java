@@ -166,6 +166,9 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                     //takeScreenshot();
                     Log.d("TEST", "selected save graph: toast");
                     FirebaseUtils.removeAllUsers(mSectionRefKey);
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.constraintLayout, timelineFragment);
+                    fragmentTransaction.commit();
                     //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
                 }
             });
