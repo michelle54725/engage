@@ -278,14 +278,19 @@ public class TimelineFragment extends Fragment {
         Log.d("TEST", "desired hour: " + desiredHour);
         int desiredMinute = Integer.parseInt(endTime.substring(3,5));
         Log.d("TEST", "desired minute: " + desiredMinute);
-        calendar.set(Calendar.HOUR_OF_DAY, desiredHour);
+        if (endTime.substring(5,7).toLowerCase().equals("pm")) {
+            calendar.set(Calendar.HOUR_OF_DAY, desiredHour + 12);
+        } else {
+            calendar.set(Calendar.HOUR_OF_DAY, desiredHour);
+        }
         calendar.set(Calendar.MINUTE, desiredMinute);
         calendar.set(Calendar.SECOND, 0);
-        long diffTimestamp = currentTimestamp - calendar.getTimeInMillis();
+        long diffTimestamp = calendar.getTimeInMillis() - currentTimestamp;
         Log.d("TEST", "current: " + currentTimestamp + " end: " + calendar.getTimeInMillis() + " Diff: " + diffTimestamp);
         //long myDelay = (diffTimestamp < 0 ? 0 : diffTimestamp);
         Log.d("TEST", "myDelay: " + diffTimestamp);
-        new Handler().postDelayed(toastTask, diffTimestamp);
+        final Handler toasty = new Handler();
+        toasty.postDelayed(toastTask, diffTimestamp);
         Log.d("TEST", "cancelled 1");
 
         return view;
