@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -24,6 +25,7 @@ import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -91,6 +93,30 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
 
         FirebaseUtils.setUserIdinSectionListener(mSectionRefKey);
 
+        endTime = FirebaseUtils.getEndTime(mSectionRefKey);
+
+        //Handler to call toast after section is over!
+        Calendar calendar = Calendar.getInstance();
+        long currentTimestamp = calendar.getTimeInMillis();
+        int desiredHour = Integer.parseInt(endTime.substring(0,2));
+        Log.d("TEST", "AF desired hour: " + desiredHour);
+        int desiredMinute = Integer.parseInt(endTime.substring(3,5));
+        Log.d("TEST", "AF desired minute: " + desiredMinute);
+        if (endTime.substring(5,7).toLowerCase().equals("pm")) {
+            calendar.set(Calendar.HOUR_OF_DAY, desiredHour + 12);
+        } else {
+            calendar.set(Calendar.HOUR_OF_DAY, desiredHour);
+        }
+        calendar.set(Calendar.MINUTE, desiredMinute);
+        calendar.set(Calendar.SECOND, 0);
+        long diffTimestamp = calendar.getTimeInMillis() - currentTimestamp;
+        Log.d("TEST", "AF current: " + currentTimestamp + " end: " + calendar.getTimeInMillis() + " Diff: " + diffTimestamp);
+        Log.d("TEST", "AF myDelay: " + diffTimestamp);
+        final Handler toasty = new Handler();
+        toasty.postDelayed(toastTask, diffTimestamp);
+        Log.d("TEST", "AF cancelled 1");
+
+
         //sets triggers for the two buttons on our screen that link to each individual fragment
         nowTabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,4 +142,32 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
     public void onFragmentInteraction(Uri uri) {
         Log.d("BOBOB", "onFragmentInteraction: " + uri.toString());
     }
+
+    public Runnable toastTask = new Runnable() {
+        public void run() {
+            Log.d("TEST", "toastTask");
+            AlertDialog.Builder builder = new AlertDialog.Builder(TeacherClassActivity.this);
+            builder.setTitle("Section has ended!");
+            builder.setMessage("Would you like to save your graph?");
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    Log.d("TEST", "selected no save: toast");
+                    //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
+
+                }
+            });
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    //takeScreenshot();
+                    Log.d("TEST", "selected save graph: toast");
+                    //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
+                }
+            });
+            builder.show();
+        };
+    };
 }

@@ -14,6 +14,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -91,42 +93,7 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
         studentCount.setText(Integer.toString(count));
 
         endTime = FirebaseUtils.getEndTime(mSectionRefKey);
-        me = getActivity();
 
-//        TimerTask checkTime = new TimerTask() {
-//            public void run() {
-//                if (FirebaseUtils.compareTime(endTime) == true) {
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(me);
-//                    builder.setTitle("Section has ended!");
-//                    builder.setMessage("Would you like to save your graph?");
-//                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.cancel();
-//                            Log.d("TEST", "selected no save: threshold");
-//                            FirebaseUtils.removeSection(FirebaseUtils.getMySection());
-//
-//                        }
-//                    });
-//                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.dismiss();
-//                            //takeScreenshot();
-//                            Log.d("TEST", "selected save graph: threshold");
-//                            FirebaseUtils.removeSection(FirebaseUtils.getMySection());
-//                        }
-//                    });
-//                    builder.show();
-//                }
-//            }
-//        };
-//        Timer t = new Timer();
-//        t.scheduleAtFixedRate(checkTime, 0, 5000);
-//        if (FirebaseUtils.compareTime(endTime)) {
-//            Log.d("TEST", "toast cancel");
-//            t.cancel();
-//        }
         /*
         The teacher listens to messages sent by students. The message contains the user id of the student.
         Each user id is appended to a list called mMessages.
@@ -219,4 +186,5 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
             Log.d("TEST", " after refreshCount: " + count);
         }
     }
+
 }

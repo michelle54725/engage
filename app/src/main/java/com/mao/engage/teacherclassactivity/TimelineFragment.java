@@ -5,9 +5,7 @@
 package com.mao.engage.teacherclassactivity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -52,8 +50,6 @@ import com.mao.engage.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -153,43 +149,6 @@ public class TimelineFragment extends Fragment {
         mDisengagedPieChart = view.findViewById(R.id.mDisengagedPieChart);
         threshBar = view.findViewById(R.id.mVerticalSeekBar);
 
-        if (FirebaseUtils.compareTime(endTime)) {
-            Log.d("TEST", "compare: stop retrieve data upon reach time 2");
-
-            //code to take screenshot
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Section has ended!");
-            builder.setMessage("Would you like to save your graph?");
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                    Log.d("TEST", "selected no save");
-                    FirebaseUtils.removeSection(FirebaseUtils.getMySection());
-                }
-            });
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Log.d("TEST", "selected save graph1");
-                    takeScreenshot();
-                    Log.d("TEST", "dismiss toast");
-                    dialog.dismiss();
-                    //code to export data
-                    //Intent myIntent = new Intent(Intent.ACTION_SEND);
-                    //myIntent.setType("text/plain");
-                    //int shareBody = 5;
-                    //String shareSub = "subject";
-                    //myIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
-                    //myIntent.putExtra(Intent.EXTRA_TEXT, "temp");
-                    //startActivity(Intent.createChooser(myIntent, "Share graph using..."));
-                    //Log.d("TEST", "selected save graph");
-                    FirebaseUtils.removeSection(FirebaseUtils.getMySection());
-                }
-            });
-            builder.show();
-        }
-
         /*
          * Listener on threshold bar. ChangeThresholdVal stores the new change into the database.
          * Need to recall retrieveData to reset pie charts and the graph.
@@ -201,29 +160,6 @@ public class TimelineFragment extends Fragment {
                 Log.d("TEST", "threshold value changed!" + progress);
                 if (FirebaseUtils.compareTime(endTime) == false) {
                     retrieveData();
-                }
-                else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("Section has ended!");
-                    builder.setMessage("Would you like to save your graph?");
-                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            Log.d("TEST", "selected no save: threshold");
-                            //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
-                        }
-                    });
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            takeScreenshot();
-                            Log.d("TEST", "selected save graph: threshold");
-                            //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
-                        }
-                    });
-                    builder.show();
                 }
             }
 
@@ -253,10 +189,8 @@ public class TimelineFragment extends Fragment {
                 }
                 if (FirebaseUtils.compareTime(endTime)) {
                     Log.d("TEST", "compare: stop retrieve data upon reach time 1");
-                    //retrieveDataTask.cancel();
                     t.cancel();
                     t.purge();
-//                    currentTimestamp = calendar.getTimeInMillis();
                     return;
                 } else {
                     activity.runOnUiThread(new Runnable() {
@@ -269,60 +203,10 @@ public class TimelineFragment extends Fragment {
             }
         };
 
-//        Timer t = new Timer();
         t.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
-
-//        Calendar calendar = Calendar.getInstance();
-//        long currentTimestamp = calendar.getTimeInMillis();
-        int desiredHour = Integer.parseInt(endTime.substring(0,2));
-        Log.d("TEST", "desired hour: " + desiredHour);
-        int desiredMinute = Integer.parseInt(endTime.substring(3,5));
-        Log.d("TEST", "desired minute: " + desiredMinute);
-        if (endTime.substring(5,7).toLowerCase().equals("pm")) {
-            calendar.set(Calendar.HOUR_OF_DAY, desiredHour + 12);
-        } else {
-            calendar.set(Calendar.HOUR_OF_DAY, desiredHour);
-        }
-        calendar.set(Calendar.MINUTE, desiredMinute);
-        calendar.set(Calendar.SECOND, 0);
-        long diffTimestamp = calendar.getTimeInMillis() - currentTimestamp;
-        Log.d("TEST", "current: " + currentTimestamp + " end: " + calendar.getTimeInMillis() + " Diff: " + diffTimestamp);
-        //long myDelay = (diffTimestamp < 0 ? 0 : diffTimestamp);
-        Log.d("TEST", "myDelay: " + diffTimestamp);
-        final Handler toasty = new Handler();
-        toasty.postDelayed(toastTask, diffTimestamp);
-        Log.d("TEST", "cancelled 1");
 
         return view;
     }
-
-    private Runnable toastTask = new Runnable() {
-        public void run() {
-            Log.d("TEST", "toastTask");
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Section has ended!");
-            builder.setMessage("Would you like to save your graph?");
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                    Log.d("TEST", "selected no save: toast");
-                    //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
-
-                }
-            });
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    takeScreenshot();
-                    Log.d("TEST", "selected save graph: toast");
-                    //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
-                }
-            });
-            builder.show();
-        };
-    };
 
     private void takeScreenshot() {
         Log.d("TEST", "reached takeScreenshot");
