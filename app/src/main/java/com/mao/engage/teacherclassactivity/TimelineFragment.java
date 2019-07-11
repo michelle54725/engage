@@ -8,7 +8,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -94,7 +96,7 @@ public class TimelineFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private Calendar calendar;
-    private long currentTimestamp;
+    static Activity me;
 
     public TimelineFragment() {
         // Required empty public constructor
@@ -175,8 +177,7 @@ public class TimelineFragment extends Fragment {
         });
 
         final Timer t = new Timer();
-        calendar = Calendar.getInstance();
-        currentTimestamp = calendar.getTimeInMillis();
+        me = getActivity();
 
         //Runs the retrieveData method specified below at a fixed rate of five seconds
         retrieveDataTask = new TimerTask() {
@@ -208,7 +209,7 @@ public class TimelineFragment extends Fragment {
         return view;
     }
 
-    private void takeScreenshot() {
+    public static void takeScreenshot() {
         Log.d("TEST", "reached takeScreenshot");
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
@@ -216,19 +217,16 @@ public class TimelineFragment extends Fragment {
         // image naming and path  to include sd card  appending name you choose for file
         String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
         // create bitmap screen capture
-        View v1 = getActivity().getWindow().getDecorView().getRootView();
+        View v1 = me.getWindow().getDecorView().getRootView();
         v1.setDrawingCacheEnabled(true);
         Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
         v1.setDrawingCacheEnabled(false);
         File imageFile = new File(mPath);
+
         if (imageFile.exists()) {
             imageFile.delete();
         }
         try {
-
-            Log.d("TEST", "takeScreenshot1");
-            boolean file = imageFile==null;
-            Log.d("TEST", "file?: " + file);
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             Log.d("TEST", "takeScreenshot2");
             int quality = 100;
@@ -238,25 +236,42 @@ public class TimelineFragment extends Fragment {
             Log.d("TEST", "takeScreenshot4");
             outputStream.close();
             Log.d("TEST", "takeScreenshot5");
-
-            openScreenshot(imageFile);
         } catch (Throwable e) {
             // Several error may come out with file handling or DOM
-            Log.d("TEST", "error test");
+            Log.d("TEST", "Error: " + e.getStackTrace());
             e.printStackTrace();
-            Log.d("TEST", "error test2");
-
         }
     }
 
-    private void openScreenshot(File imageFile) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        Uri uri = Uri.fromFile(imageFile);
-        intent.setDataAndType(uri, "image/*");
-        Log.d("TEST", "openScreenshot");
-        startActivity(intent);
+    public static Bitmap getBitmapFromView(View view) {
+        //Define a bitmap with the same size as the view
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
+        //Bind a canvas to it
+        Canvas canvas = new Canvas(returnedBitmap);
+        //Get the view's background
+        Drawable bgDrawable =view.getBackground();
+        if (bgDrawable!=null)
+            //has background drawable, then draw it on the canvas
+            bgDrawable.draw(canvas);
+        else
+            //does not have background drawable, then draw white background on the canvas
+            canvas.drawColor(Color.WHITE);
+        // draw the view on the canvas
+        view.draw(canvas);
+        //return the bitmap
+        Log.d("TEST", "bitmap created");
+        return returnedBitmap;
     }
+
+//    public static void openScreenshot(File imageFile) {
+//        Intent intent = new Intent();
+//        intent.setAction(Intent.ACTION_VIEW);
+//        Uri uri = Uri.fromFile(imageFile);
+//        intent.setDataAndType(uri, "image/*");
+//        Log.d("TEST", "openScreenshot");
+//        startActivity(intent);
+//    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

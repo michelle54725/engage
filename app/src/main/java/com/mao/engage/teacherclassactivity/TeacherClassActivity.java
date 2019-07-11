@@ -8,12 +8,15 @@ package com.mao.engage.teacherclassactivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -23,13 +26,21 @@ import android.widget.RadioButton;
 
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.teacher.TeacherCreateClassActivity;
+import com.mao.engage.teacher.TeacherOptionsActivity;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
+
+import static com.mao.engage.teacherclassactivity.TimelineFragment.getBitmapFromView;
+import static com.mao.engage.teacherclassactivity.TimelineFragment.takeScreenshot;
 
 public class TeacherClassActivity extends AppCompatActivity implements TimelineFragment.OnFragmentInteractionListener{
 
@@ -155,7 +166,9 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                     dialog.cancel();
                     Log.d("TEST", "selected no save: toast");
                     FirebaseUtils.removeAllUsers(mSectionRefKey);
-                    //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
+                    Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
+                    startActivity(intent);
+                    FirebaseUtils.removeSection(mSectionRefKey);
 
                 }
             });
@@ -163,13 +176,37 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    //takeScreenshot();
                     Log.d("TEST", "selected save graph: toast");
                     FirebaseUtils.removeAllUsers(mSectionRefKey);
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.constraintLayout, timelineFragment);
                     fragmentTransaction.commit();
-                    //FirebaseUtils.removeSection(FirebaseUtils.getMySection());
+                    //takeScreenshot();
+                    Bitmap toSave = getBitmapFromView(TeacherClassActivity.this.getWindow().getDecorView().getRootView());
+
+                    String root = Environment.getExternalStorageDirectory().toString();
+                    File myDir = new File(root + "/req_images");
+                    myDir.mkdirs();
+                    String fname = "Image-" + mSectionRefKey + ".jpg";
+                    File file = new File(myDir, fname);
+                    Log.i("TEST", "" + file);
+                    if (file.exists())
+                        file.delete();
+                    try {
+                        Log.d("TEST", "before outputstream");
+                        FileOutputStream out = new FileOutputStream(file);
+                        Log.d("TEST", "after outputstream");
+                        toSave.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                        out.flush();
+                        out.close();
+                        Log.d("TEST", "saved");
+                    } catch (Exception e) {
+                        Log.d("TEST", "outputstream error");
+                        e.printStackTrace();
+                    }
+                    Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
+                    startActivity(intent);
+                    FirebaseUtils.removeSection(mSectionRefKey);
                 }
             });
             builder.show();
