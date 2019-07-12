@@ -68,9 +68,10 @@ public class FirebaseUtils {
     /*
         Remove section
      */
-    public static void removeSection(String ref_key) {
+    public static void removeSection(String ref_key, String teacher_id) {
         Log.d("TEST", "remove section in firebase");
         FirebaseDatabase.getInstance().getReference("/Sections").child(ref_key).removeValue();
+        FirebaseDatabase.getInstance().getReference("/Teachers").child(teacher_id).child("existingSections").child(ref_key).removeValue();
     }
     /*
         setSectionListener called in StartActivity
