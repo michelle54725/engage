@@ -11,4 +11,5 @@
     <string name="take_attendance">TAKE \n ATTENDANCE</string>
     <string name="_256">256</string>
     <string name="stop_attendance">STOP \n ATTENDANCE</string>
+    <string name="END">END</string>
 </resources>

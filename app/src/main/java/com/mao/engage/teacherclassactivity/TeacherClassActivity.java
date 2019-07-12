@@ -68,7 +68,6 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_teacher_class);
 
-
         segmentedBar = findViewById(R.id.segmentedBar);
         nowTabBtn = findViewById(R.id.nowTabBtn);
         timelineTabBtn = findViewById(R.id.timelineTabBtn);
