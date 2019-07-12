@@ -62,7 +62,8 @@ public class TeacherOptionsActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.backBtn:
-                finish();
+                Intent intent3 = new Intent(TeacherOptionsActivity.this, StartActivity.class);
+                startActivity(intent3);
                 break;
             case R.id.createNewBtn:
                 Intent intent = new Intent(TeacherOptionsActivity.this, TeacherCreateClassActivity.class);
@@ -77,5 +78,11 @@ public class TeacherOptionsActivity extends AppCompatActivity implements View.On
                 Log.d("TEST:","Button not accounted for");
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(TeacherOptionsActivity.this, StartActivity.class);
+        startActivity(intent);
     }
 }
