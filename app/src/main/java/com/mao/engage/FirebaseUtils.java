@@ -53,7 +53,7 @@ public class FirebaseUtils {
      */
     public static void removeUser(String ref_key, String userId) {
         Log.d("TEST", "remove USER method in firebase; ref key: " + ref_key + "  user id   " + userId);
-        FirebaseDatabase.getInstance().getReference("/Sections").child(ref_key).child("user_ids").child(userId).removeValue();
+        mSectionRef.child(ref_key).child("user_ids").child(userId).removeValue();
         //FirebaseDatabase.getInstance().getReference("/UserSessions").child(userId).removeValue();
 
     }
@@ -63,15 +63,15 @@ public class FirebaseUtils {
      */
     public static void removeAllUsers(String ref_key) {
         Log.d("TEST", "remove ALL USERS method in firebase; ref key: " + ref_key);
-        FirebaseDatabase.getInstance().getReference("/Sections").child(ref_key).child("user_ids").removeValue();
+        mSectionRef.child(ref_key).child("user_ids").removeValue();
     }
     /*
         Remove section
      */
     public static void removeSection(String ref_key, String teacher_id) {
         Log.d("TEST", "remove section in firebase");
-        FirebaseDatabase.getInstance().getReference("/Sections").child(ref_key).removeValue();
-        FirebaseDatabase.getInstance().getReference("/Teachers").child(teacher_id).child("existingSections").child(ref_key).removeValue();
+        mSectionRef.child(ref_key).removeValue();
+        mTeachersRef.child(teacher_id).child("existingSections").child(ref_key).removeValue();
     }
     /*
         setSectionListener called in StartActivity
