@@ -6,6 +6,8 @@ package com.mao.engage.teacherclassactivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -54,6 +56,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -139,7 +143,7 @@ public class TimelineFragment extends Fragment {
         if (this.getArguments() != null) {
             sectionRefKey = getArguments().getString("sectionRefKey");
             startTimeText.setText(getArguments().getString("start_time"));
-            endTimeText.setText(getArguments().getString("end_time"));
+            endTimeText.setText(getArguments().getString("start_time"));
             endTime = getArguments().getString("end_time");
             Log.d("TEST", "sectionRefKey in Timeline: " + sectionRefKey);
             timelineData = getArguments().getIntegerArrayList("timelinedata");
@@ -301,6 +305,13 @@ public class TimelineFragment extends Fragment {
      * It is called in the onCreate method of this class at a fixed rate (every five seconds).
      */
     private void retrieveData() {
+        //update endTimeText to current time every time retrieveData is called
+        Date date = new Date();
+        String strDateFormat = "hh:mm a";
+        DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
+        String formattedDate= dateFormat.format(date);
+        endTimeText.setText(formattedDate);
+        
         //these variables will store an arraylist of all the values of this class session
         //has to be recreated at every call of retrieveData based on the way that the Android graph api works
         threshold = new ArrayList<>();
