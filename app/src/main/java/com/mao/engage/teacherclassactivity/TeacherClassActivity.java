@@ -174,7 +174,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                     FirebaseUtils.removeAllUsers(mSectionRefKey);
                     Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
                     startActivity(intent);
-                    FirebaseUtils.removeSection(mSectionRefKey);
+                    FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
 
                 }
             });
@@ -212,7 +212,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                     }
                     Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
                     startActivity(intent);
-                    FirebaseUtils.removeSection(mSectionRefKey);
+                    FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
                 }
             });
             builder.show();
@@ -233,7 +233,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                     FirebaseUtils.removeAllUsers(mSectionRefKey);
                     Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
                     startActivity(intent);
-                    FirebaseUtils.removeSection(mSectionRefKey);
+                    FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
 
                 }
             });
@@ -271,7 +271,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                     }
                     Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
                     startActivity(intent);
-                    FirebaseUtils.removeSection(mSectionRefKey);
+                    FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
                 }
             });
             builder.show();
