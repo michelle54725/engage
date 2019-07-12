@@ -192,19 +192,20 @@ public class TimelineFragment extends Fragment {
                 while (activity == null) {
                     activity = getActivity();
                 }
-                if (FirebaseUtils.compareTime(endTime)) {
-                    Log.d("TEST", "compare: stop retrieve data upon reach time 1");
-                    t.cancel();
-                    t.purge();
-                    return;
-                } else {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (FirebaseUtils.compareTime(endTime)) {
+                            threshBar.setVisibility(View.GONE);
+                            Log.d("TEST", "compare: stop retrieve data upon reach time 1");
+                            t.cancel();
+                            t.purge();
+                            return;
+                        } else {
                             retrieveData();
                         }
-                    });
-                }
+                    }
+                });
             }
         };
 
