@@ -86,7 +86,7 @@ public class TeacherResumeActivity_Adapter extends RecyclerView.Adapter<TeacherR
                 }
             });
 
-            // TODO: move to FirebaseUtils when quality checked by teammates
+            // TODO: move to FirebaseUtils when quality checked by teammates OR keep here for @Paul's idea of separating code by user logic
             // Remove all instances of this section in the DB
             // -note: this does not remove users from the section (i.e. a User's section_ref_key may still be this one)
             delete.setOnClickListener(new View.OnClickListener() {
