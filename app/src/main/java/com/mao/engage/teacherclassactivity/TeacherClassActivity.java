@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RadioButton;
 
 import com.mao.engage.FirebaseUtils;
@@ -50,6 +53,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
     SegmentedGroup segmentedBar;
     RadioButton nowTabBtn;
     RadioButton timelineTabBtn;
+    Button endSectionBtn;
 
     FragmentManager fragmentManager;
     AttendanceFragment attendanceFragment;
@@ -71,6 +75,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         segmentedBar = findViewById(R.id.segmentedBar);
         nowTabBtn = findViewById(R.id.nowTabBtn);
         timelineTabBtn = findViewById(R.id.timelineTabBtn);
+        endSectionBtn = findViewById(R.id.endSectionBtn);
 
         segmentedBar.setTintColor(getResources().getColor(R.color.colorPrimary));
         nowTabBtn.setTextColor(Color.WHITE);
@@ -132,26 +137,34 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         nowTabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.constraintLayout, attendanceFragment);
-                fragmentTransaction.commit();
+                handleFragmentTransaction(attendanceFragment);
             }
         });
-
         timelineTabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.constraintLayout, timelineFragment);
-                fragmentTransaction.commit();
+                handleFragmentTransaction(timelineFragment);
             }
         });
 
+        endSectionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //switch to timelineFragment if not being displayed TODO: this crashes the app a couple seconds after return to OptionsActivity
+//                if (!timelineFragment.isVisible()) {
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                    fragmentTransaction.replace(R.id.constraintLayout, timelineFragment);
+//                    fragmentTransaction.commitNowAllowingStateLoss(); //synchronous
+//                }
+                toasty.post(endSectionToast);
+            }
+        });
     }
 
-    @Override
-    public void onBackPressed() {
-        toasty.post(endSectionToast);
+    private void handleFragmentTransaction(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.constraintLayout, fragment, fragment.toString());
+        fragmentTransaction.commit();
     }
 
     @Override
