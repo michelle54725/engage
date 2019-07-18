@@ -117,7 +117,6 @@ public class StudentClassActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseUtils.removeUser(FirebaseUtils.getMySection(), FirebaseUtils.getPsuedoUniqueID());
-                Log.d("TEST", "clicked back button");
                 finish();
             }
         });
@@ -128,7 +127,6 @@ public class StudentClassActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         FirebaseUtils.removeUser(FirebaseUtils.getMySection(), FirebaseUtils.getPsuedoUniqueID());
-        Log.d("TEST", "clicked Android back button");
         finish();
     }
 
