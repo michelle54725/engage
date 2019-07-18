@@ -108,7 +108,6 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         fragmentTransaction.commit();
 
         FirebaseUtils.setUserIdinSectionListener(mSectionRefKey);
-
         endTime = FirebaseUtils.getEndTime(mSectionRefKey);
 
         //Handler to call toast after section is over!
