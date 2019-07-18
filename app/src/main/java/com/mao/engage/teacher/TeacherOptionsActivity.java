@@ -63,15 +63,20 @@ public class TeacherOptionsActivity extends AppCompatActivity implements View.On
         switch (v.getId()) {
             case R.id.backBtn:
                 Intent intent3 = new Intent(TeacherOptionsActivity.this, StartActivity.class);
+                Log.d("TEST", "name: " + name);
+                intent3.putExtra("name", name);
                 startActivity(intent3);
                 break;
             case R.id.createNewBtn:
                 Intent intent = new Intent(TeacherOptionsActivity.this, TeacherCreateClassActivity.class);
+                Log.d("TEST", "name: " + name);
                 intent.putExtra("name", name);
                 startActivity(intent);
                 break;
             case R.id.resumeBtn:
                 Intent intent2 = new Intent(TeacherOptionsActivity.this, TeacherResumeActivity.class);
+                Log.d("TEST", "name: " + name);
+                intent2.putExtra("name", name);
                 startActivity(intent2);
                 break;
             default:

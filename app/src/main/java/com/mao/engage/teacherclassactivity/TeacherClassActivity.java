@@ -59,7 +59,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
     AttendanceFragment attendanceFragment;
     TimelineFragment timelineFragment;
     String endTime;
-    Activity me;
+    String name;
     Handler toasty;
 
     //NowFragment nowFragment; //now fragment is not used anymore
@@ -76,6 +76,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         nowTabBtn = findViewById(R.id.nowTabBtn);
         timelineTabBtn = findViewById(R.id.timelineTabBtn);
         endSectionBtn = findViewById(R.id.endSectionBtn);
+        name = getIntent().getStringExtra("name");
 
         segmentedBar.setTintColor(getResources().getColor(R.color.colorPrimary));
         nowTabBtn.setTextColor(Color.WHITE);
@@ -177,6 +178,8 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                     dialog.cancel();
                     FirebaseUtils.removeAllUsers(mSectionRefKey);
                     Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
+                    Log.d("TEST", "name: " + name);
+                    intent.putExtra("name", name);
                     startActivity(intent);
                     FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
 
@@ -214,6 +217,8 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                         e.printStackTrace();
                     }
                     Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
+                    Log.d("TEST", "name: " + name);
+                    intent.putExtra("name", name);
                     startActivity(intent);
                     FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
                 }
