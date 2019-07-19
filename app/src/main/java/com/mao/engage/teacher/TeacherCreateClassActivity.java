@@ -59,6 +59,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity implements Vie
     EditText startTimeEditText;
     EditText endTimeEditText;
     Button createClassBtn;
+    String name;
 
     HashMap<Integer, String> activeMagicKeys; // populated with getActiveMagicKeys()
     private int magicKey; // set in generateMagicKey()
@@ -82,6 +83,8 @@ public class TeacherCreateClassActivity extends AppCompatActivity implements Vie
         startTimeEditText = findViewById(R.id.startTimeEditText);
         endTimeEditText = findViewById(R.id.endTimeEditText);
         createClassBtn = findViewById(R.id.createClassBtn);
+        name = getIntent().getStringExtra("name");
+        Log.d("TEST", "createname: " + name);
 
         // disable focus on calendar fields
         dateEditText.setFocusable(false); // Keyboard input is entered into the field with focus
@@ -138,7 +141,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity implements Vie
                             intent.putExtra("section_name", classNameEditText.getText().toString());
                             intent.putExtra("start_time", startTimeEditText.getText().toString());
                             intent.putExtra("end_time", endTimeEditText.getText().toString());
-
+                            intent.putExtra("name", name);
                             startActivity(intent);
                         }
                     });

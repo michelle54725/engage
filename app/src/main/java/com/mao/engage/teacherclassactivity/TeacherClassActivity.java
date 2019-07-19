@@ -77,6 +77,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         timelineTabBtn = findViewById(R.id.timelineTabBtn);
         endSectionBtn = findViewById(R.id.endSectionBtn);
         name = getIntent().getStringExtra("name");
+        Log.d("TEST", "firstname: " + name);
 
         segmentedBar.setTintColor(getResources().getColor(R.color.colorPrimary));
         nowTabBtn.setTextColor(Color.WHITE);
