@@ -155,7 +155,7 @@ public class StudentTimelineFragment extends Fragment {
         };
         //retrieves data every 5000 ms (5s)
         Timer t = new Timer();
-        t.scheduleAtFixedRate(retrieveDataTask, 0, 1000);
+        t.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
         if (FirebaseUtils.compareTime(activity.getEndTime())) {
             Log.d("TEST", "compare: stop retrieve data upon reach time");
             t.cancel();
@@ -215,12 +215,12 @@ public class StudentTimelineFragment extends Fragment {
                     Toast.makeText(getContext(), "Please enter a non-empty name", Toast.LENGTH_LONG).show();
                 } else {
                     boolean success = chart.saveToGallery(imageName);
-                    Log.d("TEST", "selected save graph");
                     if (success) {
                         Toast.makeText(getContext(), "Image has been saved successfully!", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(getContext(), "Image saving has failed, please try again", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Export failed :( please try again later", Toast.LENGTH_LONG).show();
                     }
+                    Log.d("TEST", "selected save graph");
                     if (isEndOfSection) {
                         FirebaseUtils.removeSection(FirebaseUtils.getMySection());
                     }
@@ -252,8 +252,8 @@ public class StudentTimelineFragment extends Fragment {
         entries.add(new Entry(3, 4));
 
         LineDataSet dataSet = new LineDataSet(entries, "You");
-        dataSet.setColor(ContextCompat.getColor(getContext(), R.color.colorWhite));
-        dataSet.setValueTextColor(ContextCompat.getColor(getContext(), R.color.colorWhite));
+        dataSet.setColor(ContextCompat.getColor(getContext(), R.color.colorAccentBlue));
+        dataSet.setValueTextColor(ContextCompat.getColor(getContext(), R.color.colorAccentBlue));
 
         //****
         // Controlling X axis
@@ -280,6 +280,7 @@ public class StudentTimelineFragment extends Fragment {
         // Setting Data
         LineData data = new LineData(dataSet);
         chart.setData(data);
+        chart.notifyDataSetChanged();
         //refresh
         chart.invalidate();
         //
