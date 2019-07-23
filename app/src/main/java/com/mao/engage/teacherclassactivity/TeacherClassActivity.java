@@ -150,7 +150,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         endSectionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //switch to timelineFragment if not being displayed TODO: this crashes the app a couple seconds after return to OptionsActivity
+                //switch to timelineFragment if not being displayed TODO: this crashes the app a couple seconds after return to OptionsActivity -Mao
 //                if (!timelineFragment.isVisible()) {
 //                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //                    fragmentTransaction.replace(R.id.constraintLayout, timelineFragment);
