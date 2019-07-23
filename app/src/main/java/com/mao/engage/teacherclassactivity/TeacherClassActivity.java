@@ -59,7 +59,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
     AttendanceFragment attendanceFragment;
     TimelineFragment timelineFragment;
     String endTime;
-    Activity me;
+    String name;
     Handler toasty;
 
     //NowFragment nowFragment; //now fragment is not used anymore
@@ -76,6 +76,8 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         nowTabBtn = findViewById(R.id.nowTabBtn);
         timelineTabBtn = findViewById(R.id.timelineTabBtn);
         endSectionBtn = findViewById(R.id.endSectionBtn);
+        name = getIntent().getStringExtra("name");
+        Log.d("TEST", "firstname: " + name);
 
         segmentedBar.setTintColor(getResources().getColor(R.color.colorPrimary));
         nowTabBtn.setTextColor(Color.WHITE);
@@ -108,16 +110,13 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         fragmentTransaction.commit();
 
         FirebaseUtils.setUserIdinSectionListener(mSectionRefKey);
-
         endTime = FirebaseUtils.getEndTime(mSectionRefKey);
 
         //Handler to call toast after section is over!
         Calendar calendar = Calendar.getInstance();
         long currentTimestamp = calendar.getTimeInMillis();
         int desiredHour = Integer.parseInt(endTime.substring(0,2));
-        Log.d("TEST", "AF desired hour: " + desiredHour);
         int desiredMinute = Integer.parseInt(endTime.substring(3,5));
-        Log.d("TEST", "AF desired minute: " + desiredMinute);
         if (endTime.substring(5,7).toLowerCase().equals("pm")) {
             calendar.set(Calendar.HOUR_OF_DAY, desiredHour + 12);
         } else {
@@ -126,11 +125,8 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         calendar.set(Calendar.MINUTE, desiredMinute);
         calendar.set(Calendar.SECOND, 0);
         long diffTimestamp = calendar.getTimeInMillis() - currentTimestamp;
-        Log.d("TEST", "AF current: " + currentTimestamp + " end: " + calendar.getTimeInMillis() + " Diff: " + diffTimestamp);
-        Log.d("TEST", "AF myDelay: " + diffTimestamp);
         toasty = new Handler();
         toasty.postDelayed(toastTask, diffTimestamp);
-        Log.d("TEST", "AF cancelled 1");
 
 
         //sets triggers for the two buttons on our screen that link to each individual fragment
@@ -156,7 +152,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
 //                    fragmentTransaction.replace(R.id.constraintLayout, timelineFragment);
 //                    fragmentTransaction.commitNowAllowingStateLoss(); //synchronous
 //                }
-                toasty.post(endSectionToast);
+                toasty.post(toastTask);
             }
         });
     }
@@ -172,68 +168,8 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         Log.d("BOBOB", "onFragmentInteraction: " + uri.toString());
     }
 
-    public Runnable endSectionToast = new Runnable() {
-        public void run() {
-            Log.d("TEST", "endSectionToast");
-            AlertDialog.Builder builder = new AlertDialog.Builder(TeacherClassActivity.this);
-            builder.setTitle("Request to end section");
-            builder.setMessage("Would you like to save your graph?");
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                    Log.d("TEST", "selected no save: toast");
-                    FirebaseUtils.removeAllUsers(mSectionRefKey);
-                    Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
-                    startActivity(intent);
-                    FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
-
-                }
-            });
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    Log.d("TEST", "selected save graph: toast");
-                    FirebaseUtils.removeAllUsers(mSectionRefKey);
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.constraintLayout, timelineFragment);
-                    fragmentTransaction.commit();
-                    //takeScreenshot();
-                    Bitmap toSave = getBitmapFromView(TeacherClassActivity.this.getWindow().getDecorView().getRootView());
-
-                    String root = Environment.getExternalStorageDirectory().toString();
-                    File myDir = new File(root + "/req_images");
-                    myDir.mkdirs();
-                    String fname = "Image-" + mSectionRefKey + ".jpg";
-                    File file = new File(myDir, fname);
-                    Log.i("TEST", "" + file);
-                    if (file.exists())
-                        file.delete();
-                    try {
-                        Log.d("TEST", "before outputstream");
-                        FileOutputStream out = new FileOutputStream(file);
-                        Log.d("TEST", "after outputstream");
-                        toSave.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                        out.flush();
-                        out.close();
-                        Log.d("TEST", "saved");
-                    } catch (Exception e) {
-                        Log.d("TEST", "outputstream error");
-                        e.printStackTrace();
-                    }
-                    Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
-                    startActivity(intent);
-                    FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
-                }
-            });
-            builder.show();
-        }
-    };
-
     public Runnable toastTask = new Runnable() {
         public void run() {
-            Log.d("TEST", "toastTask");
             AlertDialog.Builder builder = new AlertDialog.Builder(TeacherClassActivity.this);
             builder.setTitle("Section has ended!");
             builder.setMessage("Would you like to save your graph?");
@@ -241,9 +177,10 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
-                    Log.d("TEST", "selected no save: toast");
                     FirebaseUtils.removeAllUsers(mSectionRefKey);
                     Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
+                    Log.d("TEST", "name: " + name);
+                    intent.putExtra("name", name);
                     startActivity(intent);
                     FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
 
@@ -253,7 +190,6 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    Log.d("TEST", "selected save graph: toast");
                     FirebaseUtils.removeAllUsers(mSectionRefKey);
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.constraintLayout, timelineFragment);
@@ -282,6 +218,8 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                         e.printStackTrace();
                     }
                     Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
+                    Log.d("TEST", "name: " + name);
+                    intent.putExtra("name", name);
                     startActivity(intent);
                     FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
                 }

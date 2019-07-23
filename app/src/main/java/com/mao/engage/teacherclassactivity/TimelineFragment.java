@@ -149,6 +149,8 @@ public class TimelineFragment extends Fragment {
             timelineData = getArguments().getIntegerArrayList("timelinedata");
         }
         thresholdVal = FirebaseUtils.getThreshold(sectionRefKey) * 10.0;
+        //timelineData will get current saved slider vals if they exist, otherwise it will be an empty list
+        //timelineData = FirebaseUtils.getSavedSliderVals(sectionRefKey);
 
         chart.bringToFront();
         mEngagedPieChart = view.findViewById(R.id.mEngagedPieChart);
@@ -543,5 +545,13 @@ public class TimelineFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    //when student leaves this fragment, upload current timelineData to firebase.
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        //when the view is destroyed, save values to firebase, so they can be used again.
+        //FirebaseUtils.setSavedSliderVals(sectionRefKey, timelineData);
     }
 }
