@@ -58,6 +58,7 @@ public class FirebaseUtils {
         mSectionRef.child(ref_key).child("user_ids").child(userId).removeValue();
         //FirebaseDatabase.getInstance().getReference("/UserSessions").child(userId).removeValue();
 
+        FirebaseDatabase.getInstance().getReference("/Sections").child(ref_key).child("user_ids").child(userId).removeValue();
     }
 
     /*
@@ -354,39 +355,6 @@ public class FirebaseUtils {
         //Log.d("TEST", "sectionsMagicKey key: " + sectionsMagicKey.keySet() + " value: " + sectionsMagicKey.values());
         FirebaseDatabase.getInstance().getReference("/MagicKeys").child("" + section.getMagic_key()).setValue(section.getRef_key());
         // a Listener on a Section's user_ids to maintain local sectionSliders HashMap
-//        mSectionRef.child(section.ref_key).child("user_ids").addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                Log.d("TEST", "LISTENER SAYS copying user to local sectionSliders: " + dataSnapshot.getKey());
-//                String user_id = dataSnapshot.getKey();
-//                sectionSliders.put(user_id, 50); // default slider = 50
-//                setSliderListener(user_id);
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                // Someone changed their name
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-//                Log.d("TEST", "removing user from local sectionSliders: " + dataSnapshot.getKey());
-//                sectionSliders.remove(dataSnapshot.getKey());
-//                String user_id = dataSnapshot.getKey();
-//                // TODO: stop Listener?
-//            }
-
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
     public static void createSection(String start, String end, String ta_name, String section_id,
@@ -484,9 +452,6 @@ public class FirebaseUtils {
     }
 
     public static void setUserIdinSectionListener(final String ref_key) {
-        Log.d("TEST[user_ids]", "in setUserIdinSectionListener");
-        sectionSliders = new HashMap<>(); // clear out sectionSliders from previous section
-
         DatabaseReference useridsRef = mSectionRef.child(ref_key).child("user_ids");
         if (useridsRef != null) {
             useridsRef.addChildEventListener(new ChildEventListener() {
@@ -511,7 +476,8 @@ public class FirebaseUtils {
                     setSliderListener(user_id);
 
                     // LOCAL SYNC: put user in sectionAttendance
-                    sectionAttendance.put(user_id, false);
+//                    sectionAttendance.put(user_id, false);
+                    UserSesh.getInstance().setPresent(false);
                     setAttendanceListener(ref_key, user_id); //this is what above TO-DO is referring to, delete this comment once resolved
                 }
 
@@ -710,39 +676,6 @@ public class FirebaseUtils {
         });
     }
 
-    public static void setSliderValues() {
-        // creates Listener for UserSessions's slider_val to update sectionSliders HashMap
-        mUsersRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                Log.d("TEST", "[new slider val] \n");
-                Iterable<DataSnapshot> userIds = dataSnapshot.getChildren();
-                for (DataSnapshot user : userIds) {
-                    String sliderVal = user.child("slider_val").toString();
-                    Log.d("TEST", "my current sliderVALS "  + sliderVal);
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                UserSesh newUser = dataSnapshot.getValue(UserSesh.class);
-                Log.d("TEST", "[deleting User Child] \n" + newUser.getUser_id() + "\n" + newUser.getSection_ref_key());
-                allUsers.remove(newUser.getUser_id());
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
-    }
-
     // Returns a HashMap of k: user_id, v: user_name for a specific section
     public static HashMap<String, String> getUserNames(String sectionId) {
         HashMap<String, String> listOfUsers = new HashMap<>();
@@ -799,44 +732,47 @@ public class FirebaseUtils {
 
 
     public static void setTeacherListener() {
-        mTeachersRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                String id = dataSnapshot.getKey();
-                Log.d("TEST", "[new Teacher Child] \n" + id);
-                allTeachers.add(id);
-            }
+        if (!UserSesh.getInstance().checkIsStudent()) {
+            mTeachersRef.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                    String id = dataSnapshot.getKey();
+                    Log.d("TEST", "[new Teacher Child] \n" + id);
+                    allTeachers.add(id);
+                }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
 
-            }
+                }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                String id = dataSnapshot.getKey();
-                Log.d("TEST", "[deleting Teacher Child] \n" + id);
-                allTeachers.remove(id);
-            }
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    String id = dataSnapshot.getKey();
+                    Log.d("TEST", "[deleting Teacher Child] \n" + id);
+                    allTeachers.remove(id);
+                }
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
+        }
     }
 
     public static boolean teacherIsInDB() {
         Log.d("TEST", "in teacherIsInDB method...");
         Log.d("TEST", "teacherIsInDB RESULT: " + allTeachers.contains(getPsuedoUniqueID()));
-
         return allTeachers.contains(getPsuedoUniqueID());
     }
 
     public static String getMySection() {
         Log.d("TEST", "getMySection: " + allUsers.get(getPsuedoUniqueID()));
-        return allUsers.get(getPsuedoUniqueID());
+        Log.d("TEST", "getMySection - via usage of singleton: " + UserSesh.getInstance().getSection_ref_key());
+//        return allUsers.get(getPsuedoUniqueID());
+        return UserSesh.getInstance().getSection_ref_key();
     }
 
     /**
