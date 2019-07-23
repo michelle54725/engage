@@ -359,6 +359,39 @@ public class FirebaseUtils {
 
     public static void createSection(String start, String end, String ta_name, String section_id,
                                      String key, int magic_word) {
+        //        mSectionRef.child(section.ref_key).child("user_ids").addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                Log.d("TEST", "LISTENER SAYS copying user to local sectionSliders: " + dataSnapshot.getKey());
+//                String user_id = dataSnapshot.getKey();
+//                sectionSliders.put(user_id, 50); // default slider = 50
+//                setSliderListener(user_id);
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                // Someone changed their name
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//                Log.d("TEST", "removing user from local sectionSliders: " + dataSnapshot.getKey());
+//                sectionSliders.remove(dataSnapshot.getKey());
+//                String user_id = dataSnapshot.getKey();
+//                // TODO: stop Listener?
+//            }
+
+        //            @Override
+//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
     /**
@@ -452,6 +485,8 @@ public class FirebaseUtils {
     }
 
     public static void setUserIdinSectionListener(final String ref_key) {
+        Log.d("TEST[user_ids]", "in setUserIdinSectionListener");
+        sectionSliders = new HashMap<>(); // clear out sectionSliders from previous
         DatabaseReference useridsRef = mSectionRef.child(ref_key).child("user_ids");
         if (useridsRef != null) {
             useridsRef.addChildEventListener(new ChildEventListener() {
@@ -541,6 +576,39 @@ public class FirebaseUtils {
                     });
         }
     }
+
+    public static void setSliderValues() {
+        mUsersRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                Log.d("TEST", "[new slider val] \n");
+                Iterable<DataSnapshot> userIds = dataSnapshot.getChildren();
+                for (DataSnapshot user : userIds) {
+                    String sliderVal = user.child("slider_val").toString();
+                    Log.d("TEST", "my current sliderVALS "  + sliderVal);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                UserSesh newUser = dataSnapshot.getValue(UserSesh.class);
+                Log.d("TEST", "[deleting User Child] \n" + newUser.getUser_id() + "\n" + newUser.getSection_ref_key());
+                allUsers.remove(newUser.getUser_id());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+    }
+    
     public static void checkIsTakingAttendance(String section_ref_key) {
         Log.d("TEST", "calling checkIsTakingAttendance");
         FirebaseDatabase.getInstance().getReference("/Sections").child(section_ref_key).child("isTakingAttendance").addValueEventListener(new ValueEventListener() {
