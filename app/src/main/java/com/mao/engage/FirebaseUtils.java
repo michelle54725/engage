@@ -350,48 +350,6 @@ public class FirebaseUtils {
         FirebaseDatabase.getInstance().getReference("/MagicKeys").child("" + section.getMagic_key()).setValue(section.getRef_key());
     }
 
-    public static void createSection(String start, String end, String ta_name, String section_id,
-                                     String key, int magic_word) {
-    }
-
-
-    // Find SectionSesh corresponding to User's MagicWord
-    // Add UserID to corresponding Section's user_ids list
-    public static void createUser(final UserSesh user) {
-        Log.d("TEST", "in findSectionWithUser" + mSectionRef.getKey());
-        mSectionRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Log.d("TEST", "in OnDataChange w MW: " + String.valueOf(user.getMagic_key()));
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        SectionSesh section = snapshot.getValue(SectionSesh.class);
-                        if (section.getMagic_key() == user.getMagic_key()) {
-                            Log.d("TEST", "\n[FOUND MATCH] " + "\nmagic key: " + section.getMagic_key() + "; \n" + "ref key: " + section.getRef_key());
-                            // Reflect change in section_ref_key in both DB and UserSesh object
-                            user.setSection_ref_key(section.getRef_key());
-                            mUsersRef.child(user.getUser_id()).setValue(user);
-                            DatabaseReference userIDref = mSectionRef.child(section.getRef_key()).child("user_ids");
-                            Map<String, Object> userUpdates = new HashMap<>();
-                            userUpdates.put(user.getUser_id(), user.getUsername()+ ",a");
-                            userIDref.updateChildren(userUpdates);
-
-                            HashMap<String,String> user_id_map = (HashMap<String,String>) sectionMap.get(section.getRef_key()).get("user_ids");
-                            user_id_map.put(user.getUser_id(), user.getUsername() + ",a");
-                        }
-                    }
-                } else {
-                    Log.d("TEST-FAIL", "dataSnapshot DNE");
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.d("TEST-FAIL", "failed to read value");
-            }
-        });
-    }
-
     public static void updateTeacher(String name, String sectionRefKey, String sectionID) {
         Log.d("TEST", "updating Teacher w device ID " + getPsuedoUniqueID());
         DatabaseReference mRef = mTeachersRef.child(getPsuedoUniqueID());
