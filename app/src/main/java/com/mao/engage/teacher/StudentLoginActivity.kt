@@ -32,8 +32,10 @@ import com.mao.engage.R
 import com.mao.engage.callback.CallbackManager
 import com.mao.engage.student.StudentClassActivity
 import com.mao.engage.UserSesh
+import com.mao.engage.models.SectionSesh
 
 import java.util.ArrayList
+import java.util.HashMap
 
 class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -116,21 +118,10 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
                             UserSesh.getInstance().user_id = mUID
                             UserSesh.getInstance().username = mUsername
                             UserSesh.getInstance().magic_key = Integer.valueOf(magicWord)
-                            UserSesh.getInstance().section_ref_key = mUser.section_ref_key
+                            UserSesh.getInstance().section_ref_key = null; //haven't matched a section yet
                             UserSesh.getInstance().setIsStudent(true)
 
-                            // verify the current UserSession has a section_ref_key
-                            if (findSection(mUser)) {
-                                Log.d("TEST", "set User's ref key to: " + mUser.section_ref_key)
-                                Toast.makeText(this@StudentLoginActivity, "SUCCESS! Entering Section...", Toast.LENGTH_SHORT).show()
-
-                                val intent = Intent(this@StudentLoginActivity, StudentClassActivity::class.java)
-                                intent.putExtra("uID", mUID)
-                                intent.putExtra("magic_key", magicWord)
-                                startActivity(intent)
-                            } else {
-                                Toast.makeText(this@StudentLoginActivity, "Error! Check for typos?", Toast.LENGTH_SHORT).show()
-                            }
+                            findSection(mUser)
                         } else {
                             Toast.makeText(this@StudentLoginActivity, "Invalid code - check for typos?", Toast.LENGTH_SHORT).show()
                         }
@@ -145,12 +136,66 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
         })
     }
 
-    private fun findSection(user: UserSesh): Boolean {
-        FirebaseUtils.createUser(user)
-        //TODO: problem: this code runs faster than EventListeners do their work. Use runnable? or use local magic key/section ref key
-        //        user.setSection_ref_key(FirebaseUtils.allUsers.get(user.getUser_id()));
-        //        Log.d("TEST", "User's Ref Key is now: " + user.getSection_ref_key());
-        //        return user.getSection_ref_key() != null;
-        return true // forced true for now
+    // Find SectionSesh corresponding to User's MagicWord
+    // - updates User with section_ref_key then pushes it to Firebase under /Users
+    // - adds UserId to corresponding Section's user_ids list
+    // replaces: FirebaseUtils.createUser(user)
+    private fun findSection(user: UserSesh) {
+        val mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections")
+        val mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions")
+//
+//        mSectionRef.addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                if (dataSnapshot.exists()) {
+//                    var sectionRefKeyFromFirebase = ""
+//                    for (snapshot in dataSnapshot.children) {
+//                        val section = snapshot.getValue(SectionSesh::class.java)
+//                        if (section!!.getMagic_key() == user.magic_key) {
+//                            sectionRefKeyFromFirebase = section.getRef_key()
+//
+//                            // reflect change in section_ref_key in both DB and UserSesh object
+//                            user.section_ref_key = section.getRef_key()
+//                            mUsersRef.child(user.user_id).setValue(user)
+//
+//                            // add this user to user_ids of section
+//                            val userIdRef = mSectionRef.child(section.getRef_key()).child("user_ids")
+//                            val userUpdates = HashMap<String, Any>()
+//                            userUpdates[user.user_id] = user.username + ",a"
+//                            userIdRef.updateChildren(userUpdates)
+//
+//                            //TODO: eliminate sectionMap code once eliminated sectionMap
+//                            val user_id_map = FirebaseUtils.sectionMap.get(section.getRef_key())!!.get("user_ids") as HashMap<String, String>
+//                            user_id_map[user.user_id] = user.username + ",a"
+//                            Log.d("M-Test", FirebaseUtils.sectionMap.get(section.getRef_key())!!.get("user_ids").toString())
+//                        }
+//                    }
+//                    val firebaseCallbackManager = CallbackManager<String>()
+//                    firebaseCallbackManager.onSuccess(sectionRefKeyFromFirebase) {
+//                        input: String ->
+//                        run {
+//                            val sectionRefKey : String = input
+//                            Log.d("M-TEST:", sectionRefKey)
+//                            if (sectionRefKey != "") {
+//                                Log.d("M-TEST", "set User's ref key to: " + mUser.section_ref_key)
+//                                Toast.makeText(this@StudentLoginActivity, "SUCCESS! Entering Section...", Toast.LENGTH_SHORT).show()
+//
+//                                val intent = Intent(this@StudentLoginActivity, StudentClassActivity::class.java)
+//                                intent.putExtra("uID", mUID)
+//                                intent.putExtra("magic_key", magicWord)
+//                                startActivity(intent)
+//                            } else {
+//                                Toast.makeText(this@StudentLoginActivity, "Error! Check for typos?", Toast.LENGTH_SHORT).show()
+//                            }
+//                        }
+//                    }
+//                } else {
+//                    Log.d("TEST-FAIL", "dataSnapshot DNE")
+//                }
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//                Log.d("TEST-FAIL", error.message)
+//            }
+//        })
     }
 }
