@@ -94,5 +94,13 @@ internal fun findSection(user: UserSesh, context: Context) {
         override fun onCancelled(error: DatabaseError) {
             Log.d("TEST-FAIL", error.message)
         }
-    })
+    })// marks end of addListenerForSingleValueEvent
+    
+    /** Note on why we need to do this:
+     *  mSectionRef.addListenerForSingleValueEvent(...) contains code that is run asynchronously, i.e.
+     *  any code here will likely execute before the for-loop in OnDataChange finishes, thus falling
+     *  to the trap of asynchronous tasks. e.g. if we tried to match a magic_key here, we might
+     *  end with "no match" even though there was a match because this code is executing at a time
+     *  before we finished scanning the DB in OnDataChange */
+
 }
