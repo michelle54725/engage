@@ -109,7 +109,7 @@ public class TestingActivity extends AppCompatActivity {
                 mUsersRef.child(USER_ID).setValue(mUser);
 
                 // Update SectionSesh's user_ids
-                mListUsers.add(mUser.user_id);
+                mListUsers.add(mUser.getUser_id());
                 mSectionRef.child(mSectionRefKey).child("user_ids").setValue(mListUsers);
             }
         });
@@ -129,7 +129,7 @@ public class TestingActivity extends AppCompatActivity {
                     mSectionRef.child(key);
                     TextView index = findViewById(R.id.indexView);
                     index.setText(String.valueOf(i));
-                    mUser.slider_val = i;
+                    mUser.setSlider_val(i);
                 }
             }
 
@@ -154,12 +154,12 @@ public class TestingActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     SectionSesh section = snapshot.getValue(SectionSesh.class);
-                    if (section.magic_key == user.magic_key) {
+                    if (section.magic_key == user.getMagic_key()) {
                         //TODO: could do this more elegantly.
                         // Reflect change in section_ref_key in both DB and UserSesh object
                         user.setSection_ref_key(section.getRef_key());
-                        mUsersRef.child(user.user_id).child("section_ref_key").setValue(section.getRef_key());
-                        refView.setText(user.section_ref_key);
+                        mUsersRef.child(user.getUser_id()).child("section_ref_key").setValue(section.getRef_key());
+                        refView.setText(user.getSection_ref_key());
                     }
                 }
             }
