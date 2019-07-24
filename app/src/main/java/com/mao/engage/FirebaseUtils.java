@@ -357,43 +357,6 @@ public class FirebaseUtils {
         // a Listener on a Section's user_ids to maintain local sectionSliders HashMap
     }
 
-    public static void createSection(String start, String end, String ta_name, String section_id,
-                                     String key, int magic_word) {
-        //        mSectionRef.child(section.ref_key).child("user_ids").addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                Log.d("TEST", "LISTENER SAYS copying user to local sectionSliders: " + dataSnapshot.getKey());
-//                String user_id = dataSnapshot.getKey();
-//                sectionSliders.put(user_id, 50); // default slider = 50
-//                setSliderListener(user_id);
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                // Someone changed their name
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-//                Log.d("TEST", "removing user from local sectionSliders: " + dataSnapshot.getKey());
-//                sectionSliders.remove(dataSnapshot.getKey());
-//                String user_id = dataSnapshot.getKey();
-//                // TODO: stop Listener?
-//            }
-
-        //            @Override
-//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-    }
-
     /**
     //TODO: how to set saved_slider_vals array in firebase
     public static void createSavedSliderVals(String sectionRefKey) {
