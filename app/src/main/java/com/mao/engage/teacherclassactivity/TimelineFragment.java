@@ -133,11 +133,7 @@ public class TimelineFragment extends Fragment {
         threshBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                thresholdVal = progress;
-                Log.d("TEST-M", "threshold value changed: " + progress);
-                if (!FirebaseUtils.compareTime(endTime)) {
-                    retrieveData();
-                }
+                // don't call retrieveData() here so spam-y behavior doesn't affect anything
             }
 
             @Override
@@ -147,7 +143,11 @@ public class TimelineFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                thresholdVal = seekBar.getProgress();
+                Log.d("TEST-M", "threshold value changed: " + seekBar.getProgress());
+                if (!FirebaseUtils.compareTime(endTime)) {
+                    retrieveData();
+                }
             }
         });
 
@@ -340,17 +340,17 @@ public class TimelineFragment extends Fragment {
             entries.add(new BarEntry(i, countsArray[i]));
         }
 
-        BarDataSet disengagedBarSet = new BarDataSet(entries.subList(0, (thresholdVal / 100)), "BarDataSet");
+        BarDataSet disengagedBarSet = new BarDataSet(entries.subList(0, (thresholdVal / 10)), "BarDataSet");
         disengagedBarSet.setColor(getResources().getColor(R.color.colorAccentRed));
-        BarDataSet engagedBarSet = new BarDataSet(entries.subList((int) (thresholdVal / 100), entries.size()), "BarDataSet");
+        BarDataSet engagedBarSet = new BarDataSet(entries.subList((thresholdVal / 10), entries.size()), "BarDataSet");
         engagedBarSet.setColor(getResources().getColor(R.color.colorAccentBlue));
 
         int engagedStudents = 0;
-        for(int i = (thresholdVal / 100); i < countsArray.length; i++) {
+        for(int i = (thresholdVal / 10); i < countsArray.length; i++) {
             engagedStudents += countsArray[i];
         }
         int disengagedStudents = 0;
-        for(int i = 0; i < (thresholdVal / 100); i++) {
+        for(int i = 0; i < (thresholdVal / 10); i++) {
             disengagedStudents += countsArray[i];
         }
 
@@ -496,8 +496,6 @@ public class TimelineFragment extends Fragment {
         mDisengagedPieChart.invalidate();
 
         chart.invalidate();
-        Log.d("TEST-M", "thresholdVal: " + thresholdVal);
-        Log.d("TEST-M", "getProgress(): " + threshBar.getProgress());
     }
 
     /**
