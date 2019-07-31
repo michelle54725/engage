@@ -59,15 +59,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link TimelineFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link TimelineFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class TimelineFragment extends Fragment {
     private ArrayList<Entry> classValues;
     private ArrayList<Entry> threshold;
@@ -86,7 +77,7 @@ public class TimelineFragment extends Fragment {
     private String endTime;
 
     private String sectionRefKey;
-    private double thresholdVal;
+    private int thresholdVal;
 
     TimerTask retrieveDataTask;
     private ArrayList<Integer> timelineData;
@@ -100,24 +91,6 @@ public class TimelineFragment extends Fragment {
 
     public TimelineFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TimelineFragment.
-     */
-    //currently not used
-    public static TimelineFragment newInstance(String param1, String param2) {
-        TimelineFragment fragment = new TimelineFragment();
-        Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -144,7 +117,7 @@ public class TimelineFragment extends Fragment {
             Log.d("TEST", "sectionRefKey in Timeline: " + sectionRefKey);
             timelineData = getArguments().getIntegerArrayList("timelinedata");
         }
-        thresholdVal = FirebaseUtils.getThreshold(sectionRefKey) * 10.0;
+        thresholdVal = 50; //default to 50
         //[WIP:Deep] timelineData will get current saved slider vals if they exist, otherwise it will be an empty list
         //timelineData = FirebaseUtils.getSavedSliderVals(sectionRefKey);
 
@@ -154,15 +127,15 @@ public class TimelineFragment extends Fragment {
         threshBar = view.findViewById(R.id.mVerticalSeekBar);
 
         /*
-         * Listener on threshold bar. ChangeThresholdVal stores the new change into the database.
-         * Need to recall retrieveData to reset pie charts and the graph.
+         * Listener on threshold bar.
+         * Need to re-call retrieveData to reset pie charts and the graph.
          */
         threshBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                FirebaseUtils.changeThresholdVal(sectionRefKey, progress);
-                Log.d("TEST", "threshold value changed!" + progress);
-                if (FirebaseUtils.compareTime(endTime) == false) {
+                thresholdVal = progress;
+                Log.d("TEST-M", "threshold value changed: " + progress);
+                if (!FirebaseUtils.compareTime(endTime)) {
                     retrieveData();
                 }
             }
@@ -367,17 +340,17 @@ public class TimelineFragment extends Fragment {
             entries.add(new BarEntry(i, countsArray[i]));
         }
 
-        BarDataSet disengagedBarSet = new BarDataSet(entries.subList(0, (int) (thresholdVal / 10)), "BarDataSet");
+        BarDataSet disengagedBarSet = new BarDataSet(entries.subList(0, (thresholdVal / 100)), "BarDataSet");
         disengagedBarSet.setColor(getResources().getColor(R.color.colorAccentRed));
-        BarDataSet engagedBarSet = new BarDataSet(entries.subList((int) (thresholdVal / 10), entries.size()), "BarDataSet");
+        BarDataSet engagedBarSet = new BarDataSet(entries.subList((int) (thresholdVal / 100), entries.size()), "BarDataSet");
         engagedBarSet.setColor(getResources().getColor(R.color.colorAccentBlue));
 
         int engagedStudents = 0;
-        for(int i = (int) (thresholdVal / 10); i < countsArray.length; i++) {
+        for(int i = (thresholdVal / 100); i < countsArray.length; i++) {
             engagedStudents += countsArray[i];
         }
         int disengagedStudents = 0;
-        for(int i = 0; i < (int) (thresholdVal / 10); i++) {
+        for(int i = 0; i < (thresholdVal / 100); i++) {
             disengagedStudents += countsArray[i];
         }
 
@@ -523,9 +496,8 @@ public class TimelineFragment extends Fragment {
         mDisengagedPieChart.invalidate();
 
         chart.invalidate();
-        thresholdVal = FirebaseUtils.getThreshold(sectionRefKey) * 10.0;
-        Log.d("TEST", "my current threshold " + thresholdVal);
-        Log.d("TEST", "my actual threshold " + threshBar.getProgress());
+        Log.d("TEST-M", "thresholdVal: " + thresholdVal);
+        Log.d("TEST-M", "getProgress(): " + threshBar.getProgress());
     }
 
     /**
