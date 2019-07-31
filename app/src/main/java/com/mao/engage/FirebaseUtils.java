@@ -357,14 +357,14 @@ public class FirebaseUtils {
         // a Listener on a Section's user_ids to maintain local sectionSliders HashMap
     }
 
-    /**
-    //TODO: how to set saved_slider_vals array in firebase
+    /**[WIP: Deep]
+    // TODO: how to set saved_slider_vals array in firebase
     public static void createSavedSliderVals(String sectionRefKey) {
         mSectionRef.child(sectionRefKey).child("saved_slider_vals").setValue("50,");
         Log.d("TEST:", "Reached saved slider vals method!");
     }
 
-    //TODO: get saved_slider_vals array from firebase
+    // TODO: get saved_slider_vals array from firebase
     //store values like this: 22, 33, 44, 55
     public static ArrayList<Integer> getSavedSliderVals(String sectionRefKey) {
 
