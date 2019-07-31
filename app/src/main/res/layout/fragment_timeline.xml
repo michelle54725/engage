@@ -52,11 +52,11 @@
 
         <SeekBar
             android:id="@+id/mVerticalSeekBar"
-            android:layout_width="280dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="236dp"
+            android:layout_marginEnd="244dp"
             android:foregroundGravity="left"
             android:max="100"
             android:progress="50"
@@ -65,7 +65,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/chart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.562" />
+            app:layout_constraintVertical_bias="0.558" />
 
         <TextView
             android:id="@+id/startTimeText"

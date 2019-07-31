@@ -156,7 +156,6 @@ public class TimelineFragment extends Fragment {
 
         //Runs the retrieveData method specified below at a fixed rate of five seconds
         retrieveDataTask = new TimerTask() {
-            int test_val = 0; //for testing
             @Override
             public void run() {
                 Activity activity = getActivity();
