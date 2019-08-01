@@ -71,11 +71,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
     // Name validity check
     private boolean isValidName() {
-        //TODO: make more rigorous check
-        if(getName().contains(",")) {
-            return false; //no commas in name else, will be confused with ",a" and ",p"
-        }
-        return !getName().isEmpty();
+        return false;
     }
 
     // Click handling
