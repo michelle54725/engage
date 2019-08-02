@@ -38,6 +38,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
 import com.mao.engage.models.SectionSesh;
+import com.mao.engage.teacherclassactivity.LottieTeacher;
 import com.mao.engage.teacherclassactivity.TeacherClassActivity;
 
 import java.util.ArrayList;
@@ -135,7 +136,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity implements Vie
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            Intent intent = new Intent(TeacherCreateClassActivity.this, TeacherClassActivity.class);
+                            Intent intent = new Intent(TeacherCreateClassActivity.this, LottieTeacher.class);
                             intent.putExtra("sectionRefKey", mSectionRefKey);
                             intent.putExtra("magic_word", mMagicWord);
                             intent.putExtra("section_name", classNameEditText.getText().toString());
