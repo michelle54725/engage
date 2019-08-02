@@ -441,7 +441,7 @@ public class FirebaseUtils {
     }
 
     public static void updateTeacher(String name, String sectionRefKey, String sectionID) {
-        Log.d("TEST", "updating Teacher w device ID " + getPsuedoUniqueID());
+        Log.d("TEST-M", "updating Teacher w device ID " + getPsuedoUniqueID());
         DatabaseReference mRef = mTeachersRef.child(getPsuedoUniqueID());
         mRef.child("name").setValue(name);
         mRef.child("existingSections").child(sectionRefKey).setValue(sectionID);
@@ -764,11 +764,16 @@ public class FirebaseUtils {
 
     public static void setTeacherListener() {
         if (!UserSesh.getInstance().checkIsStudent()) {
+            /** TODO: @Paulshao ^this check doesn't pass for teachers when it should.
+             * This is preventing teachers from being shown TeacherOptionsActivity where they can
+             * resume sections. */
+
+            Log.d("TEST-M", "is Teacher");
             mTeachersRef.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                     String id = dataSnapshot.getKey();
-                    Log.d("TEST", "[new Teacher Child] \n" + id);
+                    Log.d("TEST-M", "[new Teacher Child] \n" + id);
                     allTeachers.add(id);
                 }
 
@@ -794,8 +799,8 @@ public class FirebaseUtils {
     }
 
     public static boolean teacherIsInDB() {
-        Log.d("TEST", "in teacherIsInDB method...");
-        Log.d("TEST", "teacherIsInDB RESULT: " + allTeachers.contains(getPsuedoUniqueID()));
+        Log.d("TEST-M", "in teacherIsInDB method...");
+        Log.d("TEST-M", "teacherIsInDB RESULT: " + allTeachers.contains(getPsuedoUniqueID()));
         return allTeachers.contains(getPsuedoUniqueID());
     }
 
