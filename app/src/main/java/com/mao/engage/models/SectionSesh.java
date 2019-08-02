@@ -24,7 +24,7 @@ public class SectionSesh implements Serializable {
 
     private boolean isTakingAttendance = false;
     private Map<String, String> user_ids;
-    private ArrayList<ArrayList<Integer>> saved_slider_vals;
+    //[Mao: (not using this)] private ArrayList<ArrayList<Integer>> saved_slider_vals;
 
     public SectionSesh(String a_start, String b_end, String ta_key, String section_name,
                        String ref_key, int magic_key, ArrayList<String> user_ids) {
@@ -41,7 +41,7 @@ public class SectionSesh implements Serializable {
         for (int i = 0; i < user_ids.size(); i++) {
             this.user_ids.put("bob", user_ids.get(i));
         }
-        this.saved_slider_vals = new ArrayList<>();
+        //[Mao: (not using this)] this.saved_slider_vals = new ArrayList<>();
     }
 
     //Serializable needs a void constructor
@@ -57,7 +57,7 @@ public class SectionSesh implements Serializable {
     public String getSection_name() { return section_name; }
     public boolean getIsTakingAttendance() { return isTakingAttendance; }
     public Map<String, String> getUser_ids() { return user_ids; }
-    public ArrayList<ArrayList<Integer>> getSaved_slider_vals() { return saved_slider_vals; }
+    //[Mao: (not using this)]public ArrayList<ArrayList<Integer>> getSaved_slider_vals() { return saved_slider_vals; }
 
 
     // setters
@@ -69,5 +69,5 @@ public class SectionSesh implements Serializable {
     public void setSection_name(String section_name) { this.section_name = section_name; }
     public void setIsTakingAttendance(boolean takingAttendance) { isTakingAttendance = takingAttendance; }
     public void setUser_ids(Map<String, String> user_ids) { this.user_ids = user_ids; }
-    public void setSaved_slider_vals(ArrayList<ArrayList<Integer>> saved_slider_vals) { this.saved_slider_vals = saved_slider_vals; }
+    //[Mao: (not using this)]public void setSaved_slider_vals(ArrayList<ArrayList<Integer>> saved_slider_vals) { this.saved_slider_vals = saved_slider_vals; }
 }
