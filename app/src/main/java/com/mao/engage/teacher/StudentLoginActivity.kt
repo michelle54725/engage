@@ -4,12 +4,11 @@
 
     Triggered by: "JOIN AS STUDENT" button from StartActivity
 
-    Transitions to: StudentClassActivity
+    Transitions to: StudentClassActivity (via findSection)
  */
 
 package com.mao.engage.teacher
 
-import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -30,12 +29,9 @@ import com.google.firebase.database.ValueEventListener
 import com.mao.engage.FirebaseUtils
 import com.mao.engage.R
 import com.mao.engage.callback.CallbackManager
-import com.mao.engage.student.StudentClassActivity
 import com.mao.engage.UserSesh
-import com.mao.engage.models.SectionSesh
 
 import java.util.ArrayList
-import java.util.HashMap
 
 class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -83,13 +79,12 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    // TODO: Firebase verify (make sure MagicWord exists); further upgrade: check MagicWord corresponds to a section CURRENTLY in session
     private fun authenticateMagicWord() {
         if (magicWord.length != 2 && magicWord.length != 3) {
             Toast.makeText(this, "Typo? A Magic Keyword Should Contain 2 or 3 digits", Toast.LENGTH_LONG).show()
             Log.d("P-TEST:", "Invalidate Magic Key: magic key must be of length 3")
         }
-        // not correctly implemented so students can key into non-existent sections
+
         val magicKeysReference = FirebaseDatabase.getInstance().getReference("/MagicKeys")
         magicKeysReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -105,8 +100,7 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
                  * Please see below for a concrete usage of the CallbackManagerClass
                  */
                 val firebaseCallbackManager = CallbackManager<ArrayList<String>>()
-                firebaseCallbackManager.onSuccess(magicKeysFromFirebase) {
-                    input: ArrayList<String> ->
+                firebaseCallbackManager.onSuccess(magicKeysFromFirebase) { input: ArrayList<String> ->
                     run {
                         existentMagicKeys = input
                         Log.d("P-TEST:", existentMagicKeys.toString())
@@ -121,7 +115,9 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
                             UserSesh.getInstance().section_ref_key = null; //haven't matched a section yet
                             UserSesh.getInstance().setIsStudent(true)
 
-                            findSection(mUser)
+                            // call helper function to search in DB for section matching user's magic_key
+                            // and start StudentClassActivity if found
+                            findSection(mUser, this@StudentLoginActivity)
                         } else {
                             Toast.makeText(this@StudentLoginActivity, "Invalid code - check for typos?", Toast.LENGTH_SHORT).show()
                         }
@@ -198,4 +194,5 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
 //            }
 //        })
     }
+
 }

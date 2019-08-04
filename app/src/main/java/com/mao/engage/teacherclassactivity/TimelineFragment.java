@@ -6,9 +6,6 @@ package com.mao.engage.teacherclassactivity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -21,7 +18,6 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
-import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
@@ -149,7 +145,7 @@ public class TimelineFragment extends Fragment {
             timelineData = getArguments().getIntegerArrayList("timelinedata");
         }
         thresholdVal = FirebaseUtils.getThreshold(sectionRefKey) * 10.0;
-        //timelineData will get current saved slider vals if they exist, otherwise it will be an empty list
+        //[WIP:Deep] timelineData will get current saved slider vals if they exist, otherwise it will be an empty list
         //timelineData = FirebaseUtils.getSavedSliderVals(sectionRefKey);
 
         chart.bringToFront();
@@ -547,11 +543,11 @@ public class TimelineFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    //when student leaves this fragment, upload current timelineData to firebase.
+    //[WIP: Deep] when student leaves this fragment, upload current timelineData to firebase.
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        //when the view is destroyed, save values to firebase, so they can be used again.
+        //[WIP: Deep] when the view is destroyed, save values to firebase, so they can be used again.
         //FirebaseUtils.setSavedSliderVals(sectionRefKey, timelineData);
     }
 }

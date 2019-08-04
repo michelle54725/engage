@@ -357,51 +357,14 @@ public class FirebaseUtils {
         // a Listener on a Section's user_ids to maintain local sectionSliders HashMap
     }
 
-    public static void createSection(String start, String end, String ta_name, String section_id,
-                                     String key, int magic_word) {
-        //        mSectionRef.child(section.ref_key).child("user_ids").addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                Log.d("TEST", "LISTENER SAYS copying user to local sectionSliders: " + dataSnapshot.getKey());
-//                String user_id = dataSnapshot.getKey();
-//                sectionSliders.put(user_id, 50); // default slider = 50
-//                setSliderListener(user_id);
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                // Someone changed their name
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-//                Log.d("TEST", "removing user from local sectionSliders: " + dataSnapshot.getKey());
-//                sectionSliders.remove(dataSnapshot.getKey());
-//                String user_id = dataSnapshot.getKey();
-//                // TODO: stop Listener?
-//            }
-
-        //            @Override
-//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-    }
-
-    /**
-    //TODO: how to set saved_slider_vals array in firebase
+    /**[WIP: Deep]
+    // TODO: how to set saved_slider_vals array in firebase
     public static void createSavedSliderVals(String sectionRefKey) {
         mSectionRef.child(sectionRefKey).child("saved_slider_vals").setValue("50,");
         Log.d("TEST:", "Reached saved slider vals method!");
     }
 
-    //TODO: get saved_slider_vals array from firebase
+    // TODO: get saved_slider_vals array from firebase
     //store values like this: 22, 33, 44, 55
     public static ArrayList<Integer> getSavedSliderVals(String sectionRefKey) {
 
@@ -478,7 +441,7 @@ public class FirebaseUtils {
     }
 
     public static void updateTeacher(String name, String sectionRefKey, String sectionID) {
-        Log.d("TEST", "updating Teacher w device ID " + getPsuedoUniqueID());
+        Log.d("TEST-M", "updating Teacher w device ID " + getPsuedoUniqueID());
         DatabaseReference mRef = mTeachersRef.child(getPsuedoUniqueID());
         mRef.child("name").setValue(name);
         mRef.child("existingSections").child(sectionRefKey).setValue(sectionID);
@@ -801,11 +764,16 @@ public class FirebaseUtils {
 
     public static void setTeacherListener() {
         if (!UserSesh.getInstance().checkIsStudent()) {
+            /** TODO: @Paulshao ^this check doesn't pass for teachers when it should.
+             * This is preventing teachers from being shown TeacherOptionsActivity where they can
+             * resume sections. */
+
+            Log.d("TEST-M", "is Teacher");
             mTeachersRef.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                     String id = dataSnapshot.getKey();
-                    Log.d("TEST", "[new Teacher Child] \n" + id);
+                    Log.d("TEST-M", "[new Teacher Child] \n" + id);
                     allTeachers.add(id);
                 }
 
@@ -831,8 +799,8 @@ public class FirebaseUtils {
     }
 
     public static boolean teacherIsInDB() {
-        Log.d("TEST", "in teacherIsInDB method...");
-        Log.d("TEST", "teacherIsInDB RESULT: " + allTeachers.contains(getPsuedoUniqueID()));
+        Log.d("TEST-M", "in teacherIsInDB method...");
+        Log.d("TEST-M", "teacherIsInDB RESULT: " + allTeachers.contains(getPsuedoUniqueID()));
         return allTeachers.contains(getPsuedoUniqueID());
     }
 
