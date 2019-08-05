@@ -37,7 +37,7 @@ internal fun findRefKey(user_id: String, value: Int) {
                     run {
                         val sectionRefKey : String = input
                         Log.d("L-TEST", sectionRefKey)
-                        if (sectionRefKey != "") {
+                        if (sectionRefKey.isNotBlank()) {
                             mUsersRef.child(user_id).child("slider_val").setValue(value).addOnSuccessListener(OnSuccessListener<Void> {
                                 Log.d("L-TEST", "New slider wrote to DB: $value")
                                 sectionSliders.put(user_id, value)
