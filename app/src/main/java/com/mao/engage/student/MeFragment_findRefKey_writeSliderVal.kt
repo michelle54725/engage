@@ -24,9 +24,7 @@ internal fun MeFragment_findRefKey_writeSliderVal(user_id: String, value: Int) {
                 var sectionRefKeyFromFirebase = ""
                 for (snapshot in dataSnapshot.children) {
                     val user = snapshot.getValue(UserSesh::class.java)
-                    Log.d("L-TEST", "a snapshot: " + user!!.getUser_id())
                     if (user!!.getUser_id().equals(user_id)) {
-                        Log.d("L-TEST", "user found. Section: " + user.section_ref_key)
                         sectionRefKeyFromFirebase = user.section_ref_key
                     }
                 }
@@ -36,12 +34,9 @@ internal fun MeFragment_findRefKey_writeSliderVal(user_id: String, value: Int) {
                     input: String ->
                     run {
                         val sectionRefKey : String = input
-                        Log.d("L-TEST", sectionRefKey)
                         if (sectionRefKey.isNotBlank()) {
                             mUsersRef.child(user_id).child("slider_val").setValue(value).addOnSuccessListener(OnSuccessListener<Void> {
-                                Log.d("L-TEST", "New slider wrote to DB: $value")
                                 sectionSliders.put(user_id, value)
-                                Log.d("L-TEST", "new slider val in section sliders" + sectionSliders.get(user_id)!!)
                             })
                                     .addOnFailureListener(OnFailureListener { Log.d("TEST", "New slider wrote to DB: " + "FAILED") })
                         }
