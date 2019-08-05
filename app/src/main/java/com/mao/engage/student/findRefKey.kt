@@ -11,7 +11,7 @@ import com.mao.engage.FirebaseUtils.sectionSliders
 import com.mao.engage.UserSesh
 import com.mao.engage.callback.CallbackManager
 
-internal fun findRefKey(user_id: String, value: Int) {
+internal fun MeFragment_findRefKey(user_id: String, value: Int) {
     val mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions")
     mUsersRef.addListenerForSingleValueEvent(object: ValueEventListener {
         override fun onCancelled(p0: DatabaseError) {
@@ -37,7 +37,7 @@ internal fun findRefKey(user_id: String, value: Int) {
                     run {
                         val sectionRefKey : String = input
                         Log.d("L-TEST", sectionRefKey)
-                        if (sectionRefKey != "") {
+                        if (sectionRefKey.isNotBlank()) {
                             mUsersRef.child(user_id).child("slider_val").setValue(value).addOnSuccessListener(OnSuccessListener<Void> {
                                 Log.d("L-TEST", "New slider wrote to DB: $value")
                                 sectionSliders.put(user_id, value)
