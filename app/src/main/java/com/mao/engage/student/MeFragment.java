@@ -28,7 +28,7 @@ import com.mao.engage.R;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.mao.engage.student.FindRefKeyKt.findRefKey;
+import static com.mao.engage.student.MeFragment_findRefKey_writeSliderValKt.MeFragment_findRefKey_writeSliderVal;
 import static java.lang.Math.abs;
 
 
@@ -161,9 +161,7 @@ public class MeFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 //FirebaseUtils.setSliderVal(uID, seekBar.getProgress());
-                Log.d("L-TEST", "seekbar: " + seekBar.getProgress());
-                findRefKey(uID, seekBar.getProgress());
-                Log.d("L-TEST", "after new func");
+                MeFragment_findRefKey_writeSliderVal(uID, seekBar.getProgress());
             }
         });
     }
