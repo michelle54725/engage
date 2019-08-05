@@ -11,7 +11,7 @@ import com.mao.engage.FirebaseUtils.sectionSliders
 import com.mao.engage.UserSesh
 import com.mao.engage.callback.CallbackManager
 
-internal fun findRefKey(user_id: String, value: Int) {
+internal fun MeFragment_findRefKey(user_id: String, value: Int) {
     val mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions")
     mUsersRef.addListenerForSingleValueEvent(object: ValueEventListener {
         override fun onCancelled(p0: DatabaseError) {
