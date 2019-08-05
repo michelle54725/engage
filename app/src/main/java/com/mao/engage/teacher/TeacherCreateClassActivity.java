@@ -204,12 +204,26 @@ public class TeacherCreateClassActivity extends AppCompatActivity implements Vie
                 break;
 
             case R.id.backBtn:
-                finish();
+                Log.d("L-TEST", "back button create class: Finish");
+                Intent intent = new Intent(TeacherCreateClassActivity.this, TeacherOptionsActivity.class);
+                Log.d("L-TEST", "name: " + name);
+                intent.putExtra("name", name);
+                startActivity(intent);
+                //finish();
                 break;
             default:
                 Log.d("TEST:","Button not accounted for");
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d("L-TEST", "back button create class: Finish");
+        Intent intent = new Intent(TeacherCreateClassActivity.this, TeacherOptionsActivity.class);
+        Log.d("L-TEST", "name: " + name);
+        intent.putExtra("name", name);
+        startActivity(intent);
     }
 
     // set magicKey to a random int between 0 and 1000. If it already exists in the DB, try again.
