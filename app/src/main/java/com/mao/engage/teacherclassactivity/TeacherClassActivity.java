@@ -170,9 +170,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
 
     @Override
     public void onBackPressed() {
-        Log.d("L-TEST", "back button ClassAct: Finish");
         Intent intent = new Intent(TeacherClassActivity.this, TeacherCreateClassActivity.class);
-        Log.d("L-TEST", "name: " + name);
         intent.putExtra("name", name);
         startActivity(intent);
         //finish();

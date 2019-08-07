@@ -204,12 +204,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity implements Vie
                 break;
 
             case R.id.backBtn:
-                Log.d("L-TEST", "back button create class: Finish");
-                Intent intent = new Intent(TeacherCreateClassActivity.this, TeacherOptionsActivity.class);
-                Log.d("L-TEST", "name: " + name);
-                intent.putExtra("name", name);
-                startActivity(intent);
-                //finish();
+                onBackPressed();
                 break;
             default:
                 Log.d("TEST:","Button not accounted for");
@@ -219,9 +214,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity implements Vie
 
     @Override
     public void onBackPressed() {
-        Log.d("L-TEST", "back button create class: Finish");
         Intent intent = new Intent(TeacherCreateClassActivity.this, TeacherOptionsActivity.class);
-        Log.d("L-TEST", "name: " + name);
         intent.putExtra("name", name);
         startActivity(intent);
     }
