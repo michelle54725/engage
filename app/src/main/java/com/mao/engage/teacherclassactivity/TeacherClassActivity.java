@@ -170,7 +170,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(TeacherClassActivity.this, TeacherCreateClassActivity.class);
+        Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
         intent.putExtra("name", name);
         startActivity(intent);
         //finish();
