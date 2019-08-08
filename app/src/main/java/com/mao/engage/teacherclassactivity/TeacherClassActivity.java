@@ -39,7 +39,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
+import static com.mao.engage.teacherclassactivity.TeacherClassActivity_LottieToastKt.lottieToast;
 import info.hoang8f.android.segmented.SegmentedGroup;
 
 import static com.mao.engage.teacherclassactivity.TimelineFragment.getBitmapFromView;
@@ -61,6 +61,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
     String endTime;
     String name;
     Handler toasty;
+    Activity me;
 
     //NowFragment nowFragment; //now fragment is not used anymore
 
@@ -85,7 +86,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
 
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
+        me = this;
         //nowFragment = new NowFragment(); // not used anymore
 
         /*
@@ -169,62 +170,66 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
     }
 
     public Runnable toastTask = new Runnable() {
+        @Override
         public void run() {
-            AlertDialog.Builder builder = new AlertDialog.Builder(TeacherClassActivity.this);
-            builder.setTitle("Section has ended!");
-            builder.setMessage("Would you like to save your graph?");
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                    FirebaseUtils.removeAllUsers(mSectionRefKey);
-                    Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
-                    Log.d("TEST", "name: " + name);
-                    intent.putExtra("name", name);
-                    startActivity(intent);
-                    FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
-
-                }
-            });
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    FirebaseUtils.removeAllUsers(mSectionRefKey);
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.constraintLayout, timelineFragment);
-                    fragmentTransaction.commit();
-                    //takeScreenshot();
-                    Bitmap toSave = getBitmapFromView(TeacherClassActivity.this.getWindow().getDecorView().getRootView());
-
-                    String root = Environment.getExternalStorageDirectory().toString();
-                    File myDir = new File(root + "/req_images");
-                    myDir.mkdirs();
-                    String fname = "Image-" + mSectionRefKey + ".jpg";
-                    File file = new File(myDir, fname);
-                    Log.i("TEST", "" + file);
-                    if (file.exists())
-                        file.delete();
-                    try {
-                        Log.d("TEST", "before outputstream");
-                        FileOutputStream out = new FileOutputStream(file);
-                        Log.d("TEST", "after outputstream");
-                        toSave.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                        out.flush();
-                        out.close();
-                        Log.d("TEST", "saved");
-                    } catch (Exception e) {
-                        Log.d("TEST", "outputstream error");
-                        e.printStackTrace();
-                    }
-                    Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
-                    Log.d("TEST", "name: " + name);
-                    intent.putExtra("name", name);
-                    startActivity(intent);
-                    FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
-                }
-            });
-            builder.show();
-        };
+            lottieToast(me, mSectionRefKey, name);
+        }
+        //        public void run() {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(TeacherClassActivity.this);
+//            builder.setTitle("Section has ended!");
+//            builder.setMessage("Would you like to save your graph?");
+//            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.cancel();
+//                    FirebaseUtils.removeAllUsers(mSectionRefKey);
+//                    Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
+//                    Log.d("TEST", "name: " + name);
+//                    intent.putExtra("name", name);
+//                    startActivity(intent);
+//                    FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
+//
+//                }
+//            });
+//            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();
+//                    FirebaseUtils.removeAllUsers(mSectionRefKey);
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                    fragmentTransaction.replace(R.id.constraintLayout, timelineFragment);
+//                    fragmentTransaction.commit();
+//                    //takeScreenshot();
+//                    Bitmap toSave = getBitmapFromView(TeacherClassActivity.this.getWindow().getDecorView().getRootView());
+//
+//                    String root = Environment.getExternalStorageDirectory().toString();
+//                    File myDir = new File(root + "/req_images");
+//                    myDir.mkdirs();
+//                    String fname = "Image-" + mSectionRefKey + ".jpg";
+//                    File file = new File(myDir, fname);
+//                    Log.i("TEST", "" + file);
+//                    if (file.exists())
+//                        file.delete();
+//                    try {
+//                        Log.d("TEST", "before outputstream");
+//                        FileOutputStream out = new FileOutputStream(file);
+//                        Log.d("TEST", "after outputstream");
+//                        toSave.compress(Bitmap.CompressFormat.JPEG, 90, out);
+//                        out.flush();
+//                        out.close();
+//                        Log.d("TEST", "saved");
+//                    } catch (Exception e) {
+//                        Log.d("TEST", "outputstream error");
+//                        e.printStackTrace();
+//                    }
+//                    Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
+//                    Log.d("TEST", "name: " + name);
+//                    intent.putExtra("name", name);
+//                    startActivity(intent);
+//                    FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
+//                }
+//            });
+//            builder.show();
+//        };
     };
 }
