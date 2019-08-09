@@ -473,8 +473,8 @@ public class FirebaseUtils {
                     setSliderListener(user_id);
 
                     // LOCAL SYNC: put user in sectionAttendance
-//                    sectionAttendance.put(user_id, false);
-                    UserSesh.getInstance().setPresent(false);
+                    sectionAttendance.put(user_id, false);
+//                    UserSesh.getInstance().setPresent(false);
                     setAttendanceListener(ref_key, user_id); //this is what above TO-DO is referring to, delete this comment once resolved
                 }
 
@@ -677,11 +677,9 @@ public class FirebaseUtils {
 
 
     public static void setTeacherListener() {
-        if (!UserSesh.getInstance().checkIsStudent()) {
-            /** TODO: @Paulshao ^this check doesn't pass for teachers when it should.
-             * This is preventing teachers from being shown TeacherOptionsActivity where they can
-             * resume sections. */
-
+        /** This is preventing teachers from being shown TeacherOptionsActivity where they can
+         * resume sections. */
+        if (!allTeachers.contains(getPsuedoUniqueID())) {
             Log.d("TEST-M", "is Teacher");
             mTeachersRef.addChildEventListener(new ChildEventListener() {
                 @Override
@@ -704,10 +702,12 @@ public class FirebaseUtils {
                 }
 
                 @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+                public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
+                }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {}
+                public void onCancelled(DatabaseError databaseError) {
+                }
             });
         }
     }

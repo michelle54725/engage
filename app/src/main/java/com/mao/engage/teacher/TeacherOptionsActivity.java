@@ -55,8 +55,6 @@ public class TeacherOptionsActivity extends AppCompatActivity implements View.On
         createButton.setOnClickListener(this);
         resumeButton.setOnClickListener(this);
 
-        UserSesh.getInstance().setIsStudent(false);
-
         // set DB listeners
         FirebaseUtils.setExistingSectionsListener(FirebaseUtils.getPsuedoUniqueID());
     }
