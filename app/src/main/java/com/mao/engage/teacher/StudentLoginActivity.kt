@@ -109,11 +109,6 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
                             mUID = FirebaseUtils.getPsuedoUniqueID()
                             mUser = UserSesh(mUID, mUsername,
                                     Integer.valueOf(magicWord), null)
-                            UserSesh.getInstance().user_id = mUID
-                            UserSesh.getInstance().username = mUsername
-                            UserSesh.getInstance().magic_key = Integer.valueOf(magicWord)
-                            UserSesh.getInstance().section_ref_key = null; //haven't matched a section yet
-                            UserSesh.getInstance().setIsStudent(true)
 
                             // call helper function to search in DB for section matching user's magic_key
                             // and start StudentClassActivity if found
