@@ -11,6 +11,7 @@ package com.mao.engage.teacher
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
@@ -21,6 +22,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import com.github.ybq.android.spinkit.SpinKitView
 
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -30,11 +32,13 @@ import com.mao.engage.FirebaseUtils
 import com.mao.engage.R
 import com.mao.engage.callback.CallbackManager
 import com.mao.engage.UserSesh
+import com.mao.engage.Utils
 
 import java.util.ArrayList
 
 class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
 
+    lateinit var loadingSpin: SpinKitView
     lateinit var joinClassBtn: Button
     lateinit var backBtn: ImageButton
     lateinit var magicWordEditText: EditText
@@ -59,6 +63,7 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_student_login)
 
         // bind views (UX components)
+        loadingSpin = findViewById(R.id.loadingSpin)
         joinClassBtn = findViewById(R.id.joinClassBtn)
         backBtn = findViewById(R.id.backBtn)
         magicWordEditText = findViewById(R.id.magicWordEditText)
@@ -73,7 +78,11 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.joinClassBtn -> authenticateMagicWord()
+            R.id.joinClassBtn -> {
+                Utils.hideKeyboard(this@StudentLoginActivity)
+                loadingSpin.visibility = View.VISIBLE
+                authenticateMagicWord()
+            }
             R.id.backBtn -> finish()
             else -> Log.d("TEST:", "Button not accounted for")
         }
@@ -118,7 +127,9 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
                             // call helper function to search in DB for section matching user's magic_key
                             // and start StudentClassActivity if found
                             findSection(mUser, this@StudentLoginActivity)
+                            loadingSpin.visibility = View.GONE
                         } else {
+                            loadingSpin.visibility = View.GONE
                             Toast.makeText(this@StudentLoginActivity, "Invalid code - check for typos?", Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -127,6 +138,7 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
+                loadingSpin.visibility = View.GONE
                 Log.d("P-TEST:", "Encountered Database Error")
             }
         })
