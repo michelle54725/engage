@@ -9,11 +9,13 @@ import com.labters.lottiealertdialoglibrary.ClickListener
 import com.labters.lottiealertdialoglibrary.DialogTypes
 import com.labters.lottiealertdialoglibrary.LottieAlertDialog
 import com.mao.engage.FirebaseUtils
+import com.mao.engage.student.StudentClassActivity
+import com.mao.engage.teacher.StudentLoginActivity
 import com.mao.engage.teacher.TeacherOptionsActivity
 
-internal fun lottieToast(teacherClassActivity: Activity, mSectionRefKey: String, name: String) {
+internal fun lottieToastTeacher(activity: Activity, mSectionRefKey: String, name: String) {
     var alertDialog : LottieAlertDialog
-    alertDialog = LottieAlertDialog.Builder (teacherClassActivity, DialogTypes.TYPE_QUESTION)
+    alertDialog = LottieAlertDialog.Builder (activity, DialogTypes.TYPE_QUESTION)
             .setTitle("Section has ended")
             .setDescription("Would you like to save your data?")
             .setPositiveText("Yes")
@@ -30,9 +32,9 @@ internal fun lottieToast(teacherClassActivity: Activity, mSectionRefKey: String,
                 override fun onClick(dialog: LottieAlertDialog) {
                     dialog.dismiss()
                     FirebaseUtils.removeAllUsers(mSectionRefKey)
-                    val intent = Intent(teacherClassActivity, TeacherOptionsActivity::class.java)
+                    val intent = Intent(activity, TeacherOptionsActivity::class.java)
                     intent.putExtra("name", name)
-                    teacherClassActivity.startActivity(intent)
+                    activity.startActivity(intent)
                     FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID())
                 }
             })
@@ -42,9 +44,9 @@ internal fun lottieToast(teacherClassActivity: Activity, mSectionRefKey: String,
                 override fun onClick(dialog: LottieAlertDialog) {
                     dialog.dismiss()
                     FirebaseUtils.removeAllUsers(mSectionRefKey)
-                    val intent = Intent(teacherClassActivity, TeacherOptionsActivity::class.java)
+                    val intent = Intent(activity, TeacherOptionsActivity::class.java)
                     intent.putExtra("name", name)
-                    teacherClassActivity.startActivity(intent)
+                    activity.startActivity(intent)
                     FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID())
                 }
             })
@@ -52,3 +54,42 @@ internal fun lottieToast(teacherClassActivity: Activity, mSectionRefKey: String,
 
     alertDialog.show()
 }
+
+internal fun lottieToastStudent(activity: Activity, name: String) {
+    var alertDialog : LottieAlertDialog
+    alertDialog = LottieAlertDialog.Builder (activity, DialogTypes.TYPE_QUESTION)
+            .setTitle("Section has ended")
+            .setDescription("Would you like to save your data?")
+            .setPositiveText("Yes")
+            .setNegativeText("No")
+//            .setNoneText("None")
+            .setPositiveButtonColor(Color.parseColor("#f44242"))
+            .setPositiveTextColor(Color.parseColor("#ffeaea"))
+            .setNegativeButtonColor(Color.parseColor("#ffbb00"))
+            .setNegativeTextColor(Color.parseColor("#0a0906"))
+//            .setNoneButtonColor(Color.parseColor("#1cd3ef"))
+//            .setNoneTextColor(Color.parseColor("#c407c4"))
+            // Error View
+            .setPositiveListener(object: ClickListener {
+                override fun onClick(dialog: LottieAlertDialog) {
+                    dialog.dismiss()
+                    val intent = Intent(activity, StudentLoginActivity::class.java)
+                    intent.putExtra("name", name)
+                    activity.startActivity(intent)
+                }
+            })
+            // Warning View
+            .setNegativeListener(object : ClickListener
+            {
+                override fun onClick(dialog: LottieAlertDialog) {
+                    dialog.dismiss()
+                    val intent = Intent(activity, StudentLoginActivity::class.java)
+                    intent.putExtra("name", name)
+                    activity.startActivity(intent)
+                }
+            })
+            .build()
+
+    alertDialog.show()
+}
+

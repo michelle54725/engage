@@ -39,7 +39,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-import static com.mao.engage.teacherclassactivity.TeacherClassActivity_LottieToastKt.lottieToast;
+import static com.mao.engage.teacherclassactivity.TeacherClassActivity_LottieToastKt.lottieToastTeacher;
 import info.hoang8f.android.segmented.SegmentedGroup;
 
 import static com.mao.engage.teacherclassactivity.TimelineFragment.getBitmapFromView;
@@ -172,7 +172,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
     public Runnable toastTask = new Runnable() {
         @Override
         public void run() {
-            lottieToast(me, mSectionRefKey, name);
+            lottieToastTeacher(me, mSectionRefKey, name);
         }
         //        public void run() {
 //            AlertDialog.Builder builder = new AlertDialog.Builder(TeacherClassActivity.this);
