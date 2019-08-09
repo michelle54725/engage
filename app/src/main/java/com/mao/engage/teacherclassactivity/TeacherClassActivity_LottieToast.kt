@@ -18,13 +18,13 @@ internal fun lottieToast(teacherClassActivity: Activity, mSectionRefKey: String,
             .setDescription("Would you like to save your data?")
             .setPositiveText("Yes")
             .setNegativeText("No")
-            .setNoneText("None")
+//            .setNoneText("None")
             .setPositiveButtonColor(Color.parseColor("#f44242"))
             .setPositiveTextColor(Color.parseColor("#ffeaea"))
             .setNegativeButtonColor(Color.parseColor("#ffbb00"))
             .setNegativeTextColor(Color.parseColor("#0a0906"))
-            .setNoneButtonColor(Color.parseColor("#1cd3ef"))
-            .setNoneTextColor(Color.parseColor("#c407c4"))
+//            .setNoneButtonColor(Color.parseColor("#1cd3ef"))
+//            .setNoneTextColor(Color.parseColor("#c407c4"))
             // Error View
             .setPositiveListener(object: ClickListener {
                 override fun onClick(dialog: LottieAlertDialog) {
