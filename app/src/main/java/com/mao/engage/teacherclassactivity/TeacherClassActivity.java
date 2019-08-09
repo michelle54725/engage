@@ -168,6 +168,14 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         Log.d("BOBOB", "onFragmentInteraction: " + uri.toString());
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
+        intent.putExtra("name", name);
+        startActivity(intent);
+        //finish();
+    }
+
     public Runnable toastTask = new Runnable() {
         public void run() {
             AlertDialog.Builder builder = new AlertDialog.Builder(TeacherClassActivity.this);

@@ -28,6 +28,7 @@ import com.mao.engage.R;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.mao.engage.student.MeFragment_findRefKey_writeSliderValKt.MeFragment_findRefKey_writeSliderVal;
 import static java.lang.Math.abs;
 
 
@@ -159,7 +160,8 @@ public class MeFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                FirebaseUtils.setSliderVal(uID, seekBar.getProgress());
+                //FirebaseUtils.setSliderVal(uID, seekBar.getProgress());
+                MeFragment_findRefKey_writeSliderVal(uID, seekBar.getProgress());
             }
         });
     }
