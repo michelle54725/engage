@@ -474,8 +474,8 @@ public class FirebaseUtils {
                     setSliderListener(user_id);
 
                     // LOCAL SYNC: put user in sectionAttendance
-//                    sectionAttendance.put(user_id, false);
-                    UserSesh.getInstance().setPresent(false);
+                    sectionAttendance.put(user_id, false);
+//                    UserSesh.getInstance().setPresent(false);
                     setAttendanceListener(ref_key, user_id); //this is what above TO-DO is referring to, delete this comment once resolved
                 }
 
@@ -763,39 +763,37 @@ public class FirebaseUtils {
 
 
     public static void setTeacherListener() {
-        if (!UserSesh.getInstance().checkIsStudent()) {
-            /** TODO: @Paulshao ^this check doesn't pass for teachers when it should.
-             * This is preventing teachers from being shown TeacherOptionsActivity where they can
-             * resume sections. */
+        /** TODO: @Paulshao ^this check doesn't pass for teachers when it should.
+         * This is preventing teachers from being shown TeacherOptionsActivity where they can
+         * resume sections. */
 
-            Log.d("TEST-M", "is Teacher");
-            mTeachersRef.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                    String id = dataSnapshot.getKey();
-                    Log.d("TEST-M", "[new Teacher Child] \n" + id);
-                    allTeachers.add(id);
-                }
+        Log.d("TEST-M", "is Teacher");
+        mTeachersRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                String id = dataSnapshot.getKey();
+                Log.d("TEST-M", "[new Teacher Child] \n" + id);
+                allTeachers.add(id);
+            }
 
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
 
-                }
+            }
 
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    String id = dataSnapshot.getKey();
-                    Log.d("TEST", "[deleting Teacher Child] \n" + id);
-                    allTeachers.remove(id);
-                }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                String id = dataSnapshot.getKey();
+                Log.d("TEST", "[deleting Teacher Child] \n" + id);
+                allTeachers.remove(id);
+            }
 
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {}
-            });
-        }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 
     public static boolean teacherIsInDB() {
@@ -806,9 +804,9 @@ public class FirebaseUtils {
 
     public static String getMySection() {
         Log.d("TEST", "getMySection: " + allUsers.get(getPsuedoUniqueID()));
-        Log.d("TEST", "getMySection - via usage of singleton: " + UserSesh.getInstance().getSection_ref_key());
-//        return allUsers.get(getPsuedoUniqueID());
-        return UserSesh.getInstance().getSection_ref_key();
+//        Log.d("TEST", "getMySection - via usage of singleton: " + UserSesh.getInstance().getSection_ref_key());
+        return allUsers.get(getPsuedoUniqueID());
+//        return UserSesh.getInstance().getSection_ref_key();
     }
 
     /**
