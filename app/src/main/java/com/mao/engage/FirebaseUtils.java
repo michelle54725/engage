@@ -763,37 +763,39 @@ public class FirebaseUtils {
 
 
     public static void setTeacherListener() {
-        /** TODO: @Paulshao ^this check doesn't pass for teachers when it should.
-         * This is preventing teachers from being shown TeacherOptionsActivity where they can
+        /** This is preventing teachers from being shown TeacherOptionsActivity where they can
          * resume sections. */
+        if (!allTeachers.contains(getPsuedoUniqueID())) {
+            Log.d("TEST-M", "is Teacher");
+            mTeachersRef.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                    String id = dataSnapshot.getKey();
+                    Log.d("TEST-M", "[new Teacher Child] \n" + id);
+                    allTeachers.add(id);
+                }
 
-        Log.d("TEST-M", "is Teacher");
-        mTeachersRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                String id = dataSnapshot.getKey();
-                Log.d("TEST-M", "[new Teacher Child] \n" + id);
-                allTeachers.add(id);
-            }
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+                }
 
-            }
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    String id = dataSnapshot.getKey();
+                    Log.d("TEST", "[deleting Teacher Child] \n" + id);
+                    allTeachers.remove(id);
+                }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                String id = dataSnapshot.getKey();
-                Log.d("TEST", "[deleting Teacher Child] \n" + id);
-                allTeachers.remove(id);
-            }
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
+                }
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        }
     }
 
     public static boolean teacherIsInDB() {
