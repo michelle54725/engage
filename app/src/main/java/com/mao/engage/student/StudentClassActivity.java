@@ -47,6 +47,7 @@ public class StudentClassActivity extends AppCompatActivity {
     //List of Entry type inputs used to graph timelines in StudentTimelineFragment
     ArrayList<Entry> meValues;
     ArrayList<Entry> classAverages;
+    String name;
 
     //for ease of access to different data
     DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
@@ -77,6 +78,8 @@ public class StudentClassActivity extends AppCompatActivity {
         classTabBtn.setTextColor(Color.WHITE);
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        name = getIntent().getStringExtra("name");
+
 
 
         //instantiation of fragments and arraylists for timeline data

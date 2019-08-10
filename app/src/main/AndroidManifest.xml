@@ -29,6 +29,7 @@
         <activity android:name=".teacherclassactivity.TeacherClassActivity" />
         <activity android:name=".teacher.TeacherOptionsActivity" />
         <activity android:name=".teacherclassactivity.AttendeeListActivity" />
+        <activity android:name=".teacherclassactivity.LottieTeacher" />
     </application>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

@@ -77,6 +77,7 @@ internal fun findSection(user: UserSesh, context: Context) {
 
                             // make Intent to StudentClassActivity via context (passed in from StudentLoginActivity)
                             val intent = Intent(context, StudentClassActivity::class.java)
+                            intent.putExtra("name", user.username)
                             intent.putExtra("uID", user.user_id)
                             intent.putExtra("magic_key", user.magic_key)
                             context.startActivity(intent)

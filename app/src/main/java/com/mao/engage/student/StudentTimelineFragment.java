@@ -59,6 +59,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+import static com.mao.engage.teacherclassactivity.TeacherClassActivity_LottieToastKt.lottieToastStudent;
+
 
 public class StudentTimelineFragment extends Fragment {
 
@@ -96,6 +98,7 @@ public class StudentTimelineFragment extends Fragment {
 
     private boolean isEndOfSection = false;
     private String exportDialogTitle = "";
+    private String name;
 
     public StudentTimelineFragment() {
         // required empty public constructor
@@ -153,6 +156,7 @@ public class StudentTimelineFragment extends Fragment {
             t.cancel();
             isEndOfSection = true;
             exportDialogTitle = "Time is up! Export Your Image as an PNG to Save to Gallery";
+//            lottieToastStudent(activity, name)
             showExportImageDialog();
         }
 
