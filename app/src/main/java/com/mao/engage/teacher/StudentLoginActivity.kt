@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.mao.engage.FirebaseUtils
 import com.mao.engage.R
+import com.mao.engage.UserConfig
 import com.mao.engage.callback.CallbackManager
 import com.mao.engage.UserSesh
 
@@ -109,7 +110,10 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
                             mUID = FirebaseUtils.getPsuedoUniqueID()
                             mUser = UserSesh(mUID, mUsername,
                                     Integer.valueOf(magicWord), null)
-
+                            // setting the UserConfig variables for global access
+                            UserConfig.username = mUsername
+                            UserConfig.userID = mUID
+                            UserConfig.userType = UserConfig.UserType.STUDENT
                             // call helper function to search in DB for section matching user's magic_key
                             // and start StudentClassActivity if found
                             findSection(mUser, this@StudentLoginActivity)
