@@ -15,7 +15,6 @@ internal fun MeFragment_findRefKey_writeSliderVal(user_id: String, value: Int) {
     val mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions")
     mUsersRef.addListenerForSingleValueEvent(object: ValueEventListener {
         override fun onCancelled(p0: DatabaseError) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             Log.d("L-TEST", "findRefKey onCancelled")
         }
 
