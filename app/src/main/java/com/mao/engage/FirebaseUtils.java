@@ -41,7 +41,6 @@ public class FirebaseUtils {
     private static DatabaseReference mMagicKeysRef = FirebaseDatabase.getInstance().getReference("/MagicKeys");
 
     //Local variables as copy of Database
-    public static HashMap<String, String> allUsers = new HashMap<>(); // K: user_id (device key); V: section_ref_key
     public static HashSet<String> allTeachers = new HashSet<>(); // device keys (DB reference key)
     public static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: sliderVal;
     public static HashMap<String, Boolean> sectionAttendance = new HashMap<>(); // K: user_id; v: True if present, False if absent;
@@ -474,8 +473,8 @@ public class FirebaseUtils {
                     setSliderListener(user_id);
 
                     // LOCAL SYNC: put user in sectionAttendance
-//                    sectionAttendance.put(user_id, false);
-                    UserSesh.getInstance().setPresent(false);
+                    sectionAttendance.put(user_id, false);
+//                    UserSesh.getInstance().setPresent(false);
                     setAttendanceListener(ref_key, user_id); //this is what above TO-DO is referring to, delete this comment once resolved
                 }
 
@@ -519,59 +518,6 @@ public class FirebaseUtils {
         return sectionSliders.get(user_id);
     }
 
-    public static void setSliderVal(final String user_id, final int value) {
-        String key = allUsers.get(user_id);
-        Log.d("TEST", "Attempting to write " + value + " to " + user_id + "...");
-        if (key != null) {
-            mUsersRef.child(user_id).child("slider_val").setValue(value).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.d("TEST", "New slider wrote to DB: " + value);
-                    sectionSliders.put(user_id, value);
-                    Log.d("TEST", "new slider val in section sliders" + sectionSliders.get(user_id));
-                }
-            })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("TEST", "New slider wrote to DB: " + "FAILED");
-                        }
-                    });
-        }
-    }
-
-    public static void setSliderValues() {
-        mUsersRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                Log.d("TEST", "[new slider val] \n");
-                Iterable<DataSnapshot> userIds = dataSnapshot.getChildren();
-                for (DataSnapshot user : userIds) {
-                    String sliderVal = user.child("slider_val").toString();
-                    Log.d("TEST", "my current sliderVALS "  + sliderVal);
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                UserSesh newUser = dataSnapshot.getValue(UserSesh.class);
-                Log.d("TEST", "[deleting User Child] \n" + newUser.getUser_id() + "\n" + newUser.getSection_ref_key());
-                allUsers.remove(newUser.getUser_id());
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
-    }
-    
     public static void checkIsTakingAttendance(String section_ref_key) {
         Log.d("TEST", "calling checkIsTakingAttendance");
         FirebaseDatabase.getInstance().getReference("/Sections").child(section_ref_key).child("isTakingAttendance").addValueEventListener(new ValueEventListener() {
@@ -729,45 +675,11 @@ public class FirebaseUtils {
         return listOfUsers;
     }
 
-    public static void setUserListener() {
-        mUsersRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                UserSesh newUser = dataSnapshot.getValue(UserSesh.class);
-                Log.d("TEST", "[new User Child] \n" + newUser.getUser_id() + "\n" + newUser.getSection_ref_key());
-                allUsers.put(newUser.getUser_id(), newUser.getSection_ref_key());
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-                //if a student leaves a class and joins a different one, we need to update allUsers locally.
-                UserSesh changedUser = dataSnapshot.getValue(UserSesh.class);
-                Log.d("TEST", "[changed User Child] \n" + changedUser.getUser_id() + "\n" + changedUser.getSection_ref_key());
-                allUsers.put(changedUser.getUser_id(), changedUser.getSection_ref_key());
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                UserSesh newUser = dataSnapshot.getValue(UserSesh.class);
-                Log.d("TEST", "[deleting User Child] \n" + newUser.getUser_id() + "\n" + newUser.getSection_ref_key());
-                allUsers.remove(newUser.getUser_id());
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
-    }
-
 
     public static void setTeacherListener() {
-        if (!UserSesh.getInstance().checkIsStudent()) {
-            /** TODO: @Paulshao ^this check doesn't pass for teachers when it should.
-             * This is preventing teachers from being shown TeacherOptionsActivity where they can
-             * resume sections. */
-
+        /** This is preventing teachers from being shown TeacherOptionsActivity where they can
+         * resume sections. */
+        if (!allTeachers.contains(getPsuedoUniqueID())) {
             Log.d("TEST-M", "is Teacher");
             mTeachersRef.addChildEventListener(new ChildEventListener() {
                 @Override
@@ -790,10 +702,12 @@ public class FirebaseUtils {
                 }
 
                 @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+                public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
+                }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {}
+                public void onCancelled(DatabaseError databaseError) {
+                }
             });
         }
     }
@@ -805,9 +719,6 @@ public class FirebaseUtils {
     }
 
     public static String getMySection() {
-//        Log.d("TEST", "getMySection: " + allUsers.get(getPsuedoUniqueID()));
-//        Log.d("TEST", "getMySection - via usage of singleton: " + UserSesh.getInstance().getSection_ref_key());
-//        return allUsers.get(getPsuedoUniqueID());
         return UserSesh.getInstance().getSection_ref_key();
     }
 

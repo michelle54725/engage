@@ -48,7 +48,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         joinTeacherBtn.setOnClickListener(this);
 
         // set DB listeners
-        FirebaseUtils.setUserListener();
         FirebaseUtils.setTeacherListener();
         FirebaseUtils.setSectionListener();
     }
