@@ -805,8 +805,8 @@ public class FirebaseUtils {
     }
 
     public static String getMySection() {
-        Log.d("TEST", "getMySection: " + allUsers.get(getPsuedoUniqueID()));
-        Log.d("TEST", "getMySection - via usage of singleton: " + UserSesh.getInstance().getSection_ref_key());
+//        Log.d("TEST", "getMySection: " + allUsers.get(getPsuedoUniqueID()));
+//        Log.d("TEST", "getMySection - via usage of singleton: " + UserSesh.getInstance().getSection_ref_key());
 //        return allUsers.get(getPsuedoUniqueID());
         return UserSesh.getInstance().getSection_ref_key();
     }
