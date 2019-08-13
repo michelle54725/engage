@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.UserConfig;
 import com.mao.engage.UserSesh;
 
 public class TeacherOptionsActivity extends AppCompatActivity implements View.OnClickListener {
@@ -34,6 +35,7 @@ public class TeacherOptionsActivity extends AppCompatActivity implements View.On
     TextView helloText;
 
     String name;
+    String uID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,12 @@ public class TeacherOptionsActivity extends AppCompatActivity implements View.On
         resumeButton.setOnClickListener(this);
 
         // set DB listeners
-        FirebaseUtils.setExistingSectionsListener(FirebaseUtils.getPsuedoUniqueID());
+        uID = FirebaseUtils.getPsuedoUniqueID();
+        FirebaseUtils.setExistingSectionsListener(uID);
+
+        UserConfig.Companion.setUsername(name);
+        UserConfig.Companion.setUserType(UserConfig.UserType.TEACHER);
+        UserConfig.Companion.setUserID(uID);
     }
 
     @Override

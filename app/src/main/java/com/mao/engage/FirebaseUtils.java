@@ -719,7 +719,11 @@ public class FirebaseUtils {
     }
 
     public static String getMySection() {
-        return UserSesh.getInstance().getSection_ref_key();
+        String sectionRefKey = UserConfig.Companion.getSectionReferenceKey();
+        if (sectionRefKey == null) {
+            throw new NullPointerException("sectionRefKey has not been initialized");
+        }
+        return sectionRefKey;
     }
 
     /**
