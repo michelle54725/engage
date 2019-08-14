@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.teacherclassactivity.CheckIfTeacherInDBKt;
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -48,8 +49,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         joinTeacherBtn.setOnClickListener(this);
 
         // set DB listeners
-        FirebaseUtils.setTeacherListener();
         FirebaseUtils.setSectionListener();
+        CheckIfTeacherInDBKt.setTeacherListener();
+
     }
 
     // Send user's name to CreateClassActivity and start it

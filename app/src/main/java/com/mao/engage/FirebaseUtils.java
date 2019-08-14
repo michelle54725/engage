@@ -41,14 +41,13 @@ public class FirebaseUtils {
     private static DatabaseReference mMagicKeysRef = FirebaseDatabase.getInstance().getReference("/MagicKeys");
 
     //Local variables as copy of Database
-    public static HashSet<String> allTeachers = new HashSet<>(); // device keys (DB reference key)
     public static HashMap<String, Integer> sectionSliders = new HashMap<>(); // K: user_id; v: sliderVal;
     public static HashMap<String, Boolean> sectionAttendance = new HashMap<>(); // K: user_id; v: True if present, False if absent;
 
     public static HashMap<String, String> existingSections = new HashMap<>(); //K: section_name; V: section_ref;
     public static HashMap<String, HashMap>  sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, sectionSliders2.0
     static int counter = 0; //counter for attendance [not sure if necessary]
-
+    public static int isTeacherInDB = 0; // 0 when first initialized, 1 if teacher in db, -1 if teacher isnt in db
     /*
         Removes self (user) from local databases
      */
@@ -675,47 +674,12 @@ public class FirebaseUtils {
         return listOfUsers;
     }
 
-
-    public static void setTeacherListener() {
-        /** This is preventing teachers from being shown TeacherOptionsActivity where they can
-         * resume sections. */
-        if (!allTeachers.contains(getPsuedoUniqueID())) {
-            Log.d("TEST-M", "is Teacher");
-            mTeachersRef.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                    String id = dataSnapshot.getKey();
-                    Log.d("TEST-M", "[new Teacher Child] \n" + id);
-                    allTeachers.add(id);
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    String id = dataSnapshot.getKey();
-                    Log.d("TEST", "[deleting Teacher Child] \n" + id);
-                    allTeachers.remove(id);
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-        }
-    }
-
     public static boolean teacherIsInDB() {
-        Log.d("TEST-M", "in teacherIsInDB method...");
-        Log.d("TEST-M", "teacherIsInDB RESULT: " + allTeachers.contains(getPsuedoUniqueID()));
-        return allTeachers.contains(getPsuedoUniqueID());
+        Log.d("TEST", "in teacherIsInDB method...");
+        Log.d("TEST", "teacherIsInDB RESULT: " + isTeacherInDB);
+        if (isTeacherInDB == -1) return false;
+        if (isTeacherInDB == 1) return true;
+        return false;
     }
 
     public static String getMySection() {
