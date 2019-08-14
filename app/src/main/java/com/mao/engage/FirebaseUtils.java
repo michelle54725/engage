@@ -48,6 +48,8 @@ public class FirebaseUtils {
     public static HashMap<String, String> existingSections = new HashMap<>(); //K: section_name; V: section_ref;
     public static HashMap<String, HashMap>  sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, sectionSliders2.0
     static int counter = 0; //counter for attendance [not sure if necessary]
+    public static ArrayList<Integer> saved_slider_vals = new ArrayList<>();
+
 
     /*
         Removes self (user) from local databases
@@ -354,29 +356,34 @@ public class FirebaseUtils {
         //Log.d("TEST", "sectionsMagicKey key: " + sectionsMagicKey.keySet() + " value: " + sectionsMagicKey.values());
         FirebaseDatabase.getInstance().getReference("/MagicKeys").child("" + section.getMagic_key()).setValue(section.getRef_key());
         // a Listener on a Section's user_ids to maintain local sectionSliders HashMap
+        createSavedSliderVals(section.ref_key);
     }
-
-    /**[WIP: Deep]
-    // TODO: how to set saved_slider_vals array in firebase
+    //TODO: how to set saved_slider_vals array in firebase
     public static void createSavedSliderVals(String sectionRefKey) {
-        mSectionRef.child(sectionRefKey).child("saved_slider_vals").setValue("50,");
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = db.getReference("/Sections").child(sectionRefKey).child("saved_slider_vals");
+        myRef.setValue("");
         Log.d("TEST:", "Reached saved slider vals method!");
+        setSavedSliderValsListener(sectionRefKey);
     }
 
-    // TODO: get saved_slider_vals array from firebase
     //store values like this: 22, 33, 44, 55
-    public static ArrayList<Integer> getSavedSliderVals(String sectionRefKey) {
-
+    public static void setSavedSliderValsListener(String sectionRefKey) {
         mSectionRef.child(sectionRefKey).child("saved_slider_vals").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     String values = dataSnapshot.getValue().toString();
-                    String str[] = values.split(",");
-                    List<String> saved_slider_vals = new ArrayList<>();
-                    saved_slider_vals = Arrays.asList(str);
-                    for (String s : saved_slider_vals) {
-                        System.out.println(s);
+                    if (values.equals("")) {
+                        saved_slider_vals = null;
+                    } else {
+                        String str[] = values.split(",");
+
+                        List<String> temp = Arrays.asList(str);
+
+                        for (String s : temp) {
+                            saved_slider_vals.add(Integer.parseInt(s));
+                        }
                     }
 
                 }
@@ -387,7 +394,11 @@ public class FirebaseUtils {
 
             }
         });
-        return new ArrayList<Integer>();
+    }
+
+    public static ArrayList<Integer> getSavedSliderVals(String sectionRefKey) {
+        Log.d("TEST:", "Reached get saved slider vals method!");
+        return saved_slider_vals;
     }
 
     public static void setSavedSliderVals(String sectionRefKey, ArrayList<Integer> slider_vals) {
@@ -396,10 +407,9 @@ public class FirebaseUtils {
         for (int i : slider_vals) {
             sliderVals += i + ",";
         }
+        Log.d("TEST", "in setSavedSliderVals" + sliderVals);
         mSectionRef.child(sectionRefKey).child("saved_slider_vals").setValue(sliderVals);
     }
-
-     **/
 
 
     // Find SectionSesh corresponding to User's MagicWord
