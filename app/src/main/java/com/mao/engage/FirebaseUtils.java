@@ -375,7 +375,7 @@ public class FirebaseUtils {
                 if (dataSnapshot.exists()) {
                     String values = dataSnapshot.getValue().toString();
                     if (values.equals("")) {
-                        saved_slider_vals = null;
+                        saved_slider_vals = new ArrayList<>();
                     } else {
                         String str[] = values.split(",");
 

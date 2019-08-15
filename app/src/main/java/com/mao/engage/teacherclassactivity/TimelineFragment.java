@@ -542,7 +542,7 @@ public class TimelineFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         //[WIP: Deep] when the view is destroyed, save values to firebase, so they can be used again.
-        FirebaseUtils.setSavedSliderVals(sectionRefKey, timelineData);
+        FirebaseUtils.setSavedSliderVals(sectionRefKey, timelineData); 
     }
 
 }
