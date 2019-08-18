@@ -23,6 +23,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 
 import com.google.firebase.database.DatabaseReference;
@@ -53,7 +55,9 @@ public class StudentClassActivity extends AppCompatActivity {
     DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
     DatabaseReference mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions");
 
-    //
+    //Reference to the line chart data so we can export the image to gallery
+    LineChart chart;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,4 +158,7 @@ public class StudentClassActivity extends AppCompatActivity {
         return FirebaseUtils.getEndTime(FirebaseUtils.getMySection());
     }
 
+    public void setChart(LineChart currChart) {
+        chart = currChart;
+    }
 }

@@ -7,4 +7,10 @@
     <color name="colorTextGrey">#CACACA</color>
     <color name="colorPresent">#12ea57</color>
     <color name="colorWhite">#ffffff</color>
+
+    <!--Lottie Toast Colors-->
+    <color name="positiveButtonColor">#f44242</color>
+    <color name="negativeButtonColor">#ffbb00</color>
+    <color name="positiveTextColor">#ffeaea</color>
+    <color name="negativeTextColor">#0a0906</color>
 </resources>
