@@ -9,12 +9,8 @@ public class UserSesh implements Serializable {
     private int slider_val;
     private int magic_key;
     private String section_ref_key;
-    private boolean isPresent;
-    private boolean isStudent;
 
-    private static UserSesh instance = null;
-
-    private UserSesh() {}
+    public UserSesh() {}
 
     public UserSesh(String user_id, String username,
                     int magic_key, String section_ref_key) {
@@ -59,4 +55,7 @@ public class UserSesh implements Serializable {
         this.section_ref_key = section_ref_key;
     }
 
+    public int getSlider_val() {
+        return slider_val;
+    }
 }

@@ -31,6 +31,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.UserConfig;
+import com.mao.engage.teacher.StudentLoginActivity;
 import com.mao.engage.ui.LottieToast;
 
 import java.util.ArrayList;
@@ -136,8 +138,16 @@ public class StudentClassActivity extends AppCompatActivity {
         FirebaseUtils.checkIsTakingAttendance(FirebaseUtils.getMySection());
         if (FirebaseUtils.compareTime(getEndTime())) {
             Log.d("TEST", "compare: stop retrieve data upon reach time");
-            timer.cancel();
-
+            if (timer != null && chart != null) {
+                timer.cancel();
+                LottieToast.Companion.showEndOfSectionToast(
+                        this,
+                        UserConfig.Companion.getSectionReferenceKey(),
+                        name,
+                        false,
+                        chart
+                );
+            }
         }
     }
 

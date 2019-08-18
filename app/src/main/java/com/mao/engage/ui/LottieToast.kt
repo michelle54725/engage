@@ -12,6 +12,8 @@ import com.labters.lottiealertdialoglibrary.LottieAlertDialog
 import com.mao.engage.FirebaseUtils
 import com.mao.engage.PermissionsUtil
 import com.mao.engage.R
+import com.mao.engage.teacher.StudentLoginActivity
+import com.mao.engage.teacher.TeacherOptionsActivity
 import java.util.*
 
 class LottieToast {
@@ -20,7 +22,6 @@ class LottieToast {
                 currActivity: Activity,
                 sectionRefKey: String,
                 name: String,
-                targetActivity: Activity,
                 isTeacher: Boolean,
                 chart: LineChart
         ) {
@@ -38,7 +39,11 @@ class LottieToast {
                         override fun onClick(dialog: LottieAlertDialog) {
                             dialog.dismiss()
                             FirebaseUtils.removeAllUsers(sectionRefKey)
-                            val intent = Intent(currActivity, targetActivity::class.java)
+                            val intent = if (isTeacher) {
+                                Intent(currActivity, TeacherOptionsActivity::class.java)
+                            } else {
+                                Intent(currActivity, StudentLoginActivity::class.java)
+                            }
                             val currentTime = Calendar.getInstance().time.toString()
                             val deviceID = FirebaseUtils.getPsuedoUniqueID()
                             val exportName = String.format("%s_%s", currentTime, deviceID)
