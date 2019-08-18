@@ -31,8 +31,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.ui.LottieToast;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
@@ -57,6 +59,9 @@ public class StudentClassActivity extends AppCompatActivity {
 
     //Reference to the line chart data so we can export the image to gallery
     LineChart chart;
+
+    //Reference to the timer
+    Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +134,11 @@ public class StudentClassActivity extends AppCompatActivity {
         });
 
         FirebaseUtils.checkIsTakingAttendance(FirebaseUtils.getMySection());
+        if (FirebaseUtils.compareTime(getEndTime())) {
+            Log.d("TEST", "compare: stop retrieve data upon reach time");
+            timer.cancel();
+
+        }
     }
 
     @Override
@@ -160,5 +170,9 @@ public class StudentClassActivity extends AppCompatActivity {
 
     public void setChart(LineChart currChart) {
         chart = currChart;
+    }
+
+    public void setTimer(Timer currTimer) {
+        timer = currTimer;
     }
 }
