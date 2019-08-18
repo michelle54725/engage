@@ -517,7 +517,7 @@ public class FirebaseUtils {
         Log.d("TEST", "mySliderValue: " + sectionSliders.get(user_id));
         return sectionSliders.get(user_id);
     }
-    
+
     public static void checkIsTakingAttendance(String section_ref_key) {
         Log.d("TEST", "calling checkIsTakingAttendance");
         FirebaseDatabase.getInstance().getReference("/Sections").child(section_ref_key).child("isTakingAttendance").addValueEventListener(new ValueEventListener() {
