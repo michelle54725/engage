@@ -37,6 +37,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.UserConfig;
 import com.mao.engage.models.SectionSesh;
 import com.mao.engage.teacherclassactivity.TeacherClassActivity;
 
@@ -110,6 +111,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity implements Vie
                     // create empty node to get key of it -> section's ref_key
                     final String mSectionRefKey = FirebaseDatabase.getInstance().getReference("/Sections")
                             .push().getKey();
+                    UserConfig.Companion.setSectionReferenceKey(mSectionRefKey);
 
                     // create SectionSesh
                     final SectionSesh mSectionSesh = new SectionSesh(

@@ -43,32 +43,12 @@ public class UserSesh implements Serializable {
         return username;
     }
 
-    public String getInstanceUsername() {
-        return instance.username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public int getSlider_val() {
-        return slider_val;
-    }
-
-    public int getInstanceSlider_val() {
-        return instance.slider_val;
-    }
-
     public void setSlider_val(int slider_val) {
         this.slider_val = slider_val;
     }
 
     public int getMagic_key() {
         return magic_key;
-    }
-
-    public void setMagic_key(int magic_key) {
-        this.magic_key = magic_key;
     }
 
     public String getSection_ref_key() {

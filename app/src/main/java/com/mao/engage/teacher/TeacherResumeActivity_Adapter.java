@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.UserConfig;
 import com.mao.engage.teacherclassactivity.TeacherClassActivity;
 
 import java.util.HashMap;
@@ -49,7 +50,7 @@ public class TeacherResumeActivity_Adapter extends RecyclerView.Adapter<TeacherR
                     // open Section sesh with given magic word, section name, section ref key
                     HashMap<String, String> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap();
                     String mSectionRefKey = mySectionsHashMap.get(section.getText().toString());
-
+                    UserConfig.Companion.setSectionReferenceKey(mSectionRefKey);
                     Intent intent = new Intent(section.getContext(), TeacherClassActivity.class);
                     intent.putExtra("sectionRefKey", mSectionRefKey);
                     intent.putExtra("section_name", section.getText().toString());
