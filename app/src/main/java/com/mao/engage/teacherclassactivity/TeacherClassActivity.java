@@ -144,6 +144,12 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         });
     }
 
+    public Runnable toastTask = new Runnable() {
+        @Override
+        public void run() {
+            //lottieToastTeacher(me, mSectionRefKey, name);
+        }
+    };
     private void handleFragmentTransaction(Fragment fragment) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.constraintLayout, fragment, fragment.toString());

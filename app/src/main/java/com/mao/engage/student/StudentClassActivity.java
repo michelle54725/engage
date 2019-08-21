@@ -10,6 +10,7 @@
  */
 package com.mao.engage.student;
 
+import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Build;
@@ -17,6 +18,8 @@ import android.os.Bundle;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -36,6 +39,7 @@ import com.mao.engage.teacher.StudentLoginActivity;
 import com.mao.engage.ui.LottieToast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Timer;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
@@ -53,7 +57,11 @@ public class StudentClassActivity extends AppCompatActivity {
     //List of Entry type inputs used to graph timelines in StudentTimelineFragment
     ArrayList<Entry> meValues;
     ArrayList<Entry> classAverages;
+    Activity me;
     String name;
+    String endTime;
+    String mSectionRefKey;
+    Handler toasty;
 
     //for ease of access to different data
     DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
@@ -98,7 +106,25 @@ public class StudentClassActivity extends AppCompatActivity {
         studentTimelineFragment = new StudentTimelineFragment();
         meValues = new ArrayList<>();
         classAverages = new ArrayList<>();
+        me = this;
+        mSectionRefKey = FirebaseUtils.getMySection();
 
+        endTime = FirebaseUtils.getEndTime(mSectionRefKey);
+        //Handler to call toast after section is over!
+        Calendar calendar = Calendar.getInstance();
+        long currentTimestamp = calendar.getTimeInMillis();
+        int desiredHour = Integer.parseInt(endTime.substring(0,2));
+        int desiredMinute = Integer.parseInt(endTime.substring(3,5));
+        if (endTime.substring(5,7).toLowerCase().equals("pm")) {
+            calendar.set(Calendar.HOUR_OF_DAY, desiredHour + 12);
+        } else {
+            calendar.set(Calendar.HOUR_OF_DAY, desiredHour);
+        }
+        calendar.set(Calendar.MINUTE, desiredMinute);
+        calendar.set(Calendar.SECOND, 0);
+        long diffTimestamp = calendar.getTimeInMillis() - currentTimestamp;
+        toasty = new Handler();
+        toasty.postDelayed(toastTask, diffTimestamp);
 
         //send timeline data to StudentTimelineFragment
         Bundle bundle = new Bundle();
@@ -136,20 +162,33 @@ public class StudentClassActivity extends AppCompatActivity {
         });
 
         FirebaseUtils.checkIsTakingAttendance(FirebaseUtils.getMySection());
-        if (FirebaseUtils.compareTime(getEndTime())) {
-            Log.d("TEST", "compare: stop retrieve data upon reach time");
-            if (timer != null && chart != null) {
-                timer.cancel();
-                LottieToast.Companion.showEndOfSectionToast(
-                        this,
-                        UserConfig.Companion.getSectionReferenceKey(),
-                        name,
-                        false,
-                        chart
-                );
-            }
-        }
+//        if (FirebaseUtils.compareTime(getEndTime())) {
+//            Log.d("TEST", "compare: stop retrieve data upon reach time");
+//            if (timer != null && chart != null) {
+//                timer.cancel();
+//                LottieToast.Companion.showEndOfSectionToast(
+//                        this,
+//                        UserConfig.Companion.getSectionReferenceKey(),
+//                        name,
+//                        false,
+//                        chart
+//                );
+//            }
+//        }
     }
+
+    public Runnable toastTask = new Runnable() {
+        @Override
+        public void run() {
+            Log.d("L-TEST", "lottie toast called");
+            LottieToast.Companion.showEndOfSectionToast(
+                    me,
+                    UserConfig.Companion.getSectionReferenceKey(),
+                    name,
+                    false,
+                    chart
+            );        }
+    };
 
     @Override
     public void onBackPressed() {
