@@ -116,7 +116,7 @@ public class TeacherCreateClassActivity extends AppCompatActivity implements Vie
                     // create SectionSesh
                     final SectionSesh mSectionSesh = new SectionSesh(
                             START, END, TA_KEY, SECTION_ID, mSectionRefKey, magicKey, new ArrayList<String>());
-                    final String mMagicWord = String.format(Locale.US, "%03d", magicKey);
+                    final String mMagicWord = String.format(Locale.US, "%d", magicKey);
 
                     // add section to /Sections in DB
                     FirebaseUtils.createSection(mSectionSesh);
