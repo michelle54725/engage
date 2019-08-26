@@ -60,6 +60,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TimelineFragment extends Fragment {
+    private TextView magicWordText;
+
     private ArrayList<Entry> classValues;
     private ArrayList<Entry> threshold;
 
@@ -106,10 +108,12 @@ public class TimelineFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_timeline, container, false);
+        magicWordText = view.findViewById(R.id.magicWordText);
         chart = view.findViewById(R.id.chart);
         startTimeText = view.findViewById(R.id.startTimeText);
         endTimeText = view.findViewById(R.id.endTimeText);
         if (this.getArguments() != null) {
+            magicWordText.setText(String.format("Magic word: %s", getArguments().getString("magic_word")));
             sectionRefKey = getArguments().getString("sectionRefKey");
             startTimeText.setText(getArguments().getString("start_time"));
             endTimeText.setText(getArguments().getString("start_time"));

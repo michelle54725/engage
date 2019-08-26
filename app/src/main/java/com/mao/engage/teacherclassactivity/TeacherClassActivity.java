@@ -106,7 +106,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         attendanceFragment.setArguments(bundle);
         timelineFragment.setArguments(bundle);
 
-        fragmentTransaction.replace(R.id.constraintLayout, attendanceFragment);
+        fragmentTransaction.replace(R.id.constraintLayout, timelineFragment);
         fragmentTransaction.commit();
 
         FirebaseUtils.setUserIdinSectionListener(mSectionRefKey);
