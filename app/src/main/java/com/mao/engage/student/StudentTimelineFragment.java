@@ -148,20 +148,20 @@ public class StudentTimelineFragment extends Fragment {
         //retrieves data every 5000 ms (5s)
         Timer t = new Timer();
         t.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
-        if (FirebaseUtils.compareTime(activity.getEndTime())) {
-            Log.d("TEST", "compare: stop retrieve data upon reach time");
-            t.cancel();
-            isEndOfSection = true;
-            exportDialogTitle = "Time is up! Export Your Image as an PNG to Save to Gallery";
-            showExportImageDialog();
-        }
-
-        exportImageButton.setOnClickListener(floatingButton -> {
-            isEndOfSection = false;
-            exportDialogTitle = "Export Your Image as an PNG to Save to Gallery";
-            Log.d("P-TEST", "Export Button Clicked");
-            showExportImageDialog();
-        });
+//        if (FirebaseUtils.compareTime(activity.getEndTime())) {
+//            Log.d("TEST", "compare: stop retrieve data upon reach time");
+//            t.cancel();
+//            isEndOfSection = true;
+//            exportDialogTitle = "Time is up! Export Your Image as an PNG to Save to Gallery";
+//            showExportImageDialog();
+//        }
+//
+//        exportImageButton.setOnClickListener(floatingButton -> {
+//            isEndOfSection = false;
+//            exportDialogTitle = "Export Your Image as an PNG to Save to Gallery";
+//            Log.d("P-TEST", "Export Button Clicked");
+//            showExportImageDialog();
+//        });
 
         startTime = activity.getStartTime();
         endTime = activity.getEndTime();
