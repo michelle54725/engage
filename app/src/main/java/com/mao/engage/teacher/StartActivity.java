@@ -21,13 +21,13 @@ import android.widget.Toast;
 
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
-import com.mao.engage.teacherclassactivity.CheckIfTeacherInDBKt;
+import com.mao.engage.teacherclassactivity.StartActivity_CheckIfTeacherInDBKt;
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener{
 
     Button joinStudentBtn;
     Button joinTeacherBtn;
-    EditText nameEditText;
+    static EditText nameEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,28 +50,18 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
         // set DB listeners
         FirebaseUtils.setSectionListener();
-        CheckIfTeacherInDBKt.setTeacherListener();
 
     }
 
-    // Send user's name to CreateClassActivity and start it
-    void goToCreateClassActivity(){
-        if (isValidName()) {
-            Intent intent = new Intent(StartActivity.this, TeacherCreateClassActivity.class);
-            intent.putExtra("name", getName());
-            startActivity(intent);
-        } else {
-            Toast.makeText(StartActivity.this, "Please provide a name", Toast.LENGTH_SHORT).show();
-        }
-    }
+
 
     // Removes spaces
-    private String getName() {
+    public static String getName() {
         return nameEditText.getText().toString().replaceAll("\\s","");
     }
 
     // Name validity check
-    private boolean isValidName() {
+    public static boolean isValidName() {
         //TODO: make more rigorous check
         if(getName().contains(",")) {
             return false; //no commas in name else, will be confused with ",a" and ",p"
@@ -94,15 +84,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.joinTeacherBtn:
-                if (FirebaseUtils.teacherIsInDB()) {
-                    // Teacher already in DB
-                    Intent intent = new Intent(StartActivity.this, TeacherOptionsActivity.class);
-                    intent.putExtra("name", nameEditText.getText().toString());
-                    startActivity(intent);
-                } else {
-                    // Teacher not in DB yet (i.e. first time user)
-                    goToCreateClassActivity();
-                }
+                StartActivity_CheckIfTeacherInDBKt.checkIfTeacherInDB(nameEditText.getText().toString(), this);
                 break;
             default:
                 Log.d("TEST:","Button not accounted for");
