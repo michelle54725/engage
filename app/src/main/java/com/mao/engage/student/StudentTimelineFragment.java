@@ -139,7 +139,7 @@ public class StudentTimelineFragment extends Fragment {
                     return;
                 }
                 //run on separate Ui thread to no conflict other threads
-                myActivity.runOnUiThread(() -> retrieveData()); // FIXME: Replace with retrieve Data; currently on dummy data for DEMO purposes
+                myActivity.runOnUiThread(() -> retrieveData());
             }
         };
         //retrieves data every 5000 ms (5s)
