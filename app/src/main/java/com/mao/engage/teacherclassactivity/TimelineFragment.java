@@ -73,7 +73,6 @@ public class TimelineFragment extends Fragment {
 
     private LineData lineData;
     private LineChart chart;
-    //TODO: implement start time and end time into graphs.
     private TextView startTimeText;
     private TextView endTimeText;
     private String endTime;
@@ -122,8 +121,6 @@ public class TimelineFragment extends Fragment {
             timelineData = getArguments().getIntegerArrayList("timelinedata");
         }
         thresholdVal = 50; //default to 50
-        //[WIP:Deep] timelineData will get current saved slider vals if they exist, otherwise it will be an empty list
-        //timelineData = FirebaseUtils.getSavedSliderVals(sectionRefKey);
 
         chart.bringToFront();
         mEngagedPieChart = view.findViewById(R.id.mEngagedPieChart);
