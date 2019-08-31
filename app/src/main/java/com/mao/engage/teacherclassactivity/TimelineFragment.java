@@ -147,7 +147,7 @@ public class TimelineFragment extends Fragment {
                 thresholdVal = seekBar.getProgress();
                 Log.d("TEST-M", "threshold value changed: " + seekBar.getProgress());
                 if (!FirebaseUtils.compareTime(endTime)) {
-                    retrieveData();
+                    retrieveData(true);
                 }
             }
         });
@@ -173,7 +173,7 @@ public class TimelineFragment extends Fragment {
                             t.purge();
                             return;
                         } else {
-                            retrieveData();
+                            retrieveData(false);
                         }
                     }
                 });
@@ -276,7 +276,8 @@ public class TimelineFragment extends Fragment {
      * This method updates the graphs and piecharts from firebase data displayed on the screen.
      * It is called in the onCreate method of this class at a fixed rate (every five seconds).
      */
-    private void retrieveData() {
+    private void retrieveData(boolean isThreshold) {
+        //isThreshold checks if we need to only change the threshold graph and not update the entire graph.
         //update endTimeText to current time every time retrieveData is called
         Date date = new Date();
         String strDateFormat = "hh:mm a";
@@ -299,7 +300,9 @@ public class TimelineFragment extends Fragment {
 
         Log.d("TEST", "calculateaveragedata timeline" + timeline.calculateAverageSectionData());
         //calculates the average of all the student's section sliders at an instance of time
-        timelineData.add((int) timeline.calculateAverageSectionData());
+        if(!isThreshold) {
+            timelineData.add((int) timeline.calculateAverageSectionData());
+        }
 
         ArrayList<Integer> individualEngagements = new ArrayList<>();
         for (String user : FirebaseUtils.sectionSliders.keySet()) {
