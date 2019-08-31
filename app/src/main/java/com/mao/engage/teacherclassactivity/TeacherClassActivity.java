@@ -106,7 +106,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         attendanceFragment.setArguments(bundle);
         timelineFragment.setArguments(bundle);
 
-        fragmentTransaction.replace(R.id.constraintLayout, attendanceFragment);
+        fragmentTransaction.replace(R.id.constraintLayout, timelineFragment);
         fragmentTransaction.commit();
 
         FirebaseUtils.setUserIdinSectionListener(mSectionRefKey);
@@ -146,12 +146,6 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         endSectionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //switch to timelineFragment if not being displayed TODO: this crashes the app a couple seconds after return to OptionsActivity -Mao
-//                if (!timelineFragment.isVisible()) {
-//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                    fragmentTransaction.replace(R.id.constraintLayout, timelineFragment);
-//                    fragmentTransaction.commitNowAllowingStateLoss(); //synchronous
-//                }
                 toasty.post(toastTask);
             }
         });
@@ -180,21 +174,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         public void run() {
             AlertDialog.Builder builder = new AlertDialog.Builder(TeacherClassActivity.this);
             builder.setTitle("Section has ended!");
-            builder.setMessage("Would you like to save your graph?");
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                    FirebaseUtils.removeAllUsers(mSectionRefKey);
-                    Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
-                    Log.d("TEST", "name: " + name);
-                    intent.putExtra("name", name);
-                    startActivity(intent);
-                    FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
-
-                }
-            });
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -202,29 +182,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.constraintLayout, timelineFragment);
                     fragmentTransaction.commit();
-                    //takeScreenshot();
-                    Bitmap toSave = getBitmapFromView(TeacherClassActivity.this.getWindow().getDecorView().getRootView());
 
-                    String root = Environment.getExternalStorageDirectory().toString();
-                    File myDir = new File(root + "/req_images");
-                    myDir.mkdirs();
-                    String fname = "Image-" + mSectionRefKey + ".jpg";
-                    File file = new File(myDir, fname);
-                    Log.i("TEST", "" + file);
-                    if (file.exists())
-                        file.delete();
-                    try {
-                        Log.d("TEST", "before outputstream");
-                        FileOutputStream out = new FileOutputStream(file);
-                        Log.d("TEST", "after outputstream");
-                        toSave.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                        out.flush();
-                        out.close();
-                        Log.d("TEST", "saved");
-                    } catch (Exception e) {
-                        Log.d("TEST", "outputstream error");
-                        e.printStackTrace();
-                    }
                     Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
                     Log.d("TEST", "name: " + name);
                     intent.putExtra("name", name);

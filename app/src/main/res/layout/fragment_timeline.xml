@@ -11,6 +11,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/magicWordText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/quicksand_bold"
+            android:text="@string/magic_word_420"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/chart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.465"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart"
             android:layout_width="310dp"

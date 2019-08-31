@@ -10,6 +10,9 @@
  */
 package com.mao.engage.student;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Build;
@@ -17,6 +20,8 @@ import android.os.Bundle;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -29,8 +34,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
+import com.mao.engage.UserConfig;
+import com.mao.engage.teacher.StudentLoginActivity;
+import com.mao.engage.teacher.TeacherOptionsActivity;
+import com.mao.engage.teacherclassactivity.TeacherClassActivity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
@@ -47,6 +57,10 @@ public class StudentClassActivity extends AppCompatActivity {
     //List of Entry type inputs used to graph timelines in StudentTimelineFragment
     ArrayList<Entry> meValues;
     ArrayList<Entry> classAverages;
+    String endTime;
+    String mSectionRefKey;
+    String name;
+    Handler toasty;
 
     //for ease of access to different data
     DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
@@ -77,6 +91,7 @@ public class StudentClassActivity extends AppCompatActivity {
         classTabBtn.setTextColor(Color.WHITE);
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        name = getIntent().getStringExtra("name");
 
 
         //instantiation of fragments and arraylists for timeline data
@@ -85,6 +100,23 @@ public class StudentClassActivity extends AppCompatActivity {
         meValues = new ArrayList<>();
         classAverages = new ArrayList<>();
 
+        //Handler to call toast after section is over!
+        mSectionRefKey = FirebaseUtils.getMySection();
+        endTime = FirebaseUtils.getEndTime(mSectionRefKey);
+        Calendar calendar = Calendar.getInstance();
+        long currentTimestamp = calendar.getTimeInMillis();
+        int desiredHour = Integer.parseInt(endTime.substring(0,2));
+        int desiredMinute = Integer.parseInt(endTime.substring(3,5));
+        if (endTime.substring(5,7).toLowerCase().equals("pm")) {
+            calendar.set(Calendar.HOUR_OF_DAY, desiredHour + 12);
+        } else {
+            calendar.set(Calendar.HOUR_OF_DAY, desiredHour);
+        }
+        calendar.set(Calendar.MINUTE, desiredMinute);
+        calendar.set(Calendar.SECOND, 0);
+        long diffTimestamp = calendar.getTimeInMillis() - currentTimestamp;
+        toasty = new Handler();
+        toasty.postDelayed(toastTask, diffTimestamp);
 
         //send timeline data to StudentTimelineFragment
         Bundle bundle = new Bundle();
@@ -124,6 +156,24 @@ public class StudentClassActivity extends AppCompatActivity {
         FirebaseUtils.checkIsTakingAttendance(FirebaseUtils.getMySection());
     }
 
+    public Runnable toastTask = new Runnable() {
+        public void run() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(StudentClassActivity.this);
+            builder.setTitle("Section has ended!");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    FirebaseUtils.removeAllUsers(mSectionRefKey);
+                    Intent intent = new Intent(StudentClassActivity.this, StudentLoginActivity.class);
+                    intent.putExtra("name", name);
+                    startActivity(intent);
+                    FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
+                }
+            });
+            builder.show();
+        };
+    };
     @Override
     public void onBackPressed() {
         FirebaseUtils.removeUser(FirebaseUtils.getMySection(), FirebaseUtils.getPsuedoUniqueID());

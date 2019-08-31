@@ -60,6 +60,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TimelineFragment extends Fragment {
+    private TextView magicWordText;
+
     private ArrayList<Entry> classValues;
     private ArrayList<Entry> threshold;
 
@@ -71,7 +73,6 @@ public class TimelineFragment extends Fragment {
 
     private LineData lineData;
     private LineChart chart;
-    //TODO: implement start time and end time into graphs.
     private TextView startTimeText;
     private TextView endTimeText;
     private String endTime;
@@ -106,10 +107,12 @@ public class TimelineFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_timeline, container, false);
+        magicWordText = view.findViewById(R.id.magicWordText);
         chart = view.findViewById(R.id.chart);
         startTimeText = view.findViewById(R.id.startTimeText);
         endTimeText = view.findViewById(R.id.endTimeText);
         if (this.getArguments() != null) {
+            magicWordText.setText(String.format("Magic word: %s", getArguments().getString("magic_word")));
             sectionRefKey = getArguments().getString("sectionRefKey");
             startTimeText.setText(getArguments().getString("start_time"));
             endTimeText.setText(getArguments().getString("start_time"));
@@ -118,8 +121,6 @@ public class TimelineFragment extends Fragment {
             timelineData = getArguments().getIntegerArrayList("timelinedata");
         }
         thresholdVal = 50; //default to 50
-        //[WIP:Deep] timelineData will get current saved slider vals if they exist, otherwise it will be an empty list
-        //timelineData = FirebaseUtils.getSavedSliderVals(sectionRefKey);
 
         chart.bringToFront();
         mEngagedPieChart = view.findViewById(R.id.mEngagedPieChart);
@@ -320,6 +321,7 @@ public class TimelineFragment extends Fragment {
         // classValues and classColors will be used as the data set by the graph api
         for (int i = 0; i < timelineData.size(); i++) {
             classValues.add(new Entry(i, (float) timelineData.get(i)));
+            Log.d("L-TEST", "class value: " + timelineData.get(i));
             classColors.add(Color.TRANSPARENT);
         }
         classColors.remove(classColors.size() - 1);
