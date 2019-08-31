@@ -14,7 +14,6 @@ import com.mao.engage.teacher.TeacherOptionsActivity
 
 
 internal fun checkIfTeacherInDB(nameEditText: String, context: Context) {
-    Log.d("TEST", "reached setTeacherListener method")
     val mTeachersRef = FirebaseDatabase.getInstance().getReference("/Teachers")
     var isTeacherInDB = false
     //will uncomment this when UserSesh starts working
@@ -30,10 +29,7 @@ internal fun checkIfTeacherInDB(nameEditText: String, context: Context) {
                     val teacher : Map<String, String> = dataSnapshot.getValue() as Map<String, String>
 
                     for (key in teacher!!.keys) {
-                        //Log.d("TEST", key)
-                        //Log.d("TEST", FirebaseUtils.getPsuedoUniqueID())
                         if (key.equals(FirebaseUtils.getPsuedoUniqueID())) {
-                            Log.d("TEST", "FOUND my teacher")
                             teacherID = key //set our callbackData once found
                             isTeacherInDB = true
                             break
@@ -49,8 +45,6 @@ internal fun checkIfTeacherInDB(nameEditText: String, context: Context) {
                 firebaseCallbackManager.onSuccess(teacherID) {
                     input: String ->
                     run {
-                        Log.d("TEST", "reached run statement")
-
                         val teacherID : String = input
                         if (teacherID.isNotBlank() && isTeacherInDB) { //isNotBlank returns false for "" and "  "
                             Log.d("TEST", "reached correct statement in teacherinDB")
@@ -63,12 +57,10 @@ internal fun checkIfTeacherInDB(nameEditText: String, context: Context) {
                     }
                 }
             } else {
-                Log.d("TEST-FAIL", "dataSnapshot DNE")
             }
         }
 
         override fun onCancelled(error: DatabaseError) {
-            Log.d("TEST-FAIL", error.message)
         }
     })// marks end of addListenerForSingleValueEvent
 
