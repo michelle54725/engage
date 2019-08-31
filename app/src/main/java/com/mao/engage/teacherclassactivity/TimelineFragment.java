@@ -321,6 +321,7 @@ public class TimelineFragment extends Fragment {
         // classValues and classColors will be used as the data set by the graph api
         for (int i = 0; i < timelineData.size(); i++) {
             classValues.add(new Entry(i, (float) timelineData.get(i)));
+            Log.d("L-TEST", "class value: " + timelineData.get(i));
             classColors.add(Color.TRANSPARENT);
         }
         classColors.remove(classColors.size() - 1);
