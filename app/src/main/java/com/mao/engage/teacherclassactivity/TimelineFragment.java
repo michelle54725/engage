@@ -75,6 +75,7 @@ public class TimelineFragment extends Fragment {
     private LineChart chart;
     private TextView startTimeText;
     private TextView endTimeText;
+    private TextView thresholdUI;
     private String endTime;
 
     private String sectionRefKey;
@@ -121,6 +122,7 @@ public class TimelineFragment extends Fragment {
             timelineData = getArguments().getIntegerArrayList("timelinedata");
         }
         thresholdVal = 50; //default to 50
+        thresholdUI = (TextView)view.findViewById(R.id.thresholdvalUI);
 
         chart.bringToFront();
         mEngagedPieChart = view.findViewById(R.id.mEngagedPieChart);
@@ -145,6 +147,7 @@ public class TimelineFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 thresholdVal = seekBar.getProgress();
+                thresholdUI.setText("Threshold Value: " + thresholdVal);
                 Log.d("TEST-M", "threshold value changed: " + seekBar.getProgress());
                 if (!FirebaseUtils.compareTime(endTime)) {
                     retrieveData(true);
