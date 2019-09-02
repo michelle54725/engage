@@ -26,4 +26,7 @@
     <dimen name="fragmentclass_pieChart_height">204dp</dimen>
     <dimen name="fragmentclass_pieChart_marginBottom">40dp</dimen>
     <dimen name="fragmentclass_pieChart_marginTop">20dp</dimen>
+
+    <dimen name="fragmentclass_me_marginRight">16dp</dimen>
+
 </resources>
