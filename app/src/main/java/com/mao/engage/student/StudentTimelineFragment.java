@@ -230,15 +230,12 @@ public class StudentTimelineFragment extends Fragment {
         int mySliderValue = dataRetrieval.getMySliderValue(FirebaseUtils.getPsuedoUniqueID());
         meValues.add(new Entry(index, mySliderValue));
         // dummy data
-        int[][] dummyData = {{1, 10}, {2, 50}, {3, 70}, {4, 50}, {5, 90}};
-        for (int[] data : dummyData) {
-            meValues.add(new Entry(data[0], data[1]));
-        }
-        Log.d("TEST", "Me value: " + mySliderValue);
+        Log.d("P-TEST", "Me value: " + mySliderValue);
 
         //adding class average slider value to ArrayList of entries
         int sectionAvg = Math.round(dataRetrieval.calculateAverageSectionData());
         classValues.add(new Entry(index, sectionAvg));
+        index++;
         Log.d("TEST", "Class avg: " + sectionAvg);
 
         //colors for rendering data points on the timeline graph: all transparent except for latest point
@@ -312,6 +309,7 @@ public class StudentTimelineFragment extends Fragment {
 
         //inputs sets into data form that can be graphed
         lineData = new LineData(meSet, classSet);
+        Log.d("P-TEST:", meSet.toString());
 
         chart.setData(lineData);
 
@@ -322,6 +320,7 @@ public class StudentTimelineFragment extends Fragment {
         classSet.notifyDataSetChanged();
         chart.getLineData().notifyDataChanged();
         chart.notifyDataSetChanged();
+        chart.invalidate();
         Log.d("TEST", "data changed");
 
         //turn off unnecessary elements of the graph package such as a legend
@@ -370,7 +369,6 @@ public class StudentTimelineFragment extends Fragment {
         Log.d("TEST", "end of graphData");
 
         //redraws
-        chart.invalidate();
     }
 
     //All adjustments for engaged count (number of students in a section)
