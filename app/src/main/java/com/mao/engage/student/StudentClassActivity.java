@@ -177,6 +177,8 @@ public class StudentClassActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         FirebaseUtils.removeUser(FirebaseUtils.getMySection(), FirebaseUtils.getPsuedoUniqueID());
+        StudentTimelineFragment fragment
+                = (StudentTimelineFragment) getSupportFragmentManager().findFragmentById(R.layout.fragment_student_timeline);
         finish();
     }
 

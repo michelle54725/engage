@@ -91,6 +91,7 @@ public class StudentTimelineFragment extends Fragment {
 
     TimerTask retrieveDataTask;
     private TimelineDataRetrieval dataRetrieval;
+    Timer timer;
 
     private boolean isEndOfSection = false;
     private String exportDialogTitle = "";
@@ -143,11 +144,11 @@ public class StudentTimelineFragment extends Fragment {
             }
         };
         //retrieves data every 5000 ms (5s)
-        Timer t = new Timer();
-        t.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
+        timer = new Timer();
+        timer.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
         if (FirebaseUtils.compareTime(activity.getEndTime())) {
             Log.d("TEST", "compare: stop retrieve data upon reach time");
-            t.cancel();
+            timer.cancel();
             isEndOfSection = true;
         }
 
@@ -169,6 +170,10 @@ public class StudentTimelineFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    public void cancelTimer() {
+        timer.cancel();
     }
 
     private void useDummyData() {
