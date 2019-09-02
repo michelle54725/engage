@@ -13,7 +13,7 @@
 
     <dimen name="fragmentclass_endTimeText_marginEnd">10dp</dimen>
     <dimen name="fragmentclass_endTimeText_marginRight">10dp</dimen>
-    <dimen name="fragmentclass_endTimeText_marginTop">4dp</dimen>
+    <dimen name="fragmentclass_endTimeText_marginTop">8dp</dimen>
 
     <dimen name="fragmentclass_startTimeText_marginStart">8dp</dimen>
     <dimen name="fragmentclass_startTimeText_marginLeft">8dp</dimen>
@@ -21,4 +21,9 @@
     <dimen name="fragmentclass_circleContent_margin">16dp</dimen>
     <dimen name="fragmentclass_circleWrapper_marginRight">8dp</dimen>
     <dimen name="fragmentclass_engagedLabel_margin">8dp</dimen>
+
+    <dimen name="fragmentclass_pieChart_marginSides">32dp</dimen>
+    <dimen name="fragmentclass_pieChart_height">204dp</dimen>
+    <dimen name="fragmentclass_pieChart_marginBottom">40dp</dimen>
+    <dimen name="fragmentclass_pieChart_marginTop">20dp</dimen>
 </resources>
