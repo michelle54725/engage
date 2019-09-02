@@ -39,5 +39,7 @@
     <dimen name="portrait_backBtn_width">32dp</dimen>
     <dimen name="portrait_backBtn_height">50dp</dimen>
 
+    <dimen name="recycleFlow_margin">24dp</dimen>
+
 
 </resources>
