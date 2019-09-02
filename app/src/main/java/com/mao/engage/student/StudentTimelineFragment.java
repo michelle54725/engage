@@ -129,13 +129,11 @@ public class StudentTimelineFragment extends Fragment {
             int test_val = 0; //for testing
             @Override
             public void run() {
-                Log.d("TEST", "TIMER WORKING..." + test_val++);
                 Activity myActivity = getActivity();
                 while (myActivity == null) { //to prevent null object reference for runOnUiThread
                     myActivity = getActivity();
                 }
                 if (FirebaseUtils.compareTime(activity.getEndTime())) {
-                    Log.d("TEST", "compare: stop retrieve data upon reach time");
                     retrieveDataTask.cancel();
                     return;
                 }
@@ -147,7 +145,6 @@ public class StudentTimelineFragment extends Fragment {
         timer = new Timer();
         timer.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
         if (FirebaseUtils.compareTime(activity.getEndTime())) {
-            Log.d("TEST", "compare: stop retrieve data upon reach time");
             timer.cancel();
             isEndOfSection = true;
         }
@@ -176,48 +173,6 @@ public class StudentTimelineFragment extends Fragment {
         timer.cancel();
     }
 
-    private void useDummyData() {
-        ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(0, 4));
-        entries.add(new Entry(1, 1));
-        entries.add(new Entry(2, 2));
-        entries.add(new Entry(3, 4));
-
-        LineDataSet dataSet = new LineDataSet(entries, "You");
-        dataSet.setColor(ContextCompat.getColor(getContext(), R.color.colorAccentBlue));
-        dataSet.setValueTextColor(ContextCompat.getColor(getContext(), R.color.colorAccentBlue));
-
-        //****
-        // Controlling X axis
-        XAxis xAxis = chart.getXAxis();
-        // Set the xAxis position to bottom. Default is top
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        //Customizing x axis value
-        final String[] months = new String[]{"7:00", "7:15", "7:30", "7:45"};
-
-        IAxisValueFormatter formatter = (value, axis) -> months[(int) value];
-        xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
-        xAxis.setValueFormatter(formatter);
-
-        //***
-        // Controlling right side of y axis
-        YAxis yAxisRight = chart.getAxisRight();
-        yAxisRight.setEnabled(false);
-
-        //***
-        // Controlling left side of y axis
-        YAxis yAxisLeft = chart.getAxisLeft();
-        yAxisLeft.setGranularity(1f);
-
-        // Setting Data
-        LineData data = new LineData(dataSet);
-        chart.setData(data);
-        chart.notifyDataSetChanged();
-        //refresh
-        chart.invalidate();
-        //
-    }
-
     private void retrieveData() {
         //initializes lines for graph
         meColors = new ArrayList<>();
@@ -229,14 +184,11 @@ public class StudentTimelineFragment extends Fragment {
         //adds user slider value to ArrayList of entries
         int mySliderValue = dataRetrieval.getMySliderValue(FirebaseUtils.getPsuedoUniqueID());
         meValues.add(new Entry(index, mySliderValue));
-        // dummy data
-        Log.d("P-TEST", "Me value: " + mySliderValue);
 
         //adding class average slider value to ArrayList of entries
         int sectionAvg = Math.round(dataRetrieval.calculateAverageSectionData());
         classValues.add(new Entry(index, sectionAvg));
         index++;
-        Log.d("TEST", "Class avg: " + sectionAvg);
 
         //colors for rendering data points on the timeline graph: all transparent except for latest point
         for (int i = 0; i < meValues.size(); i++) {
@@ -251,9 +203,6 @@ public class StudentTimelineFragment extends Fragment {
         //initializes LineDataSets necessary for timeline graph
         meSet = new LineDataSet(meValues, "Me");
         classSet = new LineDataSet(classValues, "Class");
-        Log.d("TEST", "initialized meSet and classSet");
-        Log.d("TEST", "meSet:" + meSet.getEntryCount());
-        Log.d("TEST", "classSet: " + classSet.getEntryCount());
 
         //sets line colors and weights
         meSet.setLineWidth(2f);
@@ -281,7 +230,6 @@ public class StudentTimelineFragment extends Fragment {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
                 if (entry == meSet.getEntryForIndex(meSet.getEntryCount() - 1)) {
-                    Log.d("TEST", "get last label");
                     return String.valueOf(entry.getY());
                 }  else {
                     return "";
@@ -309,8 +257,6 @@ public class StudentTimelineFragment extends Fragment {
 
         //inputs sets into data form that can be graphed
         lineData = new LineData(meSet, classSet);
-        Log.d("P-TEST:", meSet.toString());
-
         chart.setData(lineData);
 
 
@@ -321,7 +267,6 @@ public class StudentTimelineFragment extends Fragment {
         chart.getLineData().notifyDataChanged();
         chart.notifyDataSetChanged();
         chart.invalidate();
-        Log.d("TEST", "data changed");
 
         //turn off unnecessary elements of the graph package such as a legend
         chart.setTouchEnabled(false);
@@ -366,9 +311,6 @@ public class StudentTimelineFragment extends Fragment {
         //means that latest point will always be at the rightmost edge
         xAxis.setAxisMaximum(index);
         xAxis.setAxisMinimum(0);
-        Log.d("TEST", "end of graphData");
-
-        //redraws
     }
 
     //All adjustments for engaged count (number of students in a section)
@@ -378,7 +320,6 @@ public class StudentTimelineFragment extends Fragment {
         //counts number of students in a section
         for (String user : FirebaseUtils.sectionSliders.keySet()) {
             countEngaged += 1;
-            Log.d("TEST","added: " + user + ": " + FirebaseUtils.sectionSliders.get(user));
         }
 
         //sets text of engaged count
@@ -389,9 +330,7 @@ public class StudentTimelineFragment extends Fragment {
         if(countEngaged > 100) {
             circleWrapper.setVisibility(View.GONE);
         } else {
-            Log.d("TEST", "displaying engaged");
             circleWrapper.setVisibility(View.VISIBLE);
-            Log.d("TEST", "displaying engaged");
         }
     }
 }
