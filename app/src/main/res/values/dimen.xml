@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="fragmentclass_thumbsupIconWidth">50dp</dimen>
-    <dimen name="fragmentclass_thumbsupIconHeight">50dp</dimen>
+    <dimen name="fragmentclass_thumbsIconWidth">50dp</dimen>
+    <dimen name="fragmentclass_thumbsIconHeight">50dp</dimen>
     <dimen name="fragmentclass_thumbsup_marginTop">8dp</dimen>
+    <dimen name="fragmentclass_thumbsup_marginLeft">8dp</dimen>
+
     <dimen name="fragmentclass_linechart_marginTop">16dp</dimen>
-    <dimen name="fragmentclass_thumbsdownIconWidth">50dp</dimen>
-    <dimen name="fragmentclass_thumbsdownIconHeight">50dp</dimen>
+    <dimen name="fragmentclass_linechart_marginBottom">32dp</dimen>
+    <dimen name="fragmentclass_linechart_marginEnd">8dp</dimen>
+
     <dimen name="fragmentclass_thumbsdown_marginBottom">8dp</dimen>
-    <dimen name="fragmentclass_endTimeText_marginEnd">8dp</dimen>
-    <dimen name="fragmentclass_endTimeText_marginRight">8dp</dimen>
+
+    <dimen name="fragmentclass_endTimeText_marginEnd">10dp</dimen>
+    <dimen name="fragmentclass_endTimeText_marginRight">10dp</dimen>
+    <dimen name="fragmentclass_endTimeText_marginTop">4dp</dimen>
+
     <dimen name="fragmentclass_startTimeText_marginStart">8dp</dimen>
     <dimen name="fragmentclass_startTimeText_marginLeft">8dp</dimen>
-    <dimen name="fragmentclass_circleContent_margin">16dp</dimen>
 
+    <dimen name="fragmentclass_circleContent_margin">16dp</dimen>
+    <dimen name="fragmentclass_circleWrapper_marginRight">8dp</dimen>
+    <dimen name="fragmentclass_engagedLabel_margin">8dp</dimen>
 </resources>
