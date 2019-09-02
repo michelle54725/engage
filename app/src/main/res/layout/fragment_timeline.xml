@@ -31,17 +31,17 @@
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginLeft="64dp"
-            android:layout_marginStart="64dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginBottom="32dp"
-            android:paddingBottom="30dp"
-            app:layout_constraintBottom_toTopOf="@+id/mEngagedPieChart"
+            android:layout_marginRight="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/thresholdvalUI"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/magicWordText" />
 
         <com.github.mikephil.charting.charts.PieChart
@@ -54,7 +54,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/mDisengagedPieChart"
-            app:layout_constraintTop_toBottomOf="@+id/chart"/>
+            app:layout_constraintTop_toBottomOf="@+id/mVerticalSeekBar"/>
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/mDisengagedPieChart"
@@ -67,30 +67,56 @@
             app:layout_constraintEnd_toStartOf="@+id/mEngagedPieChart"
             app:layout_constraintTop_toTopOf="@+id/mEngagedPieChart"/>
 
+        <TextView
+            android:id="@+id/thresholdvalUI"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/quicksand_bold"
+            android:text="Threshold Value: 50"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/mVerticalSeekBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chart" />
+
         <SeekBar
             android:id="@+id/mVerticalSeekBar"
-            android:layout_width="250dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="32dp"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="244dp"
             android:foregroundGravity="left"
             android:max="100"
             android:progress="50"
-            android:rotation="270"
-            android:thumb="@drawable/slider"
-            app:layout_constraintBottom_toBottomOf="@+id/chart"
+            android:thumbTint="#2FA6D8"
+            app:layout_constraintBottom_toTopOf="@+id/mDisengagedPieChart"
+            app:layout_constraintTop_toBottomOf="@+id/thresholdvalUI"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/chart" />
+            tools:layout_editor_absoluteY="444dp" />
 
         <TextView
             android:id="@+id/startTimeText"
             android:layout_width="wrap_content"
             android:layout_height="18dp"
             android:layout_marginTop="4dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
             android:text=""
             android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/mEngagedPieChart"
+            app:layout_constraintBottom_toTopOf="@+id/thresholdvalUI"
             app:layout_constraintEnd_toStartOf="@+id/chart"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/chart"
@@ -105,7 +131,7 @@
             android:layout_marginRight="10dp"
             android:text=""
             android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/mEngagedPieChart"
+            app:layout_constraintBottom_toTopOf="@+id/thresholdvalUI"
             app:layout_constraintEnd_toEndOf="@+id/chart"
             app:layout_constraintHorizontal_bias="0.948"
             app:layout_constraintStart_toEndOf = "@+id/startTimeText"
