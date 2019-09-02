@@ -29,4 +29,15 @@
 
     <dimen name="fragmentclass_me_marginRight">16dp</dimen>
 
+    <dimen name="teacherOptionClass_newSectionText_marginTop">100dp</dimen>
+    <dimen name="teacherOptionClass_helloText_marginTop">16dp</dimen>
+    <dimen name="teacherOptionClass_optionButton_width">250dp</dimen>
+    <dimen name="teacherOptionClass_optionButton_marginTop">32dp</dimen>
+    <dimen name="teacherOptionClass_optionButton_betweenMargin">130dp</dimen>
+
+    <dimen name="portrait_backBtn_margin">16dp</dimen>
+    <dimen name="portrait_backBtn_width">32dp</dimen>
+    <dimen name="portrait_backBtn_height">50dp</dimen>
+
+
 </resources>
