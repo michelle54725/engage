@@ -41,5 +41,9 @@
 
     <dimen name="recycleFlow_margin">24dp</dimen>
 
+    <dimen name="teacherTimeline_edgeMargin">32dp</dimen>
+
+
+
 
 </resources>
