@@ -23,7 +23,7 @@
     <dimen name="fragmentclass_engagedLabel_margin">8dp</dimen>
 
     <dimen name="fragmentclass_pieChart_marginSides">32dp</dimen>
-    <dimen name="fragmentclass_pieChart_height">204dp</dimen>
+    <dimen name="fragmentclass_pieChart_height">150dp</dimen>
     <dimen name="fragmentclass_pieChart_marginBottom">40dp</dimen>
     <dimen name="fragmentclass_pieChart_marginTop">20dp</dimen>
 
@@ -42,6 +42,9 @@
     <dimen name="recycleFlow_margin">24dp</dimen>
 
     <dimen name="teacherTimeline_edgeMargin">32dp</dimen>
+    <dimen name="teacherTimeline_edgeMargin16">16dp</dimen>
+    <dimen name="teacherTimeline_edgeMargin4">4dp</dimen>
+    <dimen name="teacherTimeline_edgeMargin8">8dp</dimen>
 
 
 
