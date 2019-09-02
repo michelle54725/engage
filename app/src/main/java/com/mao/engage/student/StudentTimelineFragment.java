@@ -365,7 +365,7 @@ public class StudentTimelineFragment extends Fragment {
         Log.d("TEST", "end of graphData");
 
         //redraws
-//        chart.invalidate();
+        chart.invalidate();
     }
 
     //All adjustments for engaged count (number of students in a section)
