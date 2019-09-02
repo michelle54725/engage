@@ -15,8 +15,8 @@
             android:id="@+id/magicWordText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/teacherTimeline_edgeMargin"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="@dimen/teacherTimeline_edgeMargin16"
+            android:layout_marginBottom="@dimen/teacherTimeline_edgeMargin16"
             android:fontFamily="@font/quicksand_bold"
             android:text="@string/magic_word_420"
             android:textAlignment="center"
@@ -31,13 +31,12 @@
             android:id="@+id/chart"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/teacherTimeline_edgeMargin"
             android:layout_marginEnd="@dimen/teacherTimeline_edgeMargin"
             android:layout_marginRight="@dimen/teacherTimeline_edgeMargin"
             android:layout_marginStart="@dimen/teacherTimeline_edgeMargin"
             android:layout_marginLeft="@dimen/teacherTimeline_edgeMargin"
-            android:layout_marginBottom="@dimen/teacherTimeline_edgeMargin"
-            app:layout_constraintBottom_toTopOf="@+id/thresholdvalUI"
+            android:layout_marginBottom="@dimen/teacherTimeline_edgeMargin4"
+            app:layout_constraintBottom_toTopOf="@+id/startTimeText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/magicWordText" />
@@ -70,9 +69,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/teacherTimeline_edgeMargin"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/teacherTimeline_edgeMargin8"
             android:layout_marginEnd="@dimen/teacherTimeline_edgeMargin"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="@dimen/teacherTimeline_edgeMargin8"
             android:fontFamily="@font/quicksand_bold"
             android:text="Threshold Value: 50"
             android:textAlignment="center"
@@ -81,7 +80,7 @@
             app:layout_constraintBottom_toTopOf="@+id/mVerticalSeekBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chart" />
+            app:layout_constraintTop_toBottomOf="@+id/startTimeText" />
 
         <SeekBar
             android:id="@+id/mVerticalSeekBar"
@@ -90,8 +89,6 @@
             android:layout_marginLeft="@dimen/teacherTimeline_edgeMargin"
             android:layout_marginEnd="@dimen/teacherTimeline_edgeMargin"
             android:layout_marginRight="@dimen/teacherTimeline_edgeMargin"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="32dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:foregroundGravity="left"
@@ -108,29 +105,26 @@
             android:id="@+id/startTimeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="@dimen/teacherTimeline_edgeMargin16"
             android:text=""
             android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/thresholdvalUI"
-            app:layout_constraintEnd_toStartOf="@+id/chart"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/chart"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chart" />
 
         <TextView
             android:id="@+id/endTimeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="@dimen/fragmentclass_endTimeText_marginEnd"
-            android:layout_marginRight="@dimen/fragmentclass_endTimeText_marginRight"
+            android:layout_marginEnd="@dimen/teacherTimeline_edgeMargin16"
+            android:layout_marginRight="@dimen/teacherTimeline_edgeMargin16"
             android:text=""
             android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/thresholdvalUI"
-            app:layout_constraintEnd_toEndOf="@+id/chart"
-            app:layout_constraintTop_toBottomOf="@+id/chart" />
+            app:layout_constraintBottom_toBottomOf="@+id/startTimeText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/startTimeText" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
