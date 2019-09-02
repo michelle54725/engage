@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fragmentclass_thumbsupIconWidth">50dp</dimen>
+    <dimen name="fragmentclass_thumbsupIconHeight">50dp</dimen>
+    <dimen name="fragmentclass_thumbsup_marginTop">8dp</dimen>
+    <dimen name="fragmentclass_linechart_marginTop">16dp</dimen>
+    <dimen name="fragmentclass_thumbsdownIconWidth">50dp</dimen>
+    <dimen name="fragmentclass_thumbsdownIconHeight">50dp</dimen>
+    <dimen name="fragmentclass_thumbsdown_marginBottom">8dp</dimen>
+    <dimen name="fragmentclass_endTimeText_marginEnd">8dp</dimen>
+    <dimen name="fragmentclass_endTimeText_marginRight">8dp</dimen>
+    <dimen name="fragmentclass_startTimeText_marginStart">8dp</dimen>
+    <dimen name="fragmentclass_startTimeText_marginLeft">8dp</dimen>
+    <dimen name="fragmentclass_circleContent_margin">16dp</dimen>
+
+</resources>
