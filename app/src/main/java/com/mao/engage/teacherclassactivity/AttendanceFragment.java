@@ -102,7 +102,6 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
             @Override
             public void onFound(Message message) {
                 String user_id = new String(message.getContent());
-                Log.d("TEST: ", "Found message: " + user_id);
                 if(!mMessages.contains(user_id)) {
                     FirebaseUtils.updateUserAttendance(mSectionRefKey, user_id);
                 }
@@ -111,7 +110,6 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
 
             @Override
             public void onLost(Message message) {
-                Log.d("TEST: ", "Lost sight of message: " + new String(message.getContent()));
             }
         };
         mMessage = new Message("Hello World".getBytes());
@@ -149,7 +147,6 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
                 } else {
                     attendanceButton.setBackground(getResources().getDrawable(R.drawable.attendance_button2));
                     attendanceButton.setText(R.string.stop_attendance);
-                    Log.d("TEST", "studentcount: " + Integer.toString(FirebaseUtils.getUserNames(mSectionRefKey).size()));
                     //studentCount.setText(Integer.toString(FirebaseUtils.getUserNames(mSectionRefKey).size()));
                     studentCount.setVisibility(View.VISIBLE);
                     students.setVisibility(View.VISIBLE);
@@ -161,13 +158,11 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
                 break;
             //the see_whos_here button takes the user to a new page, AttendeeListActivity.
             case R.id.see_whos_here:
-                Log.d("TEST", "SEE WHO IS HERE BUTTON GOOGLE NEARBY MESSAGES");
                 Intent intent = new Intent(getActivity(), AttendeeListActivity.class);
                 intent.putExtra("sectionRefKey", mSectionRefKey);
                 startActivity(intent);
                break;
             default:
-                Log.d("TEST:","Button not accounted for");
                 break;
         }
 
@@ -180,10 +175,8 @@ public class AttendanceFragment extends Fragment implements View.OnClickListener
      */
     public static void refreshCount() {
         if (context != null) {
-            Log.d("TEST", "before refreshCount: " + count);
             count = FirebaseUtils.getUserNames(mSectionRefKey).size();
             studentCount.setText(Integer.toString(count));
-            Log.d("TEST", " after refreshCount: " + count);
         }
     }
 

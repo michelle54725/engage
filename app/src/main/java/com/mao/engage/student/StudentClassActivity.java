@@ -121,7 +121,6 @@ public class StudentClassActivity extends AppCompatActivity {
         //send timeline data to StudentTimelineFragment
         Bundle bundle = new Bundle();
         bundle.putString("uID", getIntent().getStringExtra("uID"));
-        Log.d("TEST", "put bundle: " + getIntent().getStringExtra("uID"));
         meFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.constraintLayout, meFragment);
         fragmentTransaction.commit();

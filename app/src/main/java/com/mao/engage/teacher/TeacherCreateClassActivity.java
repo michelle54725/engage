@@ -85,7 +85,6 @@ public class TeacherCreateClassActivity extends AppCompatActivity implements Vie
         endTimeEditText = findViewById(R.id.endTimeEditText);
         createClassBtn = findViewById(R.id.createClassBtn);
         name = getIntent().getStringExtra("name");
-        Log.d("TEST", "createname: " + name);
 
         // disable focus on calendar fields
         dateEditText.setFocusable(false); // Keyboard input is entered into the field with focus
@@ -209,7 +208,6 @@ public class TeacherCreateClassActivity extends AppCompatActivity implements Vie
                 onBackPressed();
                 break;
             default:
-                Log.d("TEST:","Button not accounted for");
                 break;
         }
     }
@@ -323,20 +321,17 @@ public class TeacherCreateClassActivity extends AppCompatActivity implements Vie
         FirebaseDatabase.getInstance().getReference("/MagicKeys").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.d("BOBCHILD", "onChildAdded: " + dataSnapshot.getKey() + dataSnapshot.getValue());
                 activeMagicKeys.put(Integer.valueOf(dataSnapshot.getKey()), dataSnapshot.getValue(String.class));
                 generateMagicKey();
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.d("BOBCHILD", "onChildCHANGED: " + dataSnapshot.getKey() + dataSnapshot.getValue());
                 activeMagicKeys.put(Integer.valueOf(dataSnapshot.getKey()), dataSnapshot.getValue(String.class));
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("BOBCHILD", "onChildREMOVED: " + dataSnapshot.getKey() + dataSnapshot.getValue());
                 activeMagicKeys.remove(Integer.valueOf(dataSnapshot.getKey()));
             }
 

@@ -117,7 +117,6 @@ public class TimelineFragment extends Fragment {
             startTimeText.setText(getArguments().getString("start_time"));
             endTimeText.setText(getArguments().getString("start_time"));
             endTime = getArguments().getString("end_time");
-            Log.d("TEST", "sectionRefKey in Timeline: " + sectionRefKey);
             timelineData = getArguments().getIntegerArrayList("timelinedata");
         }
         thresholdVal = 50; //default to 50
@@ -145,7 +144,6 @@ public class TimelineFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 thresholdVal = seekBar.getProgress();
-                Log.d("TEST-M", "threshold value changed: " + seekBar.getProgress());
                 if (!FirebaseUtils.compareTime(endTime)) {
                     retrieveData(true);
                 }
@@ -168,7 +166,6 @@ public class TimelineFragment extends Fragment {
                     public void run() {
                         if (FirebaseUtils.compareTime(endTime)) {
                             threshBar.setVisibility(View.GONE);
-                            Log.d("TEST", "compare: stop retrieve data upon reach time 1");
                             t.cancel();
                             t.purge();
                             return;
@@ -186,7 +183,6 @@ public class TimelineFragment extends Fragment {
     }
 
     public static void takeScreenshot() {
-        Log.d("TEST", "reached takeScreenshot");
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
@@ -204,17 +200,12 @@ public class TimelineFragment extends Fragment {
         }
         try {
             FileOutputStream outputStream = new FileOutputStream(imageFile);
-            Log.d("TEST", "takeScreenshot2");
             int quality = 100;
             bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-            Log.d("TEST", "takeScreenshot3");
             outputStream.flush();
-            Log.d("TEST", "takeScreenshot4");
             outputStream.close();
-            Log.d("TEST", "takeScreenshot5");
         } catch (Throwable e) {
             // Several error may come out with file handling or DOM
-            Log.d("TEST", "Error: " + e.getStackTrace());
             e.printStackTrace();
         }
     }
@@ -235,7 +226,6 @@ public class TimelineFragment extends Fragment {
         // draw the view on the canvas
         view.draw(canvas);
         //return the bitmap
-        Log.d("TEST", "bitmap created");
         return returnedBitmap;
     }
 
@@ -289,7 +279,6 @@ public class TimelineFragment extends Fragment {
         //has to be recreated at every call of retrieveData based on the way that the Android graph api works
         threshold = new ArrayList<>();
         classValues = new ArrayList<>();
-        Log.d("TEST", "in  retrieve data function in TIMELINE");
 
         //stores color for every data point created in the set
         ArrayList<Integer> thresholdColor = new ArrayList<>();
@@ -298,7 +287,6 @@ public class TimelineFragment extends Fragment {
         final int count = 10;
         final int range = 100;
 
-        Log.d("TEST", "calculateaveragedata timeline" + timeline.calculateAverageSectionData());
         //calculates the average of all the student's section sliders at an instance of time
         if(!isThreshold) {
             timelineData.add((int) timeline.calculateAverageSectionData());
@@ -307,7 +295,6 @@ public class TimelineFragment extends Fragment {
         ArrayList<Integer> individualEngagements = new ArrayList<>();
         for (String user : FirebaseUtils.sectionSliders.keySet()) {
             individualEngagements.add(FirebaseUtils.sectionSliders.get(user));
-            Log.d("TEST", individualEngagements.size() + ") added: " + user + ": " + FirebaseUtils.sectionSliders.get(user));
         }
 
         // need to add each data point as an entry to our array lists
@@ -324,7 +311,6 @@ public class TimelineFragment extends Fragment {
         // classValues and classColors will be used as the data set by the graph api
         for (int i = 0; i < timelineData.size(); i++) {
             classValues.add(new Entry(i, (float) timelineData.get(i)));
-            Log.d("L-TEST", "class value: " + timelineData.get(i));
             classColors.add(Color.TRANSPARENT);
         }
         classColors.remove(classColors.size() - 1);
@@ -455,7 +441,6 @@ public class TimelineFragment extends Fragment {
         classSet.notifyDataSetChanged();
         chart.getLineData().notifyDataChanged();
         chart.notifyDataSetChanged();
-        Log.d("TEST", "data changed");
 
         PieDataSet engagedSet = new PieDataSet(engagementEntries, "EngagedPieSet");
         engagedSet.setColors(Color.TRANSPARENT, getResources().getColor(R.color.colorAccentBlue));

@@ -15,7 +15,6 @@ internal fun MeFragment_findRefKey_writeSliderVal(user_id: String, value: Int) {
     val mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions")
     mUsersRef.addListenerForSingleValueEvent(object: ValueEventListener {
         override fun onCancelled(p0: DatabaseError) {
-            Log.d("L-TEST", "findRefKey onCancelled")
         }
 
         override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -37,12 +36,11 @@ internal fun MeFragment_findRefKey_writeSliderVal(user_id: String, value: Int) {
                             mUsersRef.child(user_id).child("slider_val").setValue(value).addOnSuccessListener(OnSuccessListener<Void> {
                                 sectionSliders.put(user_id, value)
                             })
-                                    .addOnFailureListener(OnFailureListener { Log.d("TEST", "New slider wrote to DB: " + "FAILED") })
+                                    .addOnFailureListener(OnFailureListener {})
                         }
                     }
                 }
             } else {
-                Log.d("L-TEST-FAIL", "datasnapshot DNE")
             }
 
         }

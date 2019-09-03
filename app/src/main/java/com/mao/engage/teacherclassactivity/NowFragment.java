@@ -67,7 +67,6 @@ public class NowFragment extends Fragment {
         magicWordText = view.findViewById(R.id.magicWordText);
         if (getArguments() != null) {
             sectionNameText.setText(getArguments().getString("section_name"));
-            Log.d("TEST-MAGIC", "in NowFragment: " + getArguments().getString("magic_word"));
             magicWordText.setText(String.format("Magic word: %s", getArguments().getString("magic_word")));
             mSectionRefKey = getArguments().getString("sectionRefKey");
         }
@@ -99,7 +98,6 @@ public class NowFragment extends Fragment {
             int test_val = 0; //for testing
             @Override
             public void run() {
-                Log.d("TEST", "TIMER WORKING..." + test_val++);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -114,13 +112,10 @@ public class NowFragment extends Fragment {
     }
 
     private void retrieveData() {
-        Log.d("TEST", "in retrieveData...");
-
         // get all Slider values
         ArrayList<Integer> individualEngagements = new ArrayList<>();
         for (String user : FirebaseUtils.sectionSliders.keySet()) {
             individualEngagements.add(FirebaseUtils.sectionSliders.get(user));
-            Log.d("TEST", individualEngagements.size() + ") added: " + user + ": " + FirebaseUtils.sectionSliders.get(user));
         }
 
 //                {
@@ -164,7 +159,6 @@ public class NowFragment extends Fragment {
         engagementEntries.add(new PieEntry(disengagedStudents));
         engagementEntries.add(new PieEntry(engagedStudents));
 
-        Log.d("SEEKBAR", "retrieveData: " + thresholdBar.getProgress());
 
         BarData barData = new BarData();
         barData.addDataSet(engagedBarSet);
@@ -239,21 +233,17 @@ public class NowFragment extends Fragment {
         disengagedPieChart.invalidate();
 
         FirebaseUtils.changeThresholdVal(mSectionRefKey, thresholdBar.getProgress());
-
-        Log.d("TEST", "...end retrieveData");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d("TEST", "onDestroyView: Destroying View & TimerTask");
         retrieveDataTask.cancel();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d("TEST", "onStop: Stopping & Destroying TimerTask");
         retrieveDataTask.cancel();
     }
 }
