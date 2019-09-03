@@ -53,7 +53,6 @@ public class FirebaseUtils {
         Removes self (user) from local databases
      */
     public static void removeUser(String ref_key, String userId) {
-        Log.d("TEST", "remove USER method in firebase; ref key: " + ref_key + "  user id   " + userId);
         mSectionRef.child(ref_key).child("user_ids").child(userId).removeValue();
         //FirebaseDatabase.getInstance().getReference("/UserSessions").child(userId).removeValue();
 
@@ -64,14 +63,12 @@ public class FirebaseUtils {
         Remove all users from a section
      */
     public static void removeAllUsers(String ref_key) {
-        Log.d("TEST", "remove ALL USERS method in firebase; ref key: " + ref_key);
         mSectionRef.child(ref_key).child("user_ids").removeValue();
     }
     /*
         Remove section
      */
     public static void removeSection(String ref_key, String teacher_id) {
-        Log.d("TEST", "remove section in firebase");
         mSectionRef.child(ref_key).removeValue();
         mTeachersRef.child(teacher_id).child("existingSections").child(ref_key).removeValue();
     }
@@ -85,19 +82,16 @@ public class FirebaseUtils {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String section_ref_key = dataSnapshot.getKey();
-                Log.d("TEST", "[new Section Child]: " + section_ref_key);
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 HashMap<String, Object> hashyMap = new HashMap<>();
                 hashyMap.put("user_ids", new HashMap<String, String>());
                 for(DataSnapshot child : children) {
                     if (!(child.getKey().equals("user_ids"))) {
                         hashyMap.put(child.getKey(), child.getValue().toString());
-                        Log.d("TEST[new Section Child]", child.getKey() + " " + child.getValue());
                     } else {
                         //copied and pasted elsewhere
                     }
                 }
-                Log.d("TEST: ", "SECTION ITEMS added");
                 sectionMap.put(section_ref_key, hashyMap);
             }
 
@@ -151,7 +145,6 @@ public class FirebaseUtils {
         Called in AttendeeListAdapter when button is clicked
      */
     public static void markPresent(String user_id, String section_ref_key) {
-        Log.d("TEST", "marking student present");
         DatabaseReference userIdRef = mSectionRef.child(section_ref_key).child("user_ids");
         userIdRef.child(user_id).setValue(getNameFromSectionMap(user_id, section_ref_key) + ",p");
     }
@@ -160,13 +153,10 @@ public class FirebaseUtils {
     public static String getAttendanceFromSectionMap(String user_id, String section_ref_key) {
         Map<String, Map<String, String>> hashyMap = sectionMap.get(section_ref_key);
         Map<String, String> user_ids = hashyMap.get("user_ids");
-        Log.d("TEST[ATTENDANCE]", "users: " + user_ids.values().toString());
 
         String username = user_ids.get(user_id);
-        Log.d("TEST[ATTENDANCE]", "username: " + username);
         if (username != null) {
             int index = username.indexOf(",");
-            Log.d("TEST[ATTENDANCE]", "getAttendanceFromSectionMap of " + user_id + ": " + username.substring(index + 1).replaceAll("\\s", ""));
             return username.substring(index + 1).replaceAll("\\s", "");
         } else {
             //username DNE
@@ -181,7 +171,6 @@ public class FirebaseUtils {
         Map<String, Map<String, String>> hashyMap = sectionMap.get(section_ref_key);
         String value = hashyMap.get("user_ids").get(userID);
         int index = value.indexOf(",");
-        Log.d("TEST", "getNameFromSectionMap " + value.substring(0, index));
         return value.substring(0, index);
     }
 
@@ -190,7 +179,6 @@ public class FirebaseUtils {
     */
     public static String getNameFromValue(String value) {
         int index = value.indexOf(",");
-        Log.d("TEST", "getNameFromValue " + value.substring(0, index));
         return value.substring(0, index);
     }
 
@@ -200,7 +188,6 @@ public class FirebaseUtils {
     public static boolean isPresent(String value) {
         int index = value.indexOf(",");
         String status = value.substring(index + 1);
-        Log.d("TEST", "isPresent " + value.substring(index));
         return status.equals("p");
     }
 
@@ -232,7 +219,6 @@ public class FirebaseUtils {
         if (sectionMap.get(refKey).get("threshold") == null) {
             sectionMap.get(refKey).put("threshold", 0);
         }
-        Log.d("TEST: ", "getThreshold called" + Double.parseDouble(sectionMap.get(refKey).get("threshold").toString()));
         return Double.parseDouble(sectionMap.get(refKey).get("threshold").toString());
     }
 
@@ -241,7 +227,6 @@ public class FirebaseUtils {
      */
     public static void changeThresholdVal(String refKey, double threshold) {
         //TODO:doesn't update the firebase, just updates local values -- ask if that is that ok?
-        Log.d("TEST: ", "changeThresholdVal called");
         sectionMap.get(refKey).put("threshold", threshold);
     }
 
@@ -251,7 +236,6 @@ public class FirebaseUtils {
      */
     public static long getMagicKey(String refKey) {
         String s = sectionMap.get(refKey).get("magic_key").toString();
-        Log.d("TEST", s);
         //Long.parseLong(sectionMap.get(refKey).get("magic_key").toString())
         return Long.parseLong(s);
     }
@@ -261,13 +245,11 @@ public class FirebaseUtils {
      */
     public static String getStartTime(String refKey) {
         String s = sectionMap.get(refKey).get("a_start").toString();
-        Log.d("TEST", "START TIME: " + s);
         return s.substring(s.length() - 7);
     }
 
     public static String getEndTime(String refKey) {
         String s = sectionMap.get(refKey).get("b_end").toString();
-        Log.d("TEST", "END TIME: " + s);
         return s.substring(s.length() - 7);
     }
 
@@ -283,20 +265,16 @@ public class FirebaseUtils {
         else if (hour > 12) { hour -= 12; amPm = "PM"; }
         else { amPm = "AM"; }
         String currentTime = String.format(Locale.US, "%02d:%02d%s", hour % 13, minute, amPm);
-        Log.d("TEST", "compare: " + "endtime: " + endTime + " currentTime: " + currentTime);
         return endTime.compareTo(currentTime) <= 0;
     }
 
     public static String getUsernameFromSectionMap(String section_ref_key, String user_id) {
         Map<String, Map<String, String>> hashyMap = sectionMap.get(section_ref_key);
         Map<String, String> user_ids = hashyMap.get("user_ids");
-        Log.d("TEST[GETUSERNAME]", "users: " + user_ids.values().toString());
 
         String username = user_ids.get(user_id);
-        Log.d("TEST[GETUSERNAME]", "username: " + username);
         if (username != null) {
             int index = username.indexOf(",");
-            Log.d("TEST[GETUSERNAME]", "getAttendanceFromSectionMap of " + user_id + ": " + username.substring(0, index).replaceAll("\\s", ""));
             return username.substring(0, index).replaceAll("\\s", "");
         } else {
             //username DNE
@@ -306,7 +284,6 @@ public class FirebaseUtils {
 
     //adds existing section information to hashmap
     public static void setExistingSectionsListener(String userID) {
-        Log.d("TEST: ", "setExistingSections Called");
         mTeachersRef.child(userID).child("existingSections").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -316,7 +293,6 @@ public class FirebaseUtils {
                 String section_id = dataSnapshot.getKey();
                 String section_ref = dataSnapshot.getValue(String.class);
                 existingSections.put(section_ref, section_id);
-                Log.d("TEST: ", "EXISTING SECTIONS added");
             }
 
             @Override
@@ -324,14 +300,12 @@ public class FirebaseUtils {
                 String section_id = dataSnapshot.getKey();
                 String section_ref = dataSnapshot.getValue(String.class);
                 existingSections.put(section_ref, section_id);
-                Log.d("TEST: ", "EXISTING SECTIONS changed");
 
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 existingSections.remove(dataSnapshot.getValue(String.class));
-                Log.d("TEST: ", "EXISTING SECTIONS removed");
 
             }
 
@@ -348,10 +322,7 @@ public class FirebaseUtils {
 
     // Add a section child in SectionSesh
     public static void createSection(SectionSesh section) {
-        Log.d("TEST", "in FirebaseUtils.createSection...");
         mSectionRef.child(section.ref_key).setValue(section);
-        //sectionsMagicKey.put(section.ref_key, section.magic_key);
-        //Log.d("TEST", "sectionsMagicKey key: " + sectionsMagicKey.keySet() + " value: " + sectionsMagicKey.values());
         FirebaseDatabase.getInstance().getReference("/MagicKeys").child("" + section.getMagic_key()).setValue(section.getRef_key());
         // a Listener on a Section's user_ids to maintain local sectionSliders HashMap
     }
@@ -360,7 +331,6 @@ public class FirebaseUtils {
     // TODO: how to set saved_slider_vals array in firebase
     public static void createSavedSliderVals(String sectionRefKey) {
         mSectionRef.child(sectionRefKey).child("saved_slider_vals").setValue("50,");
-        Log.d("TEST:", "Reached saved slider vals method!");
     }
 
     // TODO: get saved_slider_vals array from firebase
@@ -405,16 +375,13 @@ public class FirebaseUtils {
     // Find SectionSesh corresponding to User's MagicWord
     // Add UserID to corresponding Section's user_ids list
     public static void createUser(final UserSesh user) {
-        Log.d("TEST", "in findSectionWithUser" + mSectionRef.getKey());
         mSectionRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    Log.d("TEST", "in OnDataChange w MW: " + String.valueOf(user.getMagic_key()));
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         SectionSesh section = snapshot.getValue(SectionSesh.class);
                         if (section.getMagic_key() == user.getMagic_key()) {
-                            Log.d("TEST", "\n[FOUND MATCH] " + "\nmagic key: " + section.getMagic_key() + "; \n" + "ref key: " + section.getRef_key());
                             // Reflect change in section_ref_key in both DB and UserSesh object
                             user.setSection_ref_key(section.getRef_key());
                             mUsersRef.child(user.getUser_id()).setValue(user);
@@ -428,26 +395,22 @@ public class FirebaseUtils {
                         }
                     }
                 } else {
-                    Log.d("TEST-FAIL", "dataSnapshot DNE");
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                Log.d("TEST-FAIL", "failed to read value");
             }
         });
     }
 
     public static void updateTeacher(String name, String sectionRefKey, String sectionID) {
-        Log.d("TEST-M", "updating Teacher w device ID " + getPsuedoUniqueID());
         DatabaseReference mRef = mTeachersRef.child(getPsuedoUniqueID());
         mRef.child("name").setValue(name);
         mRef.child("existingSections").child(sectionRefKey).setValue(sectionID);
     }
 
     public static void setUserIdinSectionListener(final String ref_key) {
-        Log.d("TEST[user_ids]", "in setUserIdinSectionListener");
         sectionSliders = new HashMap<>(); // clear out sectionSliders from previous
         DatabaseReference useridsRef = mSectionRef.child(ref_key).child("user_ids");
         if (useridsRef != null) {
@@ -455,9 +418,7 @@ public class FirebaseUtils {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     //copied and pasted here
-                    Log.d("TEST[user_ids]", "putting... " + dataSnapshot.getKey() + ": " + dataSnapshot);
                     Map<String, String> user_ids = (Map<String, String>) sectionMap.get(ref_key).get("user_ids");
-                    Log.d("TEST[user_ids]", "user_ids is currently: " + user_ids);
                     if (user_ids != null) {
                         if (((String)dataSnapshot.getValue()).contains(",")) {
                             // LOCAL SYNC: put user in sectionMap
@@ -465,7 +426,6 @@ public class FirebaseUtils {
                         }
                     }
 
-                    Log.d("TEST[user_id]", "LISTENER SAYS copying user to local sectionSliders: " + dataSnapshot.getKey());
                     String user_id = dataSnapshot.getKey();
 
                     // LOCAL SYNC: put user in sectionSliders
@@ -486,13 +446,11 @@ public class FirebaseUtils {
 
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                    Log.d("TEST", "removing user from local hashmaps: " + dataSnapshot.getKey());
                     String user_id = dataSnapshot.getKey();
                     sectionSliders.remove(user_id);
                     Map<String, String> userMap = (Map) sectionMap.get(ref_key).get("user_ids");
                     userMap.remove(user_id);
                     boolean removed = userMap.containsKey(user_id);
-                    Log.d("TEST", "proper local removal: " + !removed);
                 }
 
                 @Override
@@ -506,21 +464,17 @@ public class FirebaseUtils {
                 }
             });
         } else {
-            Log.d("TEST[user_ids]", "USERID REF IS NULL");
         }
     }
 
     public static int getSliderVal(String user_id) {
         if (!sectionSliders.containsKey(user_id)) {
             sectionSliders.put(user_id, 50);
-            Log.d("L-TEST", "getSliderVal default");
         }
-        Log.d("TEST", "mySliderValue: " + sectionSliders.get(user_id));
         return sectionSliders.get(user_id);
     }
     
     public static void checkIsTakingAttendance(String section_ref_key) {
-        Log.d("TEST", "calling checkIsTakingAttendance");
         FirebaseDatabase.getInstance().getReference("/Sections").child(section_ref_key).child("isTakingAttendance").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -532,13 +486,11 @@ public class FirebaseUtils {
                         try {
                             MeFragment.stopSendingMessages();
                         } catch(Exception e) {
-                            Log.d("TEST: ", "context is not available");
 
                         }
                     }
 
                 } else {
-                    Log.d("TEST: ", "Is taking attendance NOT FOUND in checkIsTakingAttendance for students!");
                 }
 
             }
@@ -555,7 +507,6 @@ public class FirebaseUtils {
             mSectionRef.child(section_ref_key).child("isTakingAttendance").setValue(isAttendance);
             sectionMap.get(section_ref_key).put("isTakingAttendance", isAttendance);
         } catch(Exception e) {
-            Log.d("TEST: ", "isTakingAttendance DOES NOT EXIST in setIsTakingAttendance");
         }
     }
 
@@ -564,26 +515,19 @@ public class FirebaseUtils {
         if (val != null) {
             String[] parts = val.split("\\,");
             String name = parts[0];
-            Log.d("TEST: ", "updated user attendance" + name);
             mSectionRef.child(section_ref_key).child("user_ids").child(user_id).setValue(name + ",p");
         }
-        Log.d("TEST: ", "did NOT update user attendance, name = null");
 
     }
 
     // creates Listener for Section.user_ids.userid value (e.g. "Michelle, a") to update TA's attendance list
     public static void setAttendanceListener (final String section_ref_key, final String user_id) {
-        Log.d("TEST[ATTENDANCE]", "LISTENER SET FOR: " + user_id);
         mSectionRef.child(section_ref_key).child("user_ids").child(user_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("TEST[ATTENDANCE]", "in onDataChange for " + user_id);
                 if (dataSnapshot.exists()) {
-                    Log.d("TEST[ATTENDANCE]", "snapshot: " + dataSnapshot);
-                    Log.d("TEST[ATTENDANCE]", "status: " + getAttendanceFromSectionMap(user_id, section_ref_key));
                     if (isPresent(Objects.requireNonNull(dataSnapshot.getValue()).toString())) {
                     // update sectionAttendance AND set student's name to green if "Michelle, p"
-                        Log.d("TEST[ATTENDANCE]", user_id + ": Present");
                         sectionAttendance.put(user_id, true);
 
                         //update sectionMap
@@ -594,7 +538,6 @@ public class FirebaseUtils {
                         AttendanceFragment.refreshCount();
                     } else if (!isPresent(dataSnapshot.getValue().toString())) {
                     // update sectionAttendance AND set student's name to green if "Michelle, a"
-                        Log.d("TEST[ATTENDANCE]", user_id + ": Absent");
                         sectionAttendance.put(user_id, false);
                         AttendeeListActivity.markAbsent(user_id);
 
@@ -605,11 +548,8 @@ public class FirebaseUtils {
                         AttendeeListActivity.refreshList();
                         AttendanceFragment.refreshCount();
                     } else {
-                        Log.d("TEST[ATTENDANCE]", user_id + ": Not P or A");
                     }
                 } else {
-                    Log.d("TEST[ATTENDANCE]", "snapshot does not exist for " + user_id);
-                    //Log.d("TEST[ATTENDANCE]", "deleting attendance Listener for " + user_id);
                     //mSectionRef.child(section_ref_key).child("user_ids").child(user_id).removeEventListener(this);
                 }
             }
@@ -628,21 +568,16 @@ public class FirebaseUtils {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     if (sectionSliders.containsKey(user_id)) {
-                        Log.d("TEST", "\nreading '" + user_id + "'; \n with slider val: " + dataSnapshot.getValue());
                         sectionSliders.put(user_id, Integer.valueOf(dataSnapshot.getValue().toString()));
 
                         // For testing purposes
-                        Log.d("PRINT_TEST", "\n Printing contents of sectionSliders Hashmap...");
                         for (String user : sectionSliders.keySet()) {
                             Integer value = sectionSliders.get(user);
-                            Log.d("PRINT_TEST", user + ": " + value.toString());
                         }
 
                     } else {
-                        Log.d("TEST", "ERROR: user_id not found in sectionSlider HashMap");
                     }
                 } else {
-                    Log.d("TEST", "deleting Listener for " + user_id);
                 }
             }
 
@@ -669,7 +604,6 @@ public class FirebaseUtils {
         for (String key : usersInSection.keySet()) {
             String[] nameAndId = new String[]{usersInSection.get(key), key};
             listOfUsers.put(key, usersInSection.get(key));
-            Log.d("TEST", "getUserNames " + usersInSection.get(key) + " " + key);
         }
 
         return listOfUsers;
@@ -680,12 +614,10 @@ public class FirebaseUtils {
         /** This is preventing teachers from being shown TeacherOptionsActivity where they can
          * resume sections. */
         if (!allTeachers.contains(getPsuedoUniqueID())) {
-            Log.d("TEST-M", "is Teacher");
             mTeachersRef.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                     String id = dataSnapshot.getKey();
-                    Log.d("TEST-M", "[new Teacher Child] \n" + id);
                     allTeachers.add(id);
                 }
 
@@ -697,7 +629,6 @@ public class FirebaseUtils {
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
                     String id = dataSnapshot.getKey();
-                    Log.d("TEST", "[deleting Teacher Child] \n" + id);
                     allTeachers.remove(id);
                 }
 
@@ -713,8 +644,6 @@ public class FirebaseUtils {
     }
 
     public static boolean teacherIsInDB() {
-        Log.d("TEST-M", "in teacherIsInDB method...");
-        Log.d("TEST-M", "teacherIsInDB RESULT: " + allTeachers.contains(getPsuedoUniqueID()));
         return allTeachers.contains(getPsuedoUniqueID());
     }
 
