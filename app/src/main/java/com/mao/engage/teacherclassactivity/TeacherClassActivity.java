@@ -77,7 +77,6 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         timelineTabBtn = findViewById(R.id.timelineTabBtn);
         endSectionBtn = findViewById(R.id.endSectionBtn);
         name = getIntent().getStringExtra("name");
-        Log.d("TEST", "firstname: " + name);
 
         segmentedBar.setTintColor(getResources().getColor(R.color.colorPrimary));
         nowTabBtn.setTextColor(Color.WHITE);
@@ -159,7 +158,6 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        Log.d("BOBOB", "onFragmentInteraction: " + uri.toString());
     }
 
     @Override
@@ -184,7 +182,6 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                     fragmentTransaction.commit();
 
                     Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
-                    Log.d("TEST", "name: " + name);
                     intent.putExtra("name", name);
                     startActivity(intent);
                     FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());

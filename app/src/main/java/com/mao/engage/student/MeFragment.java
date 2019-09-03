@@ -119,7 +119,6 @@ public class MeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("BOBOOBO2BO", "onCreateView: " + seekBar.getHeight());
     }
 
     private int elasticFunction(int current) {
@@ -135,13 +134,11 @@ public class MeFragment extends Fragment {
 
     //send high frequency messages from user's phone automatically when teacher calls attendance
     public static void startSendingMessages() {
-        Log.d("TEST: ", "start sending messages! here is my message " + FirebaseUtils.getPsuedoUniqueID());
         message = new Message(FirebaseUtils.getPsuedoUniqueID().getBytes());
         Nearby.getMessagesClient(context).publish(message);
     }
     //ends messages when teacther clicks their "Stop Taking Attendance" button
     public static void stopSendingMessages() {
-        Log.d("TEST: ", "stop sending messages! " + context);
         Nearby.getMessagesClient(context).unpublish(message);
     }
 
@@ -149,7 +146,6 @@ public class MeFragment extends Fragment {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.d("ADAS", "onProgressChanged: " + sliderValue);
             }
 
             @Override

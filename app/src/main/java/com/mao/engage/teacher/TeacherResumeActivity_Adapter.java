@@ -63,7 +63,6 @@ public class TeacherResumeActivity_Adapter extends RecyclerView.Adapter<TeacherR
                                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Log.d("TEST", "exiting old section");
                                         HashMap<String, String> mySectionsHashMap = FirebaseUtils.getExistingSectionsHashMap();
                                         String mSectionRefKey = mySectionsHashMap.get(section.getText().toString());
                                         if (mSectionRefKey != null) {

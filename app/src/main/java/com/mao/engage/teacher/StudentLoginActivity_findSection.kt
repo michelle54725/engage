@@ -65,7 +65,6 @@ internal fun findSection(user: UserSesh, context: Context) {
                         //TODO: eliminate the following code once eliminated sectionMap
                         val user_id_map = FirebaseUtils.sectionMap.get(section?.getRef_key())!!.get("user_ids") as HashMap<String, String>
                         user_id_map[user.user_id] = user.username + ",a"
-                        Log.d("M-Test", FirebaseUtils.sectionMap.get(section?.getRef_key())!!.get("user_ids").toString())
                     }
                 }
 
@@ -92,12 +91,10 @@ internal fun findSection(user: UserSesh, context: Context) {
                     }
                 }
             } else {
-                Log.d("TEST-FAIL", "dataSnapshot DNE")
             }
         }
 
         override fun onCancelled(error: DatabaseError) {
-            Log.d("TEST-FAIL", error.message)
         }
     })// marks end of addListenerForSingleValueEvent
     

@@ -198,7 +198,7 @@ public class StudentTimelineFragment extends Fragment {
         meColors.remove(meColors.size() - 1);
         meColors.add(Color.WHITE);
         classColors.remove(classColors.size() - 1);
-        classColors.add(getResources().getColor(R.color.colorAccentBlue));
+        classColors.add(getResources().getColor(R.color.colorWhite));
 
         //initializes LineDataSets necessary for timeline graph
         meSet = new LineDataSet(meValues, "Me");
@@ -206,14 +206,14 @@ public class StudentTimelineFragment extends Fragment {
 
         //sets line colors and weights
         meSet.setLineWidth(2f);
-        meSet.setColor(Color.WHITE);
+        meSet.setColor(R.color.colorAccentBlue);
         meSet.setCircleColors(meColors);
         meSet.setCircleRadius(3f);
         meSet.setDrawCircleHole(false);
         meSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
 
         classSet.setLineWidth(2f);
-        classSet.setColor(getResources().getColor(R.color.colorAccentBlue));
+        classSet.setColor(getResources().getColor(R.color.colorWhite));
         classSet.setCircleColors(classColors);
         classSet.setCircleRadius(3f);
         classSet.setDrawCircleHole(false);

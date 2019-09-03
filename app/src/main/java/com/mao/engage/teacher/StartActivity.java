@@ -103,7 +103,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             default:
-                Log.d("TEST:","Button not accounted for");
                 break;
         }
     }

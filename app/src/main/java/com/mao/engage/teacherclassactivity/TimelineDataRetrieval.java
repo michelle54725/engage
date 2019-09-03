@@ -24,9 +24,7 @@ public class TimelineDataRetrieval {
         float total = 0;
         for (int i : FirebaseUtils.sectionSliders.values()) {
             total += i;
-            Log.d("TEST", "Firbase sectionslider called in Calculate Average Data" + i);
         }
-        Log.d("TEST", "calculate average : " + total/FirebaseUtils.sectionSliders.size());
         return total / FirebaseUtils.sectionSliders.size();
     }
 

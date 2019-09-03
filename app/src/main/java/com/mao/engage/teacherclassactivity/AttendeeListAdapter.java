@@ -42,12 +42,8 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
 
                     for (String id : userMap.keySet()) {
                         String name = FirebaseUtils.getNameFromValue(userMap.get(id));
-                        Log.d("TEST", "name from userMap: " + name);
                         if (name.equals(user.getText())) {
-                            Log.d("TEST", "change attendance status in Firebase");
                             FirebaseUtils.updateUserAttendance(section_ref_key, id);
-
-                            Log.d("TEST", "change button color to presen: green on click");
                             user.setBackgroundColor(Color.parseColor("#20B537"));
                         }
                     }
@@ -70,7 +66,6 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.activity_teacher_resume_item, parent, false);
-        Log.d("TEST", "AttendeeListAdapter");
         return new MyViewHolder(itemView);
     }
 
@@ -81,13 +76,10 @@ public class AttendeeListAdapter extends RecyclerView.Adapter<AttendeeListAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         String userName = attendeeList.get(position);
         //String userName = (attendeeList.get(position));
-        Log.d("TEST", "userName: " + userName);
         holder.user.setText(FirebaseUtils.getNameFromValue(userName));
 
         holder.user = (Button) holder.view1.findViewById(R.id.sectionBtn);
-        Log.d("TEST", "status: " + FirebaseUtils.isPresent(userName));
         if (FirebaseUtils.isPresent(userName)) {
-            Log.d("TEST", "changed button color to present: green");
             holder.user.setBackgroundColor(Color.parseColor("#20B537"));
         }
     }

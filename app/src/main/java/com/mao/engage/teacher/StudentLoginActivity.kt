@@ -76,14 +76,12 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
         when (v.id) {
             R.id.joinClassBtn -> authenticateMagicWord()
             R.id.backBtn -> finish()
-            else -> Log.d("TEST:", "Button not accounted for")
         }
     }
 
     private fun authenticateMagicWord() {
         if (magicWord.length != 2 && magicWord.length != 3) {
             Toast.makeText(this, "Typo? A Magic Keyword Should Contain 2 or 3 digits", Toast.LENGTH_LONG).show()
-            Log.d("P-TEST:", "Invalidate Magic Key: magic key must be of length 3")
         }
 
         val magicKeysReference = FirebaseDatabase.getInstance().getReference("/MagicKeys")
@@ -93,7 +91,6 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
                 for (keySnapshot in snapshot.children) {
                     var magicKeyInString: String? = keySnapshot.key ?: continue
                     magicKeyInString = magicKeyInString!!.trim { it <= ' ' }
-                    Log.d("P-TEST, Current Key: ", magicKeyInString)
                     magicKeysFromFirebase.add(magicKeyInString)
                     // here you can access to name property like university.name
                 }
@@ -104,7 +101,6 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
                 firebaseCallbackManager.onSuccess(magicKeysFromFirebase) { input: ArrayList<String> ->
                     run {
                         existentMagicKeys = input
-                        Log.d("P-TEST:", existentMagicKeys.toString())
                         if (existentMagicKeys.contains(magicWord.trim { it <= ' ' })) {
                             // create new UserSesh & store in DB
                             mUID = FirebaseUtils.getPsuedoUniqueID()
@@ -126,7 +122,6 @@ class StudentLoginActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.d("P-TEST:", "Encountered Database Error")
             }
         })
     }
