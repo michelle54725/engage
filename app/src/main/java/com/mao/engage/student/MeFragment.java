@@ -95,7 +95,6 @@ public class MeFragment extends Fragment {
                 ScaleDrawable test = new ScaleDrawable(original, 0, 0, 1);
                 Drawable d = test;
                 d.setLevel((seekBar.getHeight() - 1) * 10 / 3);
-                Log.d("BOBOOBO3BO", "RUNN: " + seekBar.getHeight() + " " );
                 seekBar.setThumb(d);
             }
         });
