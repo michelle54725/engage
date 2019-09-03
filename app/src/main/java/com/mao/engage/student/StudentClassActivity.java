@@ -62,10 +62,6 @@ public class StudentClassActivity extends AppCompatActivity {
     String name;
     Handler toasty;
 
-    //for ease of access to different data
-    DatabaseReference mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections");
-    DatabaseReference mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions");
-
     //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +71,7 @@ public class StudentClassActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-        }
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
         FirebaseUtils.setSliderListener(FirebaseUtils.getPsuedoUniqueID());
         setContentView(R.layout.activity_student_class);
 

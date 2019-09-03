@@ -7,15 +7,10 @@
     tools:context=".teacher.TeacherOptionsActivity">
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/newSection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="86dp"
-        android:layout_marginLeft="86dp"
-        android:layout_marginTop="104dp"
-        android:layout_marginEnd="86dp"
-        android:layout_marginRight="86dp"
-        android:layout_marginBottom="57dp"
+        android:layout_marginTop="@dimen/teacherOptionClass_newSectionText_marginTop"
         android:text="Teaching a new section?"
         android:textColor="@android:color/white"
         android:textSize="20sp"
@@ -23,80 +18,57 @@
         app:layout_constraintBottom_toTopOf="@+id/createNewBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/helloText3" />
+        app:layout_constraintTop_toBottomOf="@+id/helloText" />
 
     <TextView
-        android:id="@+id/helloText3"
+        android:id="@+id/helloText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/teacherOptionClass_helloText_marginTop"
         android:text="Hi, "
         android:textColor="@android:color/white"
         android:textSize="24sp"
         app:fontFamily="@font/quicksand_bold"
-        app:layout_constraintBottom_toTopOf="@id/magicWordLabel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.40"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toTopOf="parent" />
+<!--        app:layout_constraintVertical_chainStyle="packed" />-->
 
     <Button
         android:id="@+id/createNewBtn"
-        android:layout_width="250dp"
+        android:layout_width="@dimen/teacherOptionClass_optionButton_width"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/teacherOptionClass_optionButton_marginTop"
         android:text="Create new section"
         android:background="@drawable/button_background"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:fontFamily="@font/quicksand_bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.285" />
+        app:layout_constraintTop_toBottomOf="@id/newSection"/>
 
     <Button
         android:id="@+id/resumeBtn"
-        android:layout_width="250dp"
+        android:layout_width="@dimen/teacherOptionClass_optionButton_width"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/teacherOptionClass_optionButton_marginTop"
         android:text="Resume section"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:fontFamily="@font/quicksand_bold"
         android:background="@drawable/button_background"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.712" />
+        app:layout_constraintTop_toBottomOf="@id/resumeText" />
 
     <ImageButton
         android:id="@+id/backBtn"
-        android:layout_width="32dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="@dimen/portrait_backBtn_width"
+        android:layout_height="@dimen/portrait_backBtn_height"
+        android:layout_marginLeft="@dimen/portrait_backBtn_margin"
+        android:layout_marginStart="@dimen/portrait_backBtn_margin"
+        android:layout_marginTop="@dimen/portrait_backBtn_margin"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
         android:tint="@android:color/white"
@@ -106,15 +78,10 @@
         android:src="@drawable/ic_round_arrow_back_24px" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/resumeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
-        android:layout_marginLeft="120dp"
-        android:layout_marginTop="163dp"
-        android:layout_marginEnd="120dp"
-        android:layout_marginRight="120dp"
-        android:layout_marginBottom="70dp"
+        android:layout_marginTop="@dimen/teacherOptionClass_optionButton_betweenMargin"
         android:gravity="center_horizontal"
         android:text="Or if you have already \n  created a class:"
         android:textColor="@android:color/white"

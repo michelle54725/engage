@@ -37,7 +37,7 @@
             style="@style/RadioButton"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:text="Class"
+            android:text="Progress"
             android:textColor="@android:color/white"
             app:fontFamily="@font/quicksand_bold" />
     </info.hoang8f.android.segmented.SegmentedGroup>

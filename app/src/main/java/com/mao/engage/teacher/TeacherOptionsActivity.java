@@ -46,7 +46,7 @@ public class TeacherOptionsActivity extends AppCompatActivity implements View.On
         backBtn = findViewById(R.id.backBtn);
         createButton = findViewById(R.id.createNewBtn);
         resumeButton = findViewById(R.id.resumeBtn);
-        helloText = findViewById(R.id.helloText3);
+        helloText = findViewById(R.id.helloText);
 
         // personalize UI by displaying username
         name = getIntent().getStringExtra("name");
