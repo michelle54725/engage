@@ -11,33 +11,20 @@
  */
 package com.mao.engage.student;
 
-import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
@@ -46,14 +33,11 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.mao.engage.FirebaseUtils;
 import com.mao.engage.R;
 import com.mao.engage.teacherclassactivity.TimelineDataRetrieval;
-import com.rey.material.widget.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -196,9 +180,9 @@ public class StudentTimelineFragment extends Fragment {
             classColors.add(Color.TRANSPARENT);
         }
         meColors.remove(meColors.size() - 1);
-        meColors.add(Color.WHITE);
+        meColors.add(R.color.colorWhite);
         classColors.remove(classColors.size() - 1);
-        classColors.add(getResources().getColor(R.color.colorWhite));
+        classColors.add(getResources().getColor(R.color.colorAccentBlue));
 
         //initializes LineDataSets necessary for timeline graph
         meSet = new LineDataSet(meValues, "Me");
@@ -206,23 +190,23 @@ public class StudentTimelineFragment extends Fragment {
 
         //sets line colors and weights
         meSet.setLineWidth(2f);
-        meSet.setColor(R.color.colorAccentBlue);
+        meSet.setColor(R.color.colorWhite);
         meSet.setCircleColors(meColors);
         meSet.setCircleRadius(3f);
         meSet.setDrawCircleHole(false);
         meSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
 
         classSet.setLineWidth(2f);
-        classSet.setColor(getResources().getColor(R.color.colorWhite));
+        classSet.setColor(R.color.colorAccentBlue);
         classSet.setCircleColors(classColors);
         classSet.setCircleRadius(3f);
         classSet.setDrawCircleHole(false);
         classSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
 
         //setting graph text and colors
-        meSet.setValueTextColor(Color.WHITE);
+        meSet.setValueTextColor(R.color.colorWhite);
         meSet.setValueTextSize(12f);
-        classSet.setValueTextColor(getResources().getColor(R.color.colorAccentBlue));
+        classSet.setValueTextColor(R.color.colorAccentBlue);
         classSet.setValueTextSize(12f);
 
         //labels the latest point its numerical value

@@ -50,7 +50,7 @@ internal fun findSection(user: UserSesh, context: Context) {
 
                         sectionRefKeyFromFirebase = section?.getRef_key() ?: ""//set our callbackData once found
 
-                        user.section_ref_key = section?.getRef_key() ?: "" //reflect in section_ref_key in UserSesh object
+                        user.section_ref_key = sectionRefKeyFromFirebase //reflect in section_ref_key in UserSesh object
                         mUsersRef.child(user.user_id).setValue(user) //push updates to user (in DB)
 
                         // push this user to user_ids of section (in DB)
@@ -59,8 +59,9 @@ internal fun findSection(user: UserSesh, context: Context) {
                         userUpdates[user.user_id] = user.username + ",a" //"a" for absent
                         userIdRef.updateChildren(userUpdates)
 
+                        FirebaseUtils.sectionRefKey = sectionRefKeyFromFirebase
                         // store this user ref key into UserConfig
-                        UserConfig.sectionReferenceKey = user.section_ref_key
+                        UserConfig.sectionReferenceKey = sectionRefKeyFromFirebase
 
                         //TODO: eliminate the following code once eliminated sectionMap
                         val user_id_map = FirebaseUtils.sectionMap.get(section?.getRef_key())!!.get("user_ids") as HashMap<String, String>

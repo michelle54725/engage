@@ -1,6 +1,5 @@
 package com.mao.engage.student
 
-import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.database.DataSnapshot

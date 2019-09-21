@@ -48,6 +48,7 @@ public class FirebaseUtils {
     public static HashMap<String, String> existingSections = new HashMap<>(); //K: section_name; V: section_ref;
     public static HashMap<String, HashMap>  sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, sectionSliders2.0
     static int counter = 0; //counter for attendance [not sure if necessary]
+    public static String sectionRefKey;
 
     /*
         Removes self (user) from local databases
