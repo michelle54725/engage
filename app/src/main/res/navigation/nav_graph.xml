@@ -7,28 +7,28 @@
 
     <activity
         android:id="@+id/startActivity"
-        android:name="com.mao.engage.teacher.StartActivity"
+        android:name="com.engage.education.teacher.StartActivity"
         android:label="activity_start"
         tools:layout="@layout/activity_start" />
     <activity
         android:id="@+id/teacherCreateClassActivity"
-        android:name="com.mao.engage.teacher.TeacherCreateClassActivity"
+        android:name="com.engage.education.teacher.TeacherCreateClassActivity"
         android:label="activity_teacher_create_class"
         tools:layout="@layout/activity_teacher_create_class" />
     <activity
         android:id="@+id/teacherOptionsActivity"
-        android:name="com.mao.engage.teacher.TeacherOptionsActivity"
+        android:name="com.engage.education.teacher.TeacherOptionsActivity"
         android:label="activity_teacher_options"
         tools:layout="@layout/activity_teacher_options" />
     <activity
         android:id="@+id/teacherClassActivity"
-        android:name="com.mao.engage.teacherclassactivity.TeacherClassActivity"
+        android:name="com.engage.education.teacherclassactivity.TeacherClassActivity"
         android:label="activity_teacher_class"
         tools:layout="@layout/activity_teacher_class" />
     <!--TODO: Some way to get rid of classFragment without breaking the app-->
     <fragment
         android:id="@+id/meFragment"
-        android:name="com.mao.engage.student.MeFragment"
+        android:name="com.engage.education.student.MeFragment"
         android:label="fragment_me"
         tools:layout="@layout/fragment_me" >
         <action
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/nowFragment"
-        android:name="com.mao.engage.teacherclassactivity.NowFragment"
+        android:name="com.engage.education.teacherclassactivity.NowFragment"
         android:label="fragment_now"
         tools:layout="@layout/fragment_now" >
         <action
@@ -46,23 +46,23 @@
     </fragment>
     <fragment
         android:id="@+id/timelineFragment"
-        android:name="com.mao.engage.teacherclassactivity.TimelineFragment"
+        android:name="com.engage.education.teacherclassactivity.TimelineFragment"
         android:label="fragment_timeline"
         tools:layout="@layout/fragment_timeline" />
     <activity
         android:id="@+id/studentClassActivity"
-        android:name="com.mao.engage.student.StudentClassActivity"
+        android:name="com.engage.education.student.StudentClassActivity"
         android:label="activity_student_class"
         tools:layout="@layout/activity_student_class" />
     <activity
         android:id="@+id/studentLoginActivity"
-        android:name="com.mao.engage.teacher.StudentLoginActivity"
+        android:name="com.engage.education.teacher.StudentLoginActivity"
         android:label="activity_student_login"
         tools:layout="@layout/activity_student_login" />
     <!--TODO: Some way to get rid of classFragment without breaking the app-->
     <fragment
         android:id="@+id/classFragment3"
-        android:name="com.mao.engage.student.ClassFragment"
+        android:name="com.engage.education.student.ClassFragment"
         android:label="fragment_class"
         tools:layout="@layout/fragment_class" />
 </navigation>
