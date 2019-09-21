@@ -412,8 +412,11 @@ public class TimelineFragment extends Fragment {
         chart.setData(lineData);
         chart.setNoDataText("Trouble connecting to server. Try creating a new section?");
 
-        chart.setTouchEnabled(false); //set to enable/disable all possible touch-interactions with the chart
-
+        chart.setTouchEnabled(true); //set to enable/disable all possible touch-interactions with the chart
+        chart.setDragEnabled(true);
+        chart.setScaleEnabled(false);
+        chart.setPinchZoom(false);
+        
         Description description = new Description();
         description.setText("");
         chart.setDescription(description);
