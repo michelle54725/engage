@@ -11,95 +11,120 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/magicWordText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/teacherTimeline_edgeMargin16"
+            android:layout_marginBottom="@dimen/teacherTimeline_edgeMargin16"
+            android:fontFamily="@font/quicksand_bold"
+            android:text="@string/magic_word_420"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/chart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart"
-            android:layout_width="310dp"
-            android:layout_height="280dp"
-            android:layout_marginEnd="48dp"
-            android:layout_marginBottom="176dp"
-            android:paddingBottom="30dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/teacherTimeline_edgeMargin"
+            android:layout_marginRight="@dimen/teacherTimeline_edgeMargin"
+            android:layout_marginStart="@dimen/teacherTimeline_edgeMargin"
+            android:layout_marginLeft="@dimen/teacherTimeline_edgeMargin"
+            android:layout_marginBottom="@dimen/teacherTimeline_edgeMargin4"
+            app:layout_constraintBottom_toTopOf="@+id/startTimeText"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.190" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/magicWordText" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/mEngagedPieChart"
-            android:layout_width="165dp"
-            android:layout_height="204dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="40dp"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/fragmentclass_pieChart_height"
+            android:layout_marginTop="@dimen/fragmentclass_pieChart_marginTop"
+            android:layout_marginEnd="@dimen/teacherTimeline_edgeMargin"
+            android:layout_marginBottom="@dimen/fragmentclass_pieChart_marginBottom"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/mDisengagedPieChart"
-            app:layout_constraintTop_toBottomOf="@+id/chart"
-            app:layout_constraintVertical_bias="0.154" />
+            app:layout_constraintTop_toBottomOf="@+id/mVerticalSeekBar"/>
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/mDisengagedPieChart"
-            android:layout_width="170dp"
-            android:layout_height="203dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="26dp"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/fragmentclass_pieChart_height"
+            android:layout_marginStart="@dimen/teacherTimeline_edgeMargin"
+            android:layout_marginLeft="@dimen/teacherTimeline_edgeMargin"
             app:layout_constraintBottom_toBottomOf="@+id/mEngagedPieChart"
-            app:layout_constraintEnd_toStartOf="@+id/mEngagedPieChart"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/mEngagedPieChart"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintEnd_toStartOf="@+id/mEngagedPieChart"
+            app:layout_constraintTop_toTopOf="@+id/mEngagedPieChart"/>
+
+        <TextView
+            android:id="@+id/thresholdvalUI"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/teacherTimeline_edgeMargin"
+            android:layout_marginTop="@dimen/teacherTimeline_edgeMargin8"
+            android:layout_marginEnd="@dimen/teacherTimeline_edgeMargin"
+            android:layout_marginBottom="@dimen/teacherTimeline_edgeMargin8"
+            android:fontFamily="@font/quicksand_bold"
+            android:text="Threshold Value: 50"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/mVerticalSeekBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startTimeText" />
 
         <SeekBar
             android:id="@+id/mVerticalSeekBar"
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/teacherTimeline_edgeMargin"
+            android:layout_marginLeft="@dimen/teacherTimeline_edgeMargin"
+            android:layout_marginEnd="@dimen/teacherTimeline_edgeMargin"
+            android:layout_marginRight="@dimen/teacherTimeline_edgeMargin"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="244dp"
             android:foregroundGravity="left"
             android:max="100"
             android:progress="50"
-            android:rotation="270"
-            android:thumb="@drawable/slider"
-            app:layout_constraintBottom_toBottomOf="@+id/chart"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.558" />
+            android:thumbTint="#2FA6D8"
+            app:layout_constraintBottom_toTopOf="@+id/mDisengagedPieChart"
+            app:layout_constraintTop_toBottomOf="@+id/thresholdvalUI"
+            app:layout_constraintStart_toStartOf="@id/chart"
+            app:layout_constraintEnd_toEndOf="@id/chart"
+            tools:layout_editor_absoluteY="444dp" />
 
         <TextView
             android:id="@+id/startTimeText"
             android:layout_width="wrap_content"
-            android:layout_height="18dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="368dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="@dimen/teacherTimeline_edgeMargin16"
             android:text=""
             android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toTopOf="@+id/thresholdvalUI"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chart"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/chart" />
 
         <TextView
             android:id="@+id/endTimeText"
             android:layout_width="wrap_content"
-            android:layout_height="18dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="12dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/teacherTimeline_edgeMargin16"
+            android:layout_marginRight="@dimen/teacherTimeline_edgeMargin16"
             android:text=""
             android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/mEngagedPieChart"
+            app:layout_constraintBottom_toBottomOf="@+id/startTimeText"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.948"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chart"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="@+id/startTimeText" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

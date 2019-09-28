@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fragmentclass_thumbsIconWidth">50dp</dimen>
+    <dimen name="fragmentclass_thumbsIconHeight">50dp</dimen>
+    <dimen name="fragmentclass_thumbsup_marginTop">8dp</dimen>
+    <dimen name="fragmentclass_thumbsup_marginLeft">8dp</dimen>
+
+    <dimen name="fragmentclass_linechart_marginTop">16dp</dimen>
+    <dimen name="fragmentclass_linechart_marginBottom">32dp</dimen>
+    <dimen name="fragmentclass_linechart_marginEnd">8dp</dimen>
+
+    <dimen name="fragmentclass_thumbsdown_marginBottom">8dp</dimen>
+
+    <dimen name="fragmentclass_endTimeText_marginEnd">10dp</dimen>
+    <dimen name="fragmentclass_endTimeText_marginRight">10dp</dimen>
+    <dimen name="fragmentclass_endTimeText_marginTop">8dp</dimen>
+
+    <dimen name="fragmentclass_startTimeText_marginStart">8dp</dimen>
+    <dimen name="fragmentclass_startTimeText_marginLeft">8dp</dimen>
+
+    <dimen name="fragmentclass_circleContent_margin">16dp</dimen>
+    <dimen name="fragmentclass_circleWrapper_marginRight">8dp</dimen>
+    <dimen name="fragmentclass_engagedLabel_margin">8dp</dimen>
+
+    <dimen name="fragmentclass_pieChart_marginSides">32dp</dimen>
+    <dimen name="fragmentclass_pieChart_height">150dp</dimen>
+    <dimen name="fragmentclass_pieChart_marginBottom">40dp</dimen>
+    <dimen name="fragmentclass_pieChart_marginTop">20dp</dimen>
+
+    <dimen name="fragmentclass_me_marginRight">16dp</dimen>
+
+    <dimen name="teacherOptionClass_newSectionText_marginTop">100dp</dimen>
+    <dimen name="teacherOptionClass_helloText_marginTop">16dp</dimen>
+    <dimen name="teacherOptionClass_optionButton_width">250dp</dimen>
+    <dimen name="teacherOptionClass_optionButton_marginTop">32dp</dimen>
+    <dimen name="teacherOptionClass_optionButton_betweenMargin">130dp</dimen>
+
+    <dimen name="portrait_backBtn_margin">16dp</dimen>
+    <dimen name="portrait_backBtn_width">32dp</dimen>
+    <dimen name="portrait_backBtn_height">50dp</dimen>
+
+    <dimen name="recycleFlow_margin">24dp</dimen>
+
+    <dimen name="teacherTimeline_edgeMargin">32dp</dimen>
+    <dimen name="teacherTimeline_edgeMargin16">16dp</dimen>
+    <dimen name="teacherTimeline_edgeMargin4">4dp</dimen>
+    <dimen name="teacherTimeline_edgeMargin8">8dp</dimen>
+
+
+
+
+</resources>

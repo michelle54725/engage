@@ -11,7 +11,7 @@
         android:layout_width="56dp"
         android:layout_height="35dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/button_background"
@@ -23,7 +23,8 @@
         app:layout_constraintEnd_toStartOf="@+id/segmentedBar"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.146" />
 
     <info.hoang8f.android.segmented.SegmentedGroup
         android:id="@+id/segmentedBar"
@@ -43,6 +44,7 @@
         app:sc_corner_radius="10dp">
 
         <RadioButton
+            android:visibility="gone"
             android:id="@+id/nowTabBtn"
             style="@style/RadioButton"
             android:layout_width="125dp"
@@ -53,6 +55,7 @@
             app:fontFamily="@font/quicksand_bold" />
 
         <RadioButton
+            android:visibility="gone"
             android:id="@+id/timelineTabBtn"
             style="@style/RadioButton"
             android:layout_width="125dp"
