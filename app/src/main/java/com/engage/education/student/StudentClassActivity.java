@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -95,13 +96,23 @@ public class StudentClassActivity extends AppCompatActivity {
         int desiredHour = Integer.parseInt(endTime.substring(0,2));
         int desiredMinute = Integer.parseInt(endTime.substring(3,5));
         if (endTime.substring(5,7).toLowerCase().equals("pm")) {
+            Log.d("TEST-M", "**PM CASE**");
+            Log.d("TEST-M", String.format("desiredHour before +12: %d", desiredHour));
             calendar.set(Calendar.HOUR_OF_DAY, desiredHour + 12);
         } else {
+            Log.d("TEST-M", "**AM CASE**");
             calendar.set(Calendar.HOUR_OF_DAY, desiredHour);
         }
         calendar.set(Calendar.MINUTE, desiredMinute);
         calendar.set(Calendar.SECOND, 0);
-        long diffTimestamp = calendar.getTimeInMillis() - currentTimestamp;
+        long calendarTime = calendar.getTimeInMillis();
+        long diffTimestamp = calendarTime - currentTimestamp;
+        Log.d("TEST-M", String.format("endTime: %s", endTime));
+        Log.d("TEST-M", String.format("desiredHour: %d", desiredHour));
+        Log.d("TEST-M", String.format("desiredMinute: %d", desiredMinute));
+        Log.d("TEST-M", String.format("calendarTime(set to endTime): %d", calendarTime));
+        Log.d("TEST-M", String.format("diffTimestamp: %d", diffTimestamp));
+
         toasty = new Handler();
         toasty.postDelayed(toastTask, diffTimestamp);
 

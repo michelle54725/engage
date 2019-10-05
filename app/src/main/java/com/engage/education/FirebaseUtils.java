@@ -1,6 +1,8 @@
 package com.engage.education;
 
 import android.os.Build;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -234,14 +236,26 @@ public class FirebaseUtils {
     /*
         Currently when called, has a HashMap get null object reference error even when called on magic_key
      */
+    //TODO: @paulshaoyuqiao change this to delimiter-based parsing per issue#27
     public static String getStartTime(String refKey) {
         String s = sectionMap.get(refKey).get("a_start").toString();
         return s.substring(s.length() - 7);
     }
 
+    //TODO: @paulshaoyuqiao change this to delimiter-based parsing per issue#27
     public static String getEndTime(String refKey) {
-        String s = sectionMap.get(refKey).get("b_end").toString();
-        return s.substring(s.length() - 7);
+        String endTime = "11:59PM"; //if something goes wrong, default to midnight endTime
+        try {
+            String s = sectionMap.get(refKey).get("b_end").toString();
+            endTime = s.substring(s.length() - 7);
+            if (endTime.substring(0,1).equals("-")) {
+                Log.d("TEST-M", String.format("[In getEndTime] flipping negative endTime: %s", endTime));
+                endTime = "0" + endTime.substring(1); //0-pad the dash
+            }
+        } catch(Exception e) {
+            Log.e("TEST-M", e.getMessage());
+        }
+        return endTime;
     }
 
     public static boolean compareTime(String endTime) {
