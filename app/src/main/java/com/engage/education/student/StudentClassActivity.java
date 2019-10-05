@@ -93,10 +93,13 @@ public class StudentClassActivity extends AppCompatActivity {
         endTime = FirebaseUtils.getEndTime(mSectionRefKey);
         Calendar calendar = Calendar.getInstance();
         long currentTimestamp = calendar.getTimeInMillis();
-        int desiredHour = Integer.parseInt(endTime.substring(0,2));
-        int desiredMinute = Integer.parseInt(endTime.substring(3,5));
 
-        if (endTime.substring(5,7).toLowerCase().equals("pm")) {
+        String[] parsedComponents = FirebaseUtils.parseTime(endTime);
+        int desiredHour = Integer.parseInt(parsedComponents[0]);
+        int desiredMinute = Integer.parseInt(parsedComponents[1]);
+        String signature = parsedComponents[2];
+
+        if (signature.toLowerCase().equals("pm")) {
             calendar.set(Calendar.HOUR_OF_DAY, desiredHour + 12);
         } else {
             calendar.set(Calendar.HOUR_OF_DAY, desiredHour);

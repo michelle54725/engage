@@ -246,6 +246,24 @@ public class FirebaseUtils {
         }
     }
 
+    public static String[] parseTime(String timeString) {
+        String[] parsedComponents = new String[3];
+        try {
+            timeString = timeString.trim().replaceAll(" ", "");
+            String[] hourMinuteComponents = timeString.split(":");
+            String hour = hourMinuteComponents[0];
+            String minuteSignature = hourMinuteComponents[1];
+            String minute = minuteSignature.substring(0, minuteSignature.length() - 2);
+            String signature = minuteSignature.substring(minuteSignature.length() - 2);
+            parsedComponents[0] = hour;
+            parsedComponents[1] = minute;
+            parsedComponents[2] = signature;
+            return parsedComponents;
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
+            return parsedComponents;
+        }
+    }
+
     /*
         Currently when called, has a HashMap get null object reference error even when called on magic_key
      */
