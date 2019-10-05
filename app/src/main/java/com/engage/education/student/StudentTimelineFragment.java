@@ -181,9 +181,9 @@ public class StudentTimelineFragment extends Fragment {
             classColors.add(Color.TRANSPARENT);
         }
         meColors.remove(meColors.size() - 1);
-        meColors.add(Color.WHITE);
+        meColors.add(R.color.colorWhite);
         classColors.remove(classColors.size() - 1);
-        classColors.add(getResources().getColor(R.color.colorWhite));
+        classColors.add(getResources().getColor(R.color.colorAccentBlue));
 
         //initializes LineDataSets necessary for timeline graph
         meSet = new LineDataSet(meValues, "Me");
@@ -191,23 +191,23 @@ public class StudentTimelineFragment extends Fragment {
 
         //sets line colors and weights
         meSet.setLineWidth(2f);
-        meSet.setColor(R.color.colorAccentBlue);
+        meSet.setColor(R.color.colorWhite);
         meSet.setCircleColors(meColors);
         meSet.setCircleRadius(3f);
         meSet.setDrawCircleHole(false);
         meSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
 
         classSet.setLineWidth(2f);
-        classSet.setColor(getResources().getColor(R.color.colorWhite));
+        classSet.setColor(R.color.colorAccentBlue);
         classSet.setCircleColors(classColors);
         classSet.setCircleRadius(3f);
         classSet.setDrawCircleHole(false);
         classSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
 
         //setting graph text and colors
-        meSet.setValueTextColor(Color.WHITE);
+        meSet.setValueTextColor(R.color.colorWhite);
         meSet.setValueTextSize(12f);
-        classSet.setValueTextColor(getResources().getColor(R.color.colorAccentBlue));
+        classSet.setValueTextColor(R.color.colorAccentBlue);
         classSet.setValueTextSize(12f);
 
         //labels the latest point its numerical value
