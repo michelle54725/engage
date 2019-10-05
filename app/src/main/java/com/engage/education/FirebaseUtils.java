@@ -245,10 +245,6 @@ public class FirebaseUtils {
         }
     }
 
-    /*
-        Currently when called, has a HashMap get null object reference error even when called on magic_key
-     */
-
     public static String getStartTime(String refKey) {
         String timeString = sectionMap.get(refKey).get("a_start").toString();
         return retrieveTime(timeString);
