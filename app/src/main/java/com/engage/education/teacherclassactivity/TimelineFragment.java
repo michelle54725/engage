@@ -120,11 +120,9 @@ public class TimelineFragment extends Fragment {
             endTime = getArguments().getString("end_time");
             timelineData = getArguments().getIntegerArrayList("timelinedata");
         }
-        Log.d("TEST-M", "timelineData: " + timelineData.toString());
-        Log.d("TEST-M", "timelineData Size: " + timelineData.size());
 
         thresholdVal = 50; //default to 50
-        thresholdUI = (TextView)view.findViewById(R.id.thresholdvalUI);
+        thresholdUI = (TextView) view.findViewById(R.id.thresholdvalUI);
 
         chart.bringToFront();
         mEngagedPieChart = view.findViewById(R.id.mEngagedPieChart);
@@ -280,7 +278,7 @@ public class TimelineFragment extends Fragment {
         DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
         String formattedDate= dateFormat.format(date);
         endTimeText.setText(formattedDate);
-        
+
         //these variables will store an arraylist of all the values of this class session
         //has to be recreated at every call of retrieveData based on the way that the Android graph api works
         threshold = new ArrayList<>();
@@ -294,11 +292,9 @@ public class TimelineFragment extends Fragment {
         final int range = 100;
 
         //calculates the average of all the student's section sliders at an instance of time
-        if(!isThreshold) { //isThreshold true if only need to change the threshold graph and not update the entire graph
+        if(!isThreshold) {
             timelineData.add((int) timeline.calculateAverageSectionData());
         }
-        Log.d("TEST-M", "timelineData: " + timelineData.toString());
-        Log.d("TEST-M", "timelineData Size: " + timelineData.size());
 
         ArrayList<Integer> individualEngagements = new ArrayList<>();
         for (String user : FirebaseUtils.sectionSliders.keySet()) {
@@ -324,7 +320,6 @@ public class TimelineFragment extends Fragment {
         }
         classColors.remove(classColors.size() - 1);
         classColors.add(getResources().getColor(R.color.colorAccentBlue));
-        Log.d("TEST-M", "classValues values: " + classValues.toString());
 
         // countsArray scales down and stores the engagement levels of students on a scale of 0 to 10.
         // for example, if there are ten students with an engagement of 60,

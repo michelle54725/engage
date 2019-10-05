@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -100,13 +101,13 @@ public class StudentClassActivity extends AppCompatActivity {
         } else {
             calendar.set(Calendar.HOUR_OF_DAY, desiredHour);
         }
-        Log.d("P-TEST", "End Time: " + endTime);
-        Log.d("P-TEST", String.valueOf(calendar.getTime().getHours()));
+
         calendar.set(Calendar.MINUTE, desiredMinute);
         calendar.set(Calendar.SECOND, 0);
 
-        Log.d("P-TEST", calendar.getTime().toString());
-        long diffTimestamp = calendar.getTimeInMillis() - currentTimestamp;
+        long calendarTime = calendar.getTimeInMillis();
+        long diffTimestamp = calendarTime - currentTimestamp;
+
         toasty = new Handler();
         toasty.postDelayed(toastTask, diffTimestamp);
 
