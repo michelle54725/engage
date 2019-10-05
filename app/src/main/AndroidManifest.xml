@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mao.engage">
+    package="com.engage.education">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -14,21 +14,21 @@
         <meta-data
             android:name="com.google.android.nearby.messages.API_KEY"
             android:value="AIzaSyCTqRsUSzK_rcrrk_vZ03H_dE-hIUwCbaY" />
-        <activity android:name=".teacher.TeacherResumeActivity"/>
-        <activity android:name=".TestingActivity" />
-        <activity android:name=".teacher.StartActivity">
+        <activity android:name="com.engage.education.teacher.TeacherResumeActivity"/>
+        <activity android:name="com.engage.education.TestingActivity" />
+        <activity android:name="com.engage.education.teacher.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".teacher.StudentLoginActivity" />
-        <activity android:name=".student.StudentClassActivity" />
-        <activity android:name=".teacher.TeacherCreateClassActivity" />
-        <activity android:name=".teacherclassactivity.TeacherClassActivity" />
-        <activity android:name=".teacher.TeacherOptionsActivity" />
-        <activity android:name=".teacherclassactivity.AttendeeListActivity" />
+        <activity android:name="com.engage.education.teacher.StudentLoginActivity" />
+        <activity android:name="com.engage.education.student.StudentClassActivity" />
+        <activity android:name="com.engage.education.teacher.TeacherCreateClassActivity" />
+        <activity android:name="com.engage.education.teacherclassactivity.TeacherClassActivity" />
+        <activity android:name="com.engage.education.teacher.TeacherOptionsActivity" />
+        <activity android:name="com.engage.education.teacherclassactivity.AttendeeListActivity" />
     </application>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

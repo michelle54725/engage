@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:200989359492:android:fe8c9d10703244bc",
         "android_client_info": {
-          "package_name": "com.mao.engage"
+          "package_name": "com.engage.education"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "200989359492-l5varc8eb20g5srjfjcjpj8d090vvcr2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.mao.engage",
+            "package_name": "com.engage.education",
             "certificate_hash": "e2582209c8004967f0dc77687221fb6479472fbc"
           }
         },

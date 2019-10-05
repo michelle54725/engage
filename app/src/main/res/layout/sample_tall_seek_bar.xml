@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.mao.engage.student.TallSeekBar
+    <com.engage.education.student.TallSeekBar
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
