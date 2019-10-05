@@ -260,7 +260,6 @@ public class FirebaseUtils {
             String timeString = sectionMap.get(refKey).get("b_end").toString();
             endTime = retrieveTime(timeString);
             if (endTime.substring(0,1).equals("-")) {
-                Log.d("TEST-M", String.format("[In getEndTime] flipping negative endTime: %s", endTime));
                 endTime = "0" + endTime.substring(1); //0-pad the dash
             }
         } catch(Exception e) {

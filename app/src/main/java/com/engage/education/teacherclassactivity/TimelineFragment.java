@@ -120,8 +120,6 @@ public class TimelineFragment extends Fragment {
             endTime = getArguments().getString("end_time");
             timelineData = getArguments().getIntegerArrayList("timelinedata");
         }
-        Log.d("TEST-M", "timelineData: " + timelineData.toString());
-        Log.d("TEST-M", "timelineData Size: " + timelineData.size());
 
         thresholdVal = 50; //default to 50
         thresholdUI = (TextView) view.findViewById(R.id.thresholdvalUI);
@@ -297,8 +295,6 @@ public class TimelineFragment extends Fragment {
         if(!isThreshold) {
             timelineData.add((int) timeline.calculateAverageSectionData());
         }
-        Log.d("TEST-M", "timelineData: " + timelineData.toString());
-        Log.d("TEST-M", "timelineData Size: " + timelineData.size());
 
         ArrayList<Integer> individualEngagements = new ArrayList<>();
         for (String user : FirebaseUtils.sectionSliders.keySet()) {
@@ -320,12 +316,10 @@ public class TimelineFragment extends Fragment {
         // classValues and classColors will be used as the data set by the graph api
         for (int i = 0; i < timelineData.size(); i++) {
             classValues.add(new Entry(i, (float) timelineData.get(i)));
-            Log.d("L-TEST", "class value: " + timelineData.get(i));
             classColors.add(Color.TRANSPARENT);
         }
         classColors.remove(classColors.size() - 1);
         classColors.add(getResources().getColor(R.color.colorAccentBlue));
-        Log.d("TEST-M", "classValues values: " + classValues.toString());
 
         // countsArray scales down and stores the engagement levels of students on a scale of 0 to 10.
         // for example, if there are ten students with an engagement of 60,
