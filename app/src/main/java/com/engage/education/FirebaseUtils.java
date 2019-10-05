@@ -42,6 +42,9 @@ public class FirebaseUtils {
     public static HashMap<String, HashMap>  sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, sectionSliders2.0
     static int counter = 0; //counter for attendance [not sure if necessary]
 
+    //Default Constant Variables In Case of Exceptions
+    public static final String MIDNIGHT_TIME_STRING = "11:59PM";
+
     /*
         Removes self (user) from local databases
      */
@@ -233,21 +236,29 @@ public class FirebaseUtils {
         return Long.parseLong(s);
     }
 
+    private static String retrieveTime(String timeString) {
+        try {
+            String[] timeComponents = timeString.split("-");
+            return timeComponents[timeComponents.length - 1];
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
+            return MIDNIGHT_TIME_STRING;
+        }
+    }
+
     /*
         Currently when called, has a HashMap get null object reference error even when called on magic_key
      */
-    //TODO: @paulshaoyuqiao change this to delimiter-based parsing per issue#27
+
     public static String getStartTime(String refKey) {
-        String s = sectionMap.get(refKey).get("a_start").toString();
-        return s.substring(s.length() - 7);
+        String timeString = sectionMap.get(refKey).get("a_start").toString();
+        return retrieveTime(timeString);
     }
 
-    //TODO: @paulshaoyuqiao change this to delimiter-based parsing per issue#27
     public static String getEndTime(String refKey) {
-        String endTime = "11:59PM"; //if something goes wrong, default to midnight endTime
+        String endTime = MIDNIGHT_TIME_STRING;
         try {
-            String s = sectionMap.get(refKey).get("b_end").toString();
-            endTime = s.substring(s.length() - 7);
+            String timeString = sectionMap.get(refKey).get("b_end").toString();
+            endTime = retrieveTime(timeString);
             if (endTime.substring(0,1).equals("-")) {
                 Log.d("TEST-M", String.format("[In getEndTime] flipping negative endTime: %s", endTime));
                 endTime = "0" + endTime.substring(1); //0-pad the dash
