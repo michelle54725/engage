@@ -1,6 +1,8 @@
 package com.engage.education;
 
 import android.os.Build;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -39,6 +41,10 @@ public class FirebaseUtils {
     public static HashMap<String, String> existingSections = new HashMap<>(); //K: section_name; V: section_ref;
     public static HashMap<String, HashMap>  sectionMap = new HashMap<>(); //K: section ref key; V: new Hashmap of MagicKeys, section_names, sectionSliders2.0
     static int counter = 0; //counter for attendance [not sure if necessary]
+    public static String sectionRefKey;
+
+    //Default Constant Variables In Case of Exceptions
+    public static final String MIDNIGHT_TIME_STRING = "11:59PM";
 
     /*
         Removes self (user) from local databases
@@ -237,17 +243,50 @@ public class FirebaseUtils {
         return Long.parseLong(s);
     }
 
-    /*
-        Currently when called, has a HashMap get null object reference error even when called on magic_key
-     */
+    private static String retrieveTime(String timeString) {
+        try {
+            String[] timeComponents = timeString.split("-");
+            return timeComponents[timeComponents.length - 1];
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
+            return MIDNIGHT_TIME_STRING;
+        }
+    }
+
+    public static String[] parseTime(String timeString) {
+        String[] parsedComponents = new String[3];
+        try {
+            timeString = timeString.trim().replaceAll(" ", "");
+            String[] hourMinuteComponents = timeString.split(":");
+            String hour = hourMinuteComponents[0];
+            String minuteSignature = hourMinuteComponents[1];
+            String minute = minuteSignature.substring(0, minuteSignature.length() - 2);
+            String signature = minuteSignature.substring(minuteSignature.length() - 2);
+            parsedComponents[0] = hour;
+            parsedComponents[1] = minute;
+            parsedComponents[2] = signature;
+            return parsedComponents;
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
+            return parsedComponents;
+        }
+    }
+
     public static String getStartTime(String refKey) {
-        String s = sectionMap.get(refKey).get("a_start").toString();
-        return s.substring(s.length() - 7);
+        String timeString = sectionMap.get(refKey).get("a_start").toString();
+        return retrieveTime(timeString);
     }
 
     public static String getEndTime(String refKey) {
-        String s = sectionMap.get(refKey).get("b_end").toString();
-        return s.substring(s.length() - 7);
+        String endTime = MIDNIGHT_TIME_STRING;
+        try {
+            String timeString = sectionMap.get(refKey).get("b_end").toString();
+            endTime = retrieveTime(timeString);
+            if (endTime.substring(0,1).equals("-")) {
+                endTime = "0" + endTime.substring(1); //0-pad the dash
+            }
+        } catch(Exception e) {
+            Log.e("TEST-M", e.getMessage());
+        }
+        return endTime;
     }
 
     public static boolean compareTime(String endTime) {

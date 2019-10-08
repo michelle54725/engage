@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -88,22 +89,32 @@ public class StudentClassActivity extends AppCompatActivity {
         classAverages = new ArrayList<>();
 
         //Handler to call toast after section is over!
-        mSectionRefKey = FirebaseUtils.getMySection();
+        mSectionRefKey = FirebaseUtils.sectionRefKey;
         endTime = FirebaseUtils.getEndTime(mSectionRefKey);
         Calendar calendar = Calendar.getInstance();
         long currentTimestamp = calendar.getTimeInMillis();
-        int desiredHour = Integer.parseInt(endTime.substring(0,2));
-        int desiredMinute = Integer.parseInt(endTime.substring(3,5));
-        if (endTime.substring(5,7).toLowerCase().equals("pm")) {
+
+        String[] parsedComponents = FirebaseUtils.parseTime(endTime);
+        int desiredHour = Integer.parseInt(parsedComponents[0]);
+        int desiredMinute = Integer.parseInt(parsedComponents[1]);
+        String signature = parsedComponents[2];
+
+        if (signature.toLowerCase().equals("pm")) {
             calendar.set(Calendar.HOUR_OF_DAY, desiredHour + 12);
         } else {
             calendar.set(Calendar.HOUR_OF_DAY, desiredHour);
         }
+
         calendar.set(Calendar.MINUTE, desiredMinute);
         calendar.set(Calendar.SECOND, 0);
-        long diffTimestamp = calendar.getTimeInMillis() - currentTimestamp;
+
+        long calendarTime = calendar.getTimeInMillis();
+        long diffTimestamp = calendarTime - currentTimestamp;
+
         toasty = new Handler();
         toasty.postDelayed(toastTask, diffTimestamp);
+
+        FirebaseUtils.setUserIdinSectionListener(mSectionRefKey);
 
         //send timeline data to StudentTimelineFragment
         Bundle bundle = new Bundle();
@@ -120,6 +131,7 @@ public class StudentClassActivity extends AppCompatActivity {
                 fragmentTransaction.commit();
             }
         });
+
 
         classTabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +163,6 @@ public class StudentClassActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    FirebaseUtils.removeAllUsers(mSectionRefKey);
                     Intent intent = new Intent(StudentClassActivity.this, StudentLoginActivity.class);
                     intent.putExtra("name", name);
                     startActivity(intent);
