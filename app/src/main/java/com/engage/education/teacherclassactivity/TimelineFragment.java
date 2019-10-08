@@ -524,8 +524,31 @@ public class TimelineFragment extends Fragment {
     //[WIP: Deep] when student leaves this fragment, upload current timelineData to firebase.
     @Override
     public void onDestroyView() {
+        Log.d("TEST: ", "in onDestroy");
         super.onDestroyView();
         //[WIP: Deep] when the view is destroyed, save values to firebase, so they can be used again.
         //FirebaseUtils.setSavedSliderVals(sectionRefKey, timelineData);
+    }
+
+    @Override
+    public void onStop() {
+        Log.d("TEST: ", "in onStop");
+        super.onStop();
+        //[WIP: Deep] when the view is destroyed, save values to firebase, so they can be used again.
+        //FirebaseUtils.setSavedSliderVals(sectionRefKey, timelineData);
+    }
+
+    @Override
+    public void onPause() {
+        Log.d("TEST: ", "in onPause");
+        super.onPause();
+        //[WIP: Deep] when the view is destroyed, save values to firebase, so they can be used again.
+        //FirebaseUtils.setSavedSliderVals(sectionRefKey, timelineData);
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d("TEST: ", "in onDestroy 1");
+        super.onDestroy();
     }
 }

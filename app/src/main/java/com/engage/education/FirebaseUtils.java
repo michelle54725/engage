@@ -63,6 +63,10 @@ public class FirebaseUtils {
         mSectionRef.child(ref_key).removeValue();
         mTeachersRef.child(teacher_id).child("existingSections").child(ref_key).removeValue();
     }
+
+    public static void removeMagicKey(String magicKey) {
+        mMagicKeysRef.child(magicKey).removeValue();
+    }
     /*
         setSectionListener called in StartActivity
         Retrieves section data from Firebase to update a HashMap<String section_ref_key, Hashmap<String x, String y>>
@@ -94,6 +98,8 @@ public class FirebaseUtils {
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 String section_ref_key = dataSnapshot.getKey();
                 sectionMap.remove(section_ref_key);
+                //TODO: DEEP trigger a toast to end student's section.
+
             }
 
             @Override
@@ -311,6 +317,11 @@ public class FirebaseUtils {
         });
     }
 
+    //triggers student "Section has ended" toast WHEN a teacher ends the section
+//    public static void endSectionForStudent(String section_ref_key) {
+//        mSectionRef.child(section_ref_key).li
+//    }
+
     // Add a section child in SectionSesh
     public static void createSection(SectionSesh section) {
         mSectionRef.child(section.ref_key).setValue(section);
@@ -510,6 +521,8 @@ public class FirebaseUtils {
         }
 
     }
+
+
 
     // creates Listener for Section.user_ids.userid value (e.g. "Michelle, a") to update TA's attendance list
     public static void setAttendanceListener (final String section_ref_key, final String user_id) {

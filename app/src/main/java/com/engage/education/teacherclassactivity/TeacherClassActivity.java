@@ -47,6 +47,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
     TimelineFragment timelineFragment;
     String endTime;
     String name;
+    String mMagicKey;
     Handler toasty;
 
     //NowFragment nowFragment; //now fragment is not used anymore
@@ -82,6 +83,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         timelineFragment = new TimelineFragment();
         Bundle bundle = new Bundle();
         bundle.putString("magic_word", getIntent().getStringExtra("magic_word"));
+        mMagicKey = getIntent().getStringExtra("magic_word");
         ArrayList<Integer> timelineData = new ArrayList();
         bundle.putString("section_name", getIntent().getStringExtra("section_name"));
         mSectionRefKey = getIntent().getStringExtra("sectionRefKey");
@@ -172,6 +174,11 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                     intent.putExtra("name", name);
                     startActivity(intent);
                     FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
+                    FirebaseUtils.removeMagicKey(mMagicKey);
+                    //TODO: check if this WORKS!
+                    //TeacherClassActivity.this.onStop();
+                    //TeacherClassActivity.this.onPause();
+                    //TeacherClassActivity.this.onDestroy();
                 }
             });
             builder.show();

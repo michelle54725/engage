@@ -296,6 +296,8 @@ public class StudentTimelineFragment extends Fragment {
         //means that latest point will always be at the rightmost edge
         xAxis.setAxisMaximum(index);
         xAxis.setAxisMinimum(0);
+
+
     }
 
     //All adjustments for engaged count (number of students in a section)

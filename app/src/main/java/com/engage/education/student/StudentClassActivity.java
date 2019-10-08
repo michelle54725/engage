@@ -155,7 +155,6 @@ public class StudentClassActivity extends AppCompatActivity {
                     Intent intent = new Intent(StudentClassActivity.this, StudentLoginActivity.class);
                     intent.putExtra("name", name);
                     startActivity(intent);
-                    FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
                 }
             });
             builder.show();
