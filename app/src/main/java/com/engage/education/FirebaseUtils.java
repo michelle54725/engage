@@ -105,7 +105,6 @@ public class FirebaseUtils {
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 String section_ref_key = dataSnapshot.getKey();
                 sectionMap.remove(section_ref_key);
-
             }
 
             @Override
@@ -343,7 +342,6 @@ public class FirebaseUtils {
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 String section_ref = dataSnapshot.getValue(String.class);
                 existingSections.remove(dataSnapshot.getValue(String.class));
-                //endSectionForStudent(section_ref);
             }
 
             @Override
@@ -356,11 +354,6 @@ public class FirebaseUtils {
             }
         });
     }
-
-    //triggers student "Section has ended" toast WHEN a teacher ends the section
-//    public static void endSectionForStudent(String section_ref_key) {
-//
-//    }
 
     // Add a section child in SectionSesh
     public static void createSection(SectionSesh section) {
