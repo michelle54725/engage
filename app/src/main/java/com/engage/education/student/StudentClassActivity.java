@@ -201,16 +201,4 @@ public class StudentClassActivity extends AppCompatActivity {
         return FirebaseUtils.getEndTime(FirebaseUtils.getMySection());
     }
 
-    public void endSectionForStudent(String sectionRefKey) {
-        if (mSectionRefKey == null) {
-            return;
-        }
-        else if (sectionRefKey.equals(mSectionRefKey)) {
-            Handler t = new Handler();
-            studentTimelineFragment.cancelTimer();
-            t.postDelayed(toastTask, 0);
-            finish();
-        }
-    }
-
 }

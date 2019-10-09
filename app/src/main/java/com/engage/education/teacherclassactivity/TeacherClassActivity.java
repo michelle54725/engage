@@ -175,10 +175,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                     startActivity(intent);
                     FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
                     FirebaseUtils.removeMagicKey(mMagicKey);
-                    //TODO: check if this WORKS!
-                    //TeacherClassActivity.this.onStop();
-                    //TeacherClassActivity.this.onPause();
-                    //TeacherClassActivity.this.onDestroy();
+
                 }
             });
             builder.show();
