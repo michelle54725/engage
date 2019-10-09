@@ -193,10 +193,24 @@ public class StudentClassActivity extends AppCompatActivity {
     }
 
     //Called in StudentTimelineFragment to get the section start time
-    public String getStartTime() { return FirebaseUtils.getStartTime(FirebaseUtils.getMySection());}
+    public String getStartTime() {
+        return FirebaseUtils.getStartTime(FirebaseUtils.getMySection());
+    }
     //Called in StudentTimelineFragment to get the section end time
     public String getEndTime() {
         return FirebaseUtils.getEndTime(FirebaseUtils.getMySection());
+    }
+
+    public void endSectionForStudent(String sectionRefKey) {
+        if (mSectionRefKey == null) {
+            return;
+        }
+        else if (sectionRefKey.equals(mSectionRefKey)) {
+            Handler t = new Handler();
+            studentTimelineFragment.cancelTimer();
+            t.postDelayed(toastTask, 0);
+            finish();
+        }
     }
 
 }

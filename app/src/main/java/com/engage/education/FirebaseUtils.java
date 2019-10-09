@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.engage.education.student.StudentClassActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -104,7 +105,6 @@ public class FirebaseUtils {
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 String section_ref_key = dataSnapshot.getKey();
                 sectionMap.remove(section_ref_key);
-                //TODO: DEEP trigger a toast to end student's section.
 
             }
 
@@ -341,8 +341,9 @@ public class FirebaseUtils {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                String section_ref = dataSnapshot.getValue(String.class);
                 existingSections.remove(dataSnapshot.getValue(String.class));
-
+                //endSectionForStudent(section_ref);
             }
 
             @Override
@@ -358,7 +359,7 @@ public class FirebaseUtils {
 
     //triggers student "Section has ended" toast WHEN a teacher ends the section
 //    public static void endSectionForStudent(String section_ref_key) {
-//        mSectionRef.child(section_ref_key).li
+//
 //    }
 
     // Add a section child in SectionSesh

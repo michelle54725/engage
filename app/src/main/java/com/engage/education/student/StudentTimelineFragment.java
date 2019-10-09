@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -155,7 +156,12 @@ public class StudentTimelineFragment extends Fragment {
     }
 
     public void cancelTimer() {
-        timer.cancel();
+        if (timer != null) {
+            timer.cancel();
+        } else {
+            Log.d("TEST: ", "timer doesnt work");
+        }
+
     }
 
     private void retrieveData() {
