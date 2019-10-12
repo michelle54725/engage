@@ -126,17 +126,26 @@ public class StudentTimelineFragment extends Fragment {
                 //run on separate Ui thread to no conflict other threads
                 myActivity.runOnUiThread(() -> retrieveData());
             }
+
         };
         //retrieves data every 5000 ms (5s)
-        timer = new Timer();
-        timer.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
-        if (FirebaseUtils.compareTime(activity.getEndTime())) {
-            timer.cancel();
-            isEndOfSection = true;
-        }
+        try {
+            timer = new Timer();
+            timer.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
+            if (FirebaseUtils.compareTime(activity.getEndTime())) {
+                timer.cancel();
+                isEndOfSection = true;
+            }
 
-        startTime = activity.getStartTime();
-        endTime = activity.getEndTime();
+            startTime = activity.getStartTime();
+            endTime = activity.getEndTime();
+        } catch(NullPointerException e) {
+            isEndOfSection = true;
+            Log.e("TEST-DEEP", "Teacher has ended the section.");
+        } catch(Exception e) {
+            isEndOfSection = true;
+            Log.e("TEST-DEEP", e.getMessage());
+        }
         startTimeText.setText(startTime);
         endTimeText.setText(endTime);
 
