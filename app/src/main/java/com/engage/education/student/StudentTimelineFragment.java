@@ -79,7 +79,6 @@ public class StudentTimelineFragment extends Fragment {
     private TimelineDataRetrieval dataRetrieval;
     Timer timer;
 
-    private boolean isEndOfSection = false;
     private String exportDialogTitle = "";
 
     public StudentTimelineFragment() {
@@ -126,19 +125,26 @@ public class StudentTimelineFragment extends Fragment {
                 //run on separate Ui thread to no conflict other threads
                 myActivity.runOnUiThread(() -> retrieveData());
             }
+
         };
         //retrieves data every 5000 ms (5s)
-        timer = new Timer();
-        timer.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
-        if (FirebaseUtils.compareTime(activity.getEndTime())) {
-            timer.cancel();
-            isEndOfSection = true;
+        try {
+            timer = new Timer();
+            timer.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
+            if (FirebaseUtils.compareTime(activity.getEndTime())) {
+                timer.cancel();
+            }
+
+            startTime = activity.getStartTime();
+            endTime = activity.getEndTime();
+            startTimeText.setText(startTime);
+            endTimeText.setText(endTime);
+        } catch(NullPointerException e) {
+            Log.e("TEST-DEEP", e.getMessage());
+        } catch(Exception e) {
+            Log.e("TEST-DEEP", e.getMessage());
         }
 
-        startTime = activity.getStartTime();
-        endTime = activity.getEndTime();
-        startTimeText.setText(startTime);
-        endTimeText.setText(endTime);
 
         setEngagedCount();
 
@@ -187,7 +193,7 @@ public class StudentTimelineFragment extends Fragment {
             classColors.add(Color.TRANSPARENT);
         }
         meColors.remove(meColors.size() - 1);
-        meColors.add(R.color.colorWhite);
+        meColors.add(getResources().getColor(R.color.colorWhite));
         classColors.remove(classColors.size() - 1);
         classColors.add(getResources().getColor(R.color.colorAccentBlue));
 
@@ -197,23 +203,23 @@ public class StudentTimelineFragment extends Fragment {
 
         //sets line colors and weights
         meSet.setLineWidth(2f);
-        meSet.setColor(R.color.colorWhite);
+        meSet.setColor(getResources().getColor(R.color.colorWhite));
         meSet.setCircleColors(meColors);
         meSet.setCircleRadius(3f);
         meSet.setDrawCircleHole(false);
         meSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
 
         classSet.setLineWidth(2f);
-        classSet.setColor(R.color.colorAccentBlue);
+        classSet.setColor(getResources().getColor(R.color.colorAccentBlue));
         classSet.setCircleColors(classColors);
         classSet.setCircleRadius(3f);
         classSet.setDrawCircleHole(false);
         classSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
 
         //setting graph text and colors
-        meSet.setValueTextColor(R.color.colorWhite);
+        meSet.setValueTextColor(getResources().getColor(R.color.colorWhite));
         meSet.setValueTextSize(12f);
-        classSet.setValueTextColor(R.color.colorAccentBlue);
+        classSet.setValueTextColor(getResources().getColor(R.color.colorAccentBlue));
         classSet.setValueTextSize(12f);
 
         //labels the latest point its numerical value

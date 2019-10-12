@@ -105,7 +105,6 @@ public class FirebaseUtils {
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 String section_ref_key = dataSnapshot.getKey();
                 sectionMap.remove(section_ref_key);
-
             }
 
             @Override
@@ -354,8 +353,6 @@ public class FirebaseUtils {
             }
         });
     }
-
-
 
     // Add a section child in SectionSesh
     public static void createSection(SectionSesh section) {
