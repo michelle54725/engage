@@ -228,7 +228,6 @@ public class FirebaseUtils {
     changes threshold value as set by teacher in TimelineFragment
      */
     public static void changeThresholdVal(String refKey, double threshold) {
-        //TODO:doesn't update the firebase, just updates local values -- ask if that is that ok?
         sectionMap.get(refKey).put("threshold", threshold);
     }
 
@@ -363,12 +362,10 @@ public class FirebaseUtils {
     }
 
     /**[WIP: Deep]
-    // TODO: how to set saved_slider_vals array in firebase
     public static void createSavedSliderVals(String sectionRefKey) {
         mSectionRef.child(sectionRefKey).child("saved_slider_vals").setValue("50,");
     }
 
-    // TODO: get saved_slider_vals array from firebase
     //store values like this: 22, 33, 44, 55
     public static ArrayList<Integer> getSavedSliderVals(String sectionRefKey) {
 
@@ -396,7 +393,6 @@ public class FirebaseUtils {
     }
 
     public static void setSavedSliderVals(String sectionRefKey, ArrayList<Integer> slider_vals) {
-        //TODO: set values in firebase
         String sliderVals = "";
         for (int i : slider_vals) {
             sliderVals += i + ",";

@@ -165,7 +165,7 @@ public class StudentTimelineFragment extends Fragment {
         if (timer != null) {
             timer.cancel();
         } else {
-            Log.e("TEST: ", "timer doesnt work");
+            Log.e("TEST: ", "timer doesn't work");
         }
 
     }
