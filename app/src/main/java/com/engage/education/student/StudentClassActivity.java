@@ -201,18 +201,4 @@ public class StudentClassActivity extends AppCompatActivity {
         return FirebaseUtils.getEndTime(FirebaseUtils.getMySection());
     }
 
-    //[WIP: DEEP] This method has yet to be implemented, but the purpose of this
-    // function is to remove a student from a section once the teacher has ended the section.
-    public void endSectionForStudent(String sectionRefKey) {
-        if (mSectionRefKey == null) {
-            return;
-        }
-        else if (sectionRefKey.equals(mSectionRefKey)) {
-            Handler t = new Handler();
-            studentTimelineFragment.cancelTimer();
-            t.postDelayed(toastTask, 0);
-            finish();
-        }
-    }
-
 }

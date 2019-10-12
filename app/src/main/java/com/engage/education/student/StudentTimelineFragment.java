@@ -79,7 +79,6 @@ public class StudentTimelineFragment extends Fragment {
     private TimelineDataRetrieval dataRetrieval;
     Timer timer;
 
-    private boolean isEndOfSection = false;
     private String exportDialogTitle = "";
 
     public StudentTimelineFragment() {
@@ -134,20 +133,18 @@ public class StudentTimelineFragment extends Fragment {
             timer.scheduleAtFixedRate(retrieveDataTask, 0, 5000);
             if (FirebaseUtils.compareTime(activity.getEndTime())) {
                 timer.cancel();
-                isEndOfSection = true;
             }
 
             startTime = activity.getStartTime();
             endTime = activity.getEndTime();
+            startTimeText.setText(startTime);
+            endTimeText.setText(endTime);
         } catch(NullPointerException e) {
-            isEndOfSection = true;
-            Log.e("TEST-DEEP", "Teacher has ended the section.");
+            Log.e("TEST-DEEP", e.getMessage());
         } catch(Exception e) {
-            isEndOfSection = true;
             Log.e("TEST-DEEP", e.getMessage());
         }
-        startTimeText.setText(startTime);
-        endTimeText.setText(endTime);
+
 
         setEngagedCount();
 
