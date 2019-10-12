@@ -374,8 +374,12 @@ public class TimelineFragment extends Fragment {
         mThreshold.setValueFormatter(new IValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                if(entry == mThreshold.getEntryForIndex(timelineData.size() - 1)) {
-                    return "Threshold";
+                if(mThreshold.getEntryCount() >= timelineData.size() - 1) {
+                    if(entry == mThreshold.getEntryForIndex(timelineData.size() - 1)) {
+                        return "Threshold";
+                    } else {
+                        return "";
+                    }
                 } else {
                     return "";
                 }
@@ -522,6 +526,28 @@ public class TimelineFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         //[WIP: Deep] when the view is destroyed, save values to firebase, so they can be used again.
-        //FirebaseUtils.setSavedSliderVals(sectionRefKey, timelineData);
+        FirebaseUtils.setSavedSliderVals(sectionRefKey, timelineData);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //[WIP: Deep] when the view is destroyed, save values to firebase, so they can be used again.
+        FirebaseUtils.setSavedSliderVals(sectionRefKey, timelineData);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //[WIP: Deep] when the view is destroyed, save values to firebase, so they can be used again.
+        FirebaseUtils.setSavedSliderVals(sectionRefKey, timelineData);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //[WIP: Deep] when the view is destroyed, save values to firebase, so they can be used again.
+        FirebaseUtils.setSavedSliderVals(sectionRefKey, timelineData); 
+    }
+
 }

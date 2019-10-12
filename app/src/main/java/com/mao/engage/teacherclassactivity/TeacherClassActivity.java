@@ -100,6 +100,10 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         bundle.putString("section_name", getIntent().getStringExtra("section_name"));
         mSectionRefKey = getIntent().getStringExtra("sectionRefKey");
         bundle.putString("sectionRefKey", getIntent().getStringExtra("sectionRefKey"));
+        if(FirebaseUtils.getSavedSliderVals(mSectionRefKey) != null) {
+            Log.d("TEST", "reached to creating a OLD arraylist for teacher's datapoints " + FirebaseUtils.getSavedSliderVals(mSectionRefKey));
+            timelineData = FirebaseUtils.getSavedSliderVals(mSectionRefKey);
+        }
         bundle.putIntegerArrayList("timelinedata", timelineData);
         bundle.putString("start_time", getIntent().getStringExtra("start_time"));
         bundle.putString("end_time", getIntent().getStringExtra("end_time"));
