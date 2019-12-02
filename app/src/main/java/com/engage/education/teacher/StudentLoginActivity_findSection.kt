@@ -106,3 +106,65 @@ internal fun findSection(user: UserSesh, context: Context) {
      *  before we finished scanning the DB in OnDataChange */
 
 }
+
+
+internal fun findSectionBot(user: UserSesh) {
+    val mSectionRef = FirebaseDatabase.getInstance().getReference("/Sections")
+    val mUsersRef = FirebaseDatabase.getInstance().getReference("/UserSessions")
+
+    // use SingleValueEvent Listener to read Firebase (only reads it once)
+    mSectionRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            // sanity check snapshot is non-null (i.e. /Sections contains data)
+            if (dataSnapshot.exists()) {
+                // sectionRefKeyFromFirebase will be our callbackData
+                var sectionRefKeyFromFirebase = ""
+
+                /** Loop through all sections under /Sections */
+                for (snapshot in dataSnapshot.children) {
+
+                    // we stored sections as SectionSesh classes so we retrieve them as such
+                    val section = snapshot.getValue(SectionSesh::class.java)
+
+                    // check for matching magic_key
+                    if (section?.getMagic_key() ?: "" == user.magic_key) {
+
+                        sectionRefKeyFromFirebase = section?.getRef_key() ?: ""//set our callbackData once found
+
+                        user.section_ref_key = sectionRefKeyFromFirebase //reflect in section_ref_key in UserSesh object
+                        mUsersRef.child(user.user_id).setValue(user) //push updates to user (in DB)
+
+                        // push this user to user_ids of section (in DB)
+                        val userIdRef = mSectionRef.child(section?.getRef_key() ?: "").child("user_ids")
+                        val userUpdates = HashMap<String, Any>()
+                        userUpdates[user.user_id] = user.username + ",a" //"a" for absent
+                        userIdRef.updateChildren(userUpdates)
+
+                        FirebaseUtils.sectionRefKey = sectionRefKeyFromFirebase
+                        // store this user ref key into UserConfig
+                        UserConfig.sectionReferenceKey = sectionRefKeyFromFirebase
+
+                        //TODO: eliminate the following code once eliminated sectionMap
+                        val user_id_map = FirebaseUtils.sectionMap.get(section?.getRef_key())!!.get("user_ids") as HashMap<String, String>
+                        user_id_map[user.user_id] = user.username + ",a"
+                    }
+                }
+
+                /** At this point we can safely assume we've completed the for-loop
+                and use the CallbackManager to proceed */
+            } else {
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+        }
+    })// marks end of addListenerForSingleValueEvent
+
+    /** Note on why we need to do this:
+     *  mSectionRef.addListenerForSingleValueEvent(...) contains code that is run asynchronously, i.e.
+     *  any code here will likely execute before the for-loop in OnDataChange finishes, thus falling
+     *  to the trap of asynchronous tasks. e.g. if we tried to match a magic_key here, we might
+     *  end with "no match" even though there was a match because this code is executing at a time
+     *  before we finished scanning the DB in OnDataChange */
+
+}

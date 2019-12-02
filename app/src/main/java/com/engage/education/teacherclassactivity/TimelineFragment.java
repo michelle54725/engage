@@ -197,6 +197,7 @@ public class TimelineFragment extends Fragment {
         v1.setDrawingCacheEnabled(true);
         Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
         v1.setDrawingCacheEnabled(false);
+
         File imageFile = new File(mPath);
 
         if (imageFile.exists()) {

@@ -8,6 +8,7 @@ package com.engage.education.teacherclassactivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 
@@ -16,7 +17,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -27,10 +30,17 @@ import com.engage.education.FirebaseUtils;
 import com.engage.education.R;
 import com.engage.education.teacher.TeacherOptionsActivity;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
+
+import static com.engage.education.teacherclassactivity.TimelineFragment.getBitmapFromView;
+import static com.engage.education.teacherclassactivity.TimelineFragment.takeScreenshot;
+import com.engage.education.Bot;
+
 
 public class TeacherClassActivity extends AppCompatActivity implements TimelineFragment.OnFragmentInteractionListener{
 
@@ -41,6 +51,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
     RadioButton nowTabBtn;
     RadioButton timelineTabBtn;
     Button endSectionBtn;
+    Button addStudentsBtn;
 
     FragmentManager fragmentManager;
     AttendanceFragment attendanceFragment;
@@ -64,6 +75,7 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         nowTabBtn = findViewById(R.id.nowTabBtn);
         timelineTabBtn = findViewById(R.id.timelineTabBtn);
         endSectionBtn = findViewById(R.id.endSectionBtn);
+        addStudentsBtn = findViewById(R.id.addStudents);
         name = getIntent().getStringExtra("name");
 
         segmentedBar.setTintColor(getResources().getColor(R.color.colorPrimary));
@@ -137,6 +149,13 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
                 toasty.post(toastTask);
             }
         });
+
+        addStudentsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bot.createNewUser(mMagicKey);
+            }
+        });
     }
 
     private void handleFragmentTransaction(Fragment fragment) {
@@ -161,14 +180,53 @@ public class TeacherClassActivity extends AppCompatActivity implements TimelineF
         public void run() {
             AlertDialog.Builder builder = new AlertDialog.Builder(TeacherClassActivity.this);
             builder.setTitle("Section has ended!");
+            builder.setMessage("Would you like to save your graph?");
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        FirebaseUtils.removeAllUsers(mSectionRefKey);
+                        Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
+                        //Log.d("TEST", "name: " + name);
+                        intent.putExtra("name", name);
+                        startActivity(intent);
+                        FirebaseUtils.removeSection(mSectionRefKey, FirebaseUtils.getPsuedoUniqueID());
+
+                    }
+                });
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    Log.d("TEST-Deep", "ok clicked");
                     FirebaseUtils.removeAllUsers(mSectionRefKey);
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.constraintLayout, timelineFragment);
                     fragmentTransaction.commit();
+                    takeScreenshot();
+                    Bitmap toSave = getBitmapFromView(TeacherClassActivity.this.getWindow().getDecorView().getRootView());
+
+                    String root = Environment.getExternalStorageDirectory().toString();
+                    File myDir = new File(root + "/req_images");
+                    myDir.mkdirs();
+                    String fname = "Image-" + mSectionRefKey + ".jpg";
+                    File file = new File(myDir, fname);
+                    //Log.i("TEST", "" + file);
+                    if (file.exists())
+                        file.delete();
+                    try {
+                        //Log.d("TEST", "before outputstream");
+                        FileOutputStream out = new FileOutputStream(file);
+                        //Log.d("TEST", "after outputstream");
+                        toSave.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                        out.flush();
+                        out.close();
+                        //Log.d("TEST", "saved");
+                    } catch (Exception e) {
+                        //Log.d("TEST", "outputstream error");
+                        e.printStackTrace();
+                    }
+
 
                     Intent intent = new Intent(TeacherClassActivity.this, TeacherOptionsActivity.class);
                     intent.putExtra("name", name);
